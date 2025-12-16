@@ -1,0 +1,31 @@
+ACCESO Y AUTENTICACIÓN
+Ver landing page pública        ✅ Administrador ✅ Comercial ✅ Cliente
+Registrarse en el sistema       ✅ Administrador ❌ Comercial ✅ Cliente  
+Hacer login / inicio de sesión  ✅ Administrador ✅ Comercial ✅ Cliente
+Darse de baja (soft delete)     ✅ Administrador ✅ Comercial ✅ Cliente
+Modificar datos personales      ✅ Administrador ✅ Comercial ✅ Cliente
+
+GESTIÓN DE CATÁLOGO
+Ver catálogo de productos       ✅ Administrador ✅ Comercial ✅ Cliente
+Buscar y filtrar productos      ✅ Administrador ✅ Comercial ✅ Cliente
+CRUD productos                  ✅ Administrador ❌ Comercial ❌ Cliente
+CRUD categorías                 ✅ Administrador ❌ Comercial ❌ Cliente
+CRUD fabricantes                ✅ Administrador ❌ Comercial ❌ Cliente
+
+GESTIÓN COMERCIAL
+Crear cotizaciones              ✅ Administrador ✅ Comercial ✅ Cliente
+Modificar cotizaciones propias  ✅ Administrador ✅ Comercial ✅ Cliente
+Convertir cotización en pedido  ✅ Administrador ✅ Comercial ✅ Cliente
+Realizar pedidos directos       ✅ Administrador ✅ Comercial ✅ Cliente
+Cancelar pedidos                ✅ Administrador ✅ Comercial ✅ Cliente (propios)
+
+GESTIÓN DE CLIENTES
+CRUD clientes                   ✅ Administrador ✅ Comercial (asignados) ❌ Cliente
+Asignar comerciales a clientes  ✅ Administrador ❌ Comercial ❌ Cliente
+Ver historial de cliente        ✅ Administrador ✅ Comercial (asignados) ❌ Cliente
+
+DASHBOARD E INFORMES
+Ver dashboard general           ✅ Administrador ❌ Comercial ❌ Cliente
+Ver dashboard comercial         ❌ Administrador ✅ Comercial ❌ Cliente
+Ver historial personal          ❌ Administrador ❌ Comercial ✅ Cliente
+Generar informes PDF            ✅ Administrador ✅ Comercial (sus datos) ✅ Cliente (sus datos)
