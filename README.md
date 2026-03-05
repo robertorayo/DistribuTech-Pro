@@ -118,5 +118,4 @@ Distribuido bajo la licencia MIT. Ver archivo `LICENSE`.
 ## 📞 Contacto
 
 - 📧 Email: robertobamym2@gmail.com
-- 💼 LinkedIn: [linkedin.com/in/roberto-borrallo](https://linkedin.com)
-- 🐙 GitHub: [github.com/roberto-borrallo](https://github.com)
+- 🐙 GitHub: [https://github.com/robertorayo](https://github.com/robertorayo)
