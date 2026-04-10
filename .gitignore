@@ -1,0 +1,31 @@
+# =============================================
+# DistribuTech Pro - .gitignore raíz del monorepo
+# =============================================
+
+# Dependencias
+node_modules/
+
+# Variables de entorno (NUNCA subir)
+.env
+.env.local
+.env.production
+
+# Builds
+dist/
+build/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
+.idea/
+
+# Coverage y tests
+coverage/
