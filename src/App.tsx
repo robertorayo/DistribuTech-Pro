@@ -1,12 +1,11 @@
-import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 /**
- * App.jsx — Componente raíz de DistribuTech Pro
+ * App.tsx — Componente raíz de DistribuTech Pro
  *
- * TODO (T-36): Configurar rutas completas con React Router DOM v6
- * TODO (T-31): Envolver con AuthContext
- * TODO (T-32): Envolver con CartContext
+ * TODO: Configurar rutas completas con React Router DOM v6
+ * TODO: Envolver con AuthContext
+ * TODO: Envolver con CartContext
  */
 
 function App() {
