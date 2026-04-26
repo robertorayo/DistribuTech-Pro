@@ -4,8 +4,8 @@ import App from './App';
 import './index.css';
 import { AuthProvider } from './context/AuthContext';
 
-// TODO: Importar configuración i18n cuando esté implementada
-// import './i18n';
+// Inicializar configuración i18n
+import './i18n';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
