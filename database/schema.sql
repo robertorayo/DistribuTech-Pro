@@ -71,19 +71,19 @@ CREATE TABLE usuarios (
 );
 
 -- (TRIGGER INSERCIÓN DESDE AUTH.USERS)
-CREATE OR REPLACE FUNCTION handle_new_user() RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION public.handle_new_user() RETURNS TRIGGER AS $$
 BEGIN
   INSERT INTO public.usuarios (id, email, nombre, apellidos, rol)
   VALUES (
     NEW.id,
     NEW.email,
-    NEW.raw_user_meta_data->>'nombre',
-    NEW.raw_user_meta_data->>'apellidos',
-    COALESCE((NEW.raw_user_meta_data->>'rol')::rol_usuario, 'cliente')
+    COALESCE(NEW.raw_user_meta_data->>'nombre', 'Usuario'),
+    COALESCE(NEW.raw_user_meta_data->>'apellidos', 'B2B'),
+    COALESCE((NEW.raw_user_meta_data->>'rol')::public.rol_usuario, 'cliente'::public.rol_usuario)
   );
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created AFTER INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION handle_new_user();
