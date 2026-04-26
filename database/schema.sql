@@ -5,7 +5,33 @@
 -- 1. EXTENSIONES
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+-- ==============================================================================
+-- LIMPIEZA PREVIA (Para poder ejecutar este script repetidas veces sin errores)
+-- ==============================================================================
+DROP TABLE IF EXISTS pedido_historial_estados CASCADE;
+DROP TABLE IF EXISTS facturas CASCADE;
+DROP TABLE IF EXISTS detalle_pedido CASCADE;
+DROP TABLE IF EXISTS pedidos CASCADE;
+DROP TABLE IF EXISTS detalle_cotizacion CASCADE;
+DROP TABLE IF EXISTS cotizaciones CASCADE;
+DROP TABLE IF EXISTS contactos_comercial CASCADE;
+DROP TABLE IF EXISTS producto_imagenes CASCADE;
+DROP TABLE IF EXISTS productos CASCADE;
+DROP TABLE IF EXISTS fabricantes CASCADE;
+DROP TABLE IF EXISTS categorias CASCADE;
+DROP TABLE IF EXISTS direcciones CASCADE;
+DROP TABLE IF EXISTS usuarios CASCADE;
+DROP TABLE IF EXISTS empresas CASCADE;
+
+DROP TYPE IF EXISTS rol_usuario CASCADE;
+DROP TYPE IF EXISTS sector_categoria CASCADE;
+DROP TYPE IF EXISTS estado_cotizacion CASCADE;
+DROP TYPE IF EXISTS estado_pedido CASCADE;
+DROP TYPE IF EXISTS metodo_pago CASCADE;
+
+-- ==============================================================================
 -- 2. ENUMS
+-- ==============================================================================
 CREATE TYPE rol_usuario AS ENUM ('cliente', 'comercial', 'admin');
 CREATE TYPE sector_categoria AS ENUM ('ferreteria', 'fontaneria', 'riego', 'bano', 'industrial');
 CREATE TYPE estado_cotizacion AS ENUM ('pendiente', 'aprobada', 'rechazada');
@@ -60,7 +86,7 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
-CREATE TRIGGER on_auth_user_created BEFORE INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION handle_new_user();
+CREATE TRIGGER on_auth_user_created AFTER INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION handle_new_user();
 
 CREATE TABLE direcciones (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
