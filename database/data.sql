@@ -4,6 +4,9 @@
 -- NOTA: Los 'usuarios' no pueden inicializarse puramente en SQL debido a que 
 -- dependen de la creación criptográfica en el sistema de 'auth.users' de Supabase.
 
+-- 0. Limpiar datos anteriores para evitar conflictos de IDs duplicados
+TRUNCATE TABLE public.productos, public.fabricantes, public.categorias CASCADE;
+
 -- 1. Insertar Categorías (Con UUIDs fijos predecibles para el seeding)
 INSERT INTO categorias (id, nombre, descripcion, sector) VALUES 
 ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a10', 'Bombas de agua', 'Bombas sumergibles y de superficie', 'fontaneria'),

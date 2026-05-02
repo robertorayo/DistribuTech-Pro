@@ -39,13 +39,16 @@ CREATE TYPE estado_pedido AS ENUM ('pendiente', 'confirmado', 'enviado', 'comple
 CREATE TYPE metodo_pago AS ENUM ('transferencia', 'tarjeta', 'contrarembolso');
 
 -- 3. FUNCIONES CORE
--- Previene la recursión de RLS leyendo el rol directo desde el JWT de Supabase
+-- Lee el rol real directamente desde la tabla de usuarios
 CREATE OR REPLACE FUNCTION get_my_rol() RETURNS TEXT AS $$
-  SELECT COALESCE(
-    auth.jwt() -> 'user_metadata' ->> 'rol',
-    'cliente'
+BEGIN
+  RETURN (
+    SELECT rol::TEXT 
+    FROM public.usuarios 
+    WHERE id = auth.uid()
   );
-$$ LANGUAGE sql STABLE;
+END;
+$$ LANGUAGE plpgsql STABLE SECURITY DEFINER;
 
 -- 4. TABLAS ESTRUCTURALES Y FISCALIDAD
 CREATE TABLE empresas (
@@ -307,7 +310,10 @@ ALTER TABLE detalle_pedido ENABLE ROW LEVEL SECURITY;
 -- Evitamos recursión en usuarios
 CREATE POLICY "usuario_view_self" ON usuarios FOR SELECT USING (id = auth.uid() OR get_my_rol() = 'admin');
 
--- Brecha Comercial Cerrada: Inserción condicionada y validada en Cotizaciones
+-- ==============================================================================
+-- POLÍTICAS PARA COTIZACIONES
+-- ==============================================================================
+
 CREATE POLICY "user_crear_cot" ON cotizaciones FOR INSERT WITH CHECK (
   usuario_id = auth.uid() OR get_my_rol() = 'admin' OR EXISTS (
     SELECT 1 FROM contactos_comercial cc 
@@ -315,7 +321,6 @@ CREATE POLICY "user_crear_cot" ON cotizaciones FOR INSERT WITH CHECK (
   )
 );
 
--- Lecturas cruzadas
 CREATE POLICY "user_leer_cot" ON cotizaciones FOR SELECT USING (
   usuario_id = auth.uid() OR get_my_rol() = 'admin' OR EXISTS (
     SELECT 1 FROM contactos_comercial cc 
@@ -323,7 +328,17 @@ CREATE POLICY "user_leer_cot" ON cotizaciones FOR SELECT USING (
   )
 );
 
--- RLS Detalle dependiente del padre (JOIN virtual)
+CREATE POLICY "admin_update_cot" ON cotizaciones FOR UPDATE USING (
+  get_my_rol() = 'admin' OR EXISTS (
+    SELECT 1 FROM contactos_comercial cc 
+    WHERE cc.cliente_id = cotizaciones.usuario_id AND cc.comercial_id = auth.uid() AND cc.activo = true
+  )
+);
+
+-- ==============================================================================
+-- POLÍTICAS PARA DETALLE_COTIZACION
+-- ==============================================================================
+
 CREATE POLICY "rls_detalle_cot_select" ON detalle_cotizacion FOR SELECT USING (
   EXISTS (
     SELECT 1 FROM cotizaciones c WHERE c.id = cotizacion_id
@@ -332,3 +347,80 @@ CREATE POLICY "rls_detalle_cot_select" ON detalle_cotizacion FOR SELECT USING (
     ))
   )
 );
+
+CREATE POLICY "user_crear_detalle_cot" ON detalle_cotizacion FOR INSERT WITH CHECK (
+  EXISTS (
+    SELECT 1 FROM cotizaciones c WHERE c.id = cotizacion_id
+    AND (c.usuario_id = auth.uid() OR get_my_rol() = 'admin')
+  )
+);
+
+-- ==============================================================================
+-- POLÍTICAS PARA PEDIDOS
+-- ==============================================================================
+
+CREATE POLICY "user_leer_pedidos" ON pedidos FOR SELECT USING (
+  usuario_id = auth.uid() OR get_my_rol() = 'admin' OR EXISTS (
+    SELECT 1 FROM contactos_comercial cc 
+    WHERE cc.cliente_id = pedidos.usuario_id AND cc.comercial_id = auth.uid() AND cc.activo = true
+  )
+);
+
+CREATE POLICY "user_crear_pedidos" ON pedidos FOR INSERT WITH CHECK (
+  usuario_id = auth.uid() OR get_my_rol() = 'admin'
+);
+
+CREATE POLICY "admin_update_pedidos" ON pedidos FOR UPDATE USING (
+  get_my_rol() = 'admin'
+);
+
+-- ==============================================================================
+-- POLÍTICAS PARA DETALLE_PEDIDO
+-- ==============================================================================
+
+CREATE POLICY "user_leer_detalle_ped" ON detalle_pedido FOR SELECT USING (
+  EXISTS (
+    SELECT 1 FROM pedidos p WHERE p.id = pedido_id
+    AND (p.usuario_id = auth.uid() OR get_my_rol() = 'admin' OR EXISTS (
+      SELECT 1 FROM contactos_comercial cc WHERE cc.cliente_id = p.usuario_id AND cc.comercial_id = auth.uid() AND cc.activo = true
+    ))
+  )
+);
+
+CREATE POLICY "user_crear_detalle_ped" ON detalle_pedido FOR INSERT WITH CHECK (
+  EXISTS (
+    SELECT 1 FROM pedidos p WHERE p.id = pedido_id
+    AND (p.usuario_id = auth.uid() OR get_my_rol() = 'admin')
+  )
+);
+
+-- ==============================================================================
+-- POLÍTICAS PARA CATÁLOGO (PRODUCTOS, CATEGORÍAS, FABRICANTES)
+-- ==============================================================================
+
+-- 2. Políticas para PRODUCTOS
+CREATE POLICY "productos_select_policy" ON productos FOR SELECT 
+USING (activo = true OR get_my_rol() = 'admin');
+
+CREATE POLICY "productos_admin_all" ON productos FOR ALL 
+TO authenticated 
+USING (get_my_rol() = 'admin')
+WITH CHECK (get_my_rol() = 'admin');
+
+-- 3. Políticas para CATEGORÍAS
+CREATE POLICY "categorias_select_policy" ON categorias FOR SELECT 
+USING (true);
+
+CREATE POLICY "categorias_admin_all" ON categorias FOR ALL 
+TO authenticated 
+USING (get_my_rol() = 'admin')
+WITH CHECK (get_my_rol() = 'admin');
+
+-- 4. Políticas para FABRICANTES
+CREATE POLICY "fabricantes_select_policy" ON fabricantes FOR SELECT 
+USING (true);
+
+CREATE POLICY "fabricantes_admin_all" ON fabricantes FOR ALL 
+TO authenticated 
+USING (get_my_rol() = 'admin')
+WITH CHECK (get_my_rol() = 'admin');
