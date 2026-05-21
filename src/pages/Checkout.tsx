@@ -30,8 +30,8 @@ export const Checkout: React.FC = () => {
     
     try {
       setLoading(true);
-      const { data: cotizacion, error: cotError } = await supabase
-        .from('cotizaciones')
+      const { data: cotizacion, error: cotError } = await (supabase
+        .from('cotizaciones') as any)
         .insert({
           usuario_id: session.user.id,
           creado_por: session.user.id,
@@ -50,7 +50,7 @@ export const Checkout: React.FC = () => {
         tipo_iva: item.producto.tipo_iva || 21.00
       }));
 
-      const { error: detError } = await supabase.from('detalle_cotizacion').insert(detalles);
+      const { error: detError } = await (supabase.from('detalle_cotizacion') as any).insert(detalles);
       if (detError) throw detError;
 
       toast.success(t('checkout.success'));

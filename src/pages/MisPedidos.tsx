@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { useFormatCurrency, useFormatDate } from '../lib/formatters';
 import { toast } from 'sonner';
-import { ClipboardList, AlertTriangle, Clock, CheckCircle, XCircle, Hourglass } from 'lucide-react';
+import { ClipboardList, AlertTriangle, Hourglass } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import {
   LoadingScreen,
@@ -92,7 +92,7 @@ export const MisPedidos: React.FC = () => {
     if (!cotizacionSeleccionada) return;
     setAccionLoading('dividir');
     try {
-      const { data, error } = await supabase.rpc('dividir_cotizacion', {
+      const { error } = await (supabase.rpc as any)('dividir_cotizacion', {
         p_cotizacion_id: cotizacionSeleccionada.id,
       });
       if (error) throw error;
@@ -111,8 +111,8 @@ export const MisPedidos: React.FC = () => {
     if (!cotizacionSeleccionada) return;
     setAccionLoading('cancelar');
     try {
-      const { error } = await supabase
-        .from('cotizaciones')
+      const { error } = await (supabase
+        .from('cotizaciones') as any)
         .update({ estado: 'rechazada', tipo_incidencia: null, updated_at: new Date().toISOString() })
         .eq('id', cotizacionSeleccionada.id)
         .eq('usuario_id', session!.user.id);
@@ -132,7 +132,7 @@ export const MisPedidos: React.FC = () => {
     if (!cotizacionSeleccionada) return;
     setAccionLoading('mantener');
     try {
-      const { error } = await supabase.rpc('mantener_cotizacion_pendiente', {
+      const { error } = await (supabase.rpc as any)('mantener_cotizacion_pendiente', {
         p_cotizacion_id: cotizacionSeleccionada.id,
       });
       if (error) throw error;
