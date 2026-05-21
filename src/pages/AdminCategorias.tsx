@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { Database } from '../types';
 import { Button } from '../components/ui/button';
@@ -30,6 +31,7 @@ type CategoriaInsert = Database['public']['Tables']['categorias']['Insert'];
 const SECTORES = ['ferreteria', 'fontaneria', 'riego', 'bano', 'industrial'] as const;
 
 export const AdminCategorias: React.FC = () => {
+  const { rol } = useAuth();
   const { t } = useTranslation();
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [loading, setLoading] = useState(true);
@@ -82,13 +84,25 @@ export const AdminCategorias: React.FC = () => {
   };
 
   const handleGuardar = async () => {
-    if (!nombre.trim()) {
+    const tNombre = nombre.trim();
+    const tDescripcion = descripcion.trim();
+    
+    if (!tNombre) {
       toast.error(t('crud.field_required', { field: t('crud.name') }));
       return;
     }
+    if (tNombre.length < 2) {
+      toast.error('El nombre de la categoría debe tener al menos 2 caracteres.');
+      return;
+    }
+    if (!sector) {
+      toast.error('Debes seleccionar un sector válido.');
+      return;
+    }
+    
     try {
       setSaving(true);
-      const payload = { nombre: nombre.trim(), descripcion: descripcion.trim() || null, sector };
+      const payload = { nombre: tNombre, descripcion: tDescripcion || null, sector };
       
       if (editando) {
         const { error } = await supabase.from('categorias').update(payload).eq('id', editando.id);
@@ -150,9 +164,9 @@ export const AdminCategorias: React.FC = () => {
         title={t('crud.categories')} 
         subtitle={t('crud.categories_desc')}
         icon={Tag}
-        actionLabel={t('crud.new_category')}
-        actionIcon={Plus}
-        onAction={abrirCrear}
+        actionLabel={rol === 'admin' ? t('crud.new_category') : undefined}
+        actionIcon={rol === 'admin' ? Plus : undefined}
+        onAction={rol === 'admin' ? abrirCrear : undefined}
       />
 
       <FilterBar onClear={limpiarFiltros} showClear={isFilterActive}>
@@ -178,13 +192,13 @@ export const AdminCategorias: React.FC = () => {
         t('crud.name'), 
         t('crud.description'), 
         t('crud.sector'), 
-        t('common.actions')
+        ...(rol === 'admin' ? [t('common.actions')] : [])
       ]}
       footer={`${categoriasFiltradas.length} / ${categorias.length} ${t('crud.categories').toLowerCase()}`}
       >
         {categoriasFiltradas.length === 0 ? (
           <tr>
-            <td colSpan={4}>
+            <td colSpan={rol === 'admin' ? 4 : 3}>
               <EmptyState icon={Tag} title={t('crud.no_categories')} />
             </td>
           </tr>
@@ -198,12 +212,14 @@ export const AdminCategorias: React.FC = () => {
                   {cat.sector}
                 </span>
               </td>
-              <td className="px-6 py-4">
-                <RowActions 
-                  onEdit={() => abrirEditar(cat)}
-                  onDelete={() => setConfirmDelete(cat.id)}
-                />
-              </td>
+              {rol === 'admin' && (
+                <td className="px-6 py-4">
+                  <RowActions 
+                    onEdit={() => abrirEditar(cat)}
+                    onDelete={() => setConfirmDelete(cat.id)}
+                  />
+                </td>
+              )}
             </tr>
           ))
         )}

@@ -12,7 +12,15 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <AuthProvider>
       <App />
-      <Toaster position="top-right" richColors closeButton />
+      <Toaster 
+        position="top-center" 
+        richColors 
+        closeButton 
+        toastOptions={{ 
+          style: { fontSize: '15px', padding: '16px' },
+          className: 'text-base' 
+        }} 
+      />
     </AuthProvider>
   </React.StrictMode>
 );

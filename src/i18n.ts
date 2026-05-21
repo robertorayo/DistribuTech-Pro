@@ -8,6 +8,7 @@ const resources = {
       "app": {
         "title": "DistribuTech Pro",
         "catalog": "Catálogo B2B",
+        "my_orders": "Mis Pedidos",
         "login": "Iniciar Sesión",
         "logout": "Cerrar Sesión",
         "loading": "Cargando...",
@@ -17,7 +18,9 @@ const resources = {
         "nav_menu": "Menú de Navegación",
         "admin_products": "Productos",
         "admin_categories": "Categorías",
-        "admin_manufacturers": "Fabricantes"
+        "admin_manufacturers": "Fabricantes",
+        "auto_approved_toast_client": "¡Tu pedido en espera #{{id}} ha sido procesado automáticamente por disponibilidad de stock!",
+        "auto_approved_toast_staff": "El pedido en espera #{{id}} se ha aprobado automáticamente por entrada de stock."
       },
       "common": {
         "close": "Cerrar",
@@ -52,7 +55,12 @@ const resources = {
         "reset_search": "Restablecer Búsqueda",
         "units_in_stock": "{{count}} unidades en stock",
         "out_of_stock_temp": "Agotado temporalmente",
-        "added_to_cart": "añadido al carrito"
+        "added_to_cart": "añadido al carrito",
+        "sort_by": "Ordenar por",
+        "price_low_high": "Precio: Menor a Mayor",
+        "price_high_low": "Precio: Mayor a Menor",
+        "stock_low_high": "Stock: Menor a Mayor",
+        "stock_high_low": "Stock: Mayor a Menor"
       },
       "checkout": {
         "title": "Resumen de Cotización",
@@ -82,7 +90,41 @@ const resources = {
         "quotes_to_review": "Cotizaciones por revisar",
         "quote_review": "Revisión de Cotización",
         "no_quotes": "No hay cotizaciones registradas en el sistema.",
-        "status_updated": "Cotización {{status}} exitosamente."
+        "status_updated": "Cotización {{status}} exitosamente.",
+        "approved_ok": "Cotización aprobada y stock actualizado correctamente.",
+        "stock_insufficient": "⚠️ Stock insuficiente detectado",
+        "client_notified": "El cliente ha sido notificado. Debe elegir cómo proceder desde su panel de Mis Pedidos.",
+        "sort_recent": "Más recientes",
+        "sort_oldest": "Más antiguos",
+        "sort_price_desc": "Precio: Mayor a Menor",
+        "sort_price_asc": "Precio: Menor a Mayor",
+        "waiting_client_or_stock": "En espera de decisión del cliente o de stock"
+      },
+      "mispedidos": {
+        "title": "Mis Pedidos",
+        "subtitle": "Consulta el estado de todas tus cotizaciones y pedidos.",
+        "no_orders": "No tienes ningún pedido todavía.",
+        "view": "Ver detalle",
+        "incident": "Incidencia",
+        "action_required": "Acción requerida",
+        "waiting_stock": "Esperando stock completo",
+        "backorder": "En espera de reposición",
+        "detail_title": "Detalle del Pedido",
+        "notes": "Notas del pedido",
+        "processed": "Pedido procesado automáticamente.",
+        "stock_alert_title": "Stock insuficiente — Se requiere tu decisión",
+        "stock_alert_desc": "Al revisar tu pedido, detectamos que no hay suficiente stock para servir todo lo solicitado. A continuación puedes ver la disponibilidad actual:",
+        "ordered": "Solicitado",
+        "available": "Disponible",
+        "missing": "Faltante",
+        "choose_option": "¿Qué deseas hacer?",
+        "split_order": "Dividir en 2 pedidos",
+        "cancel_order": "Cancelar pedido",
+        "wait_full_stock": "Esperar stock completo",
+        "split_success": "Pedido dividido correctamente. El pedido con stock disponible ha sido aprobado.",
+        "cancel_success": "Pedido cancelado.",
+        "wait_success": "Tu pedido quedará en espera hasta que haya stock suficiente.",
+        "waiting_full_stock_msg": "Has optado por esperar a que haya stock suficiente para servir el pedido completo. Te notificaremos cuando esté disponible."
       },
       "product": {
         "description": "Descripción",
@@ -197,6 +239,7 @@ const resources = {
       "app": {
         "title": "DistribuTech Pro",
         "catalog": "B2B Catalog",
+        "my_orders": "My Orders",
         "login": "Login",
         "logout": "Logout",
         "loading": "Loading...",
@@ -206,7 +249,9 @@ const resources = {
         "nav_menu": "Navigation Menu",
         "admin_products": "Products",
         "admin_categories": "Categories",
-        "admin_manufacturers": "Manufacturers"
+        "admin_manufacturers": "Manufacturers",
+        "auto_approved_toast_client": "Your backordered order #{{id}} has been automatically processed due to stock availability!",
+        "auto_approved_toast_staff": "The backordered order #{{id}} has been automatically approved due to new stock."
       },
       "common": {
         "close": "Close",
@@ -241,7 +286,12 @@ const resources = {
         "reset_search": "Reset Search",
         "units_in_stock": "{{count}} units in stock",
         "out_of_stock_temp": "Temporarily out of stock",
-        "added_to_cart": "added to cart"
+        "added_to_cart": "added to cart",
+        "sort_by": "Sort by",
+        "price_low_high": "Price: Lowest to Highest",
+        "price_high_low": "Price: Highest to Lowest",
+        "stock_low_high": "Stock: Lowest to Highest",
+        "stock_high_low": "Stock: Highest to Lowest"
       },
       "checkout": {
         "title": "Quote Summary",
@@ -271,7 +321,41 @@ const resources = {
         "quotes_to_review": "Quotes to review",
         "quote_review": "Quote Review",
         "no_quotes": "No quotes registered in the system.",
-        "status_updated": "Quote {{status}} successfully."
+        "status_updated": "Quote {{status}} successfully.",
+        "approved_ok": "Quote approved and stock updated successfully.",
+        "stock_insufficient": "⚠️ Insufficient stock detected",
+        "client_notified": "The client has been notified. They must choose how to proceed from their My Orders panel.",
+        "sort_recent": "Most recent",
+        "sort_oldest": "Oldest",
+        "sort_price_desc": "Price: Highest to Lowest",
+        "sort_price_asc": "Price: Lowest to Highest",
+        "waiting_client_or_stock": "Waiting for client decision or stock"
+      },
+      "mispedidos": {
+        "title": "My Orders",
+        "subtitle": "Check the status of all your quotes and orders.",
+        "no_orders": "You have no orders yet.",
+        "view": "View detail",
+        "incident": "Incident",
+        "action_required": "Action required",
+        "waiting_stock": "Waiting for full stock",
+        "backorder": "Awaiting restock",
+        "detail_title": "Order Detail",
+        "notes": "Order notes",
+        "processed": "Order processed automatically.",
+        "stock_alert_title": "Insufficient stock — Your decision is required",
+        "stock_alert_desc": "When reviewing your order, we detected that there is not enough stock to fulfill everything requested. Current availability:",
+        "ordered": "Ordered",
+        "available": "Available",
+        "missing": "Missing",
+        "choose_option": "What would you like to do?",
+        "split_order": "Split into 2 orders",
+        "cancel_order": "Cancel order",
+        "wait_full_stock": "Wait for full stock",
+        "split_success": "Order split successfully. The order with available stock has been approved.",
+        "cancel_success": "Order cancelled.",
+        "wait_success": "Your order will remain on hold until there is enough stock to fulfill it completely.",
+        "waiting_full_stock_msg": "You have chosen to wait until there is enough stock to fulfill the complete order. We will notify you when available."
       },
       "product": {
         "description": "Description",
@@ -388,10 +472,18 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
+    lng: 'es',
     fallbackLng: 'es',
+    supportedLngs: ['es', 'en'],
+    nonExplicitSupportedLngs: true,
+    load: 'languageOnly',
+    detection: {
+      order: ['localStorage'],
+      caches: ['localStorage'],
+    },
     interpolation: {
-      escapeValue: false, 
-    }
+      escapeValue: false,
+    },
   });
 
 export default i18n;

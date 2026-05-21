@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
@@ -8,9 +8,11 @@ import {
 } from './ui/dropdown-menu';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from './ui/sheet';
 import { 
-  Menu, Package, LogOut, Globe, User as UserIcon, LayoutDashboard, FileText, ShoppingCart
+  Menu, Package, LogOut, Globe, User as UserIcon, LayoutDashboard, FileText, ShoppingCart, ClipboardList
 } from 'lucide-react';
 import { useCartStore } from '../store/cartStore';
+import { supabase } from '../lib/supabase';
+import { toast } from 'sonner';
 
 interface SidebarProps {
   onClose?: () => void;
@@ -39,8 +41,17 @@ const SidebarContent: React.FC<SidebarProps> = ({ onClose, rol, user, location, 
                 : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
             }`}
           >
-            {item.icon}
-            {item.name}
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-3">
+                {item.icon}
+                {item.name}
+              </div>
+              {item.badge !== undefined && item.badge > 0 && (
+                <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                  {item.badge}
+                </span>
+              )}
+            </div>
           </Link>
         ))}
       </nav>
@@ -66,6 +77,55 @@ export const Layout: React.FC = () => {
   const location = useLocation();
   const cartItemsCount = useCartStore((state) => state.getTotalItems());
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [incidentCount, setIncidentCount] = useState(0);
+
+  useEffect(() => {
+    if (!rol || !user?.id) return;
+
+    // Función para actualizar contador de incidencias del cliente
+    const fetchIncidents = async () => {
+      if (rol !== 'cliente') return;
+      const { count, error } = await supabase
+        .from('cotizaciones')
+        .select('id', { count: 'exact', head: true })
+        .eq('usuario_id', user.id)
+        .eq('tipo_incidencia', 'pendiente_decision_cliente');
+      
+      if (!error && count !== null) {
+        setIncidentCount(count);
+      }
+    };
+
+    fetchIncidents();
+    
+    // Suscripción a cambios en tiempo real
+    const filter = rol === 'cliente' ? `usuario_id=eq.${user.id}` : undefined;
+    
+    const subscription = supabase
+      .channel('cotizaciones_realtime')
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'cotizaciones', filter }, (payload) => {
+        const { new: newRow, old: oldRow } = payload;
+        
+        // Si el cliente tiene incidencias, actualizar el contador
+        if (rol === 'cliente') {
+          fetchIncidents();
+        }
+
+        // Notificación de aprobación automática por stock
+        if (newRow.tipo_incidencia === 'auto_aprobado' && oldRow.tipo_incidencia !== 'auto_aprobado') {
+          if (rol === 'cliente') {
+            toast.success(t('app.auto_approved_toast_client', { id: newRow.id.split('-')[0] }), { duration: 6000 });
+          } else {
+            toast.info(t('app.auto_approved_toast_staff', { id: newRow.id.split('-')[0] }), { duration: 6000 });
+          }
+        }
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subscription);
+    };
+  }, [rol, user, t]);
 
   const handleLogout = async () => {
     await signOut();
@@ -76,12 +136,15 @@ export const Layout: React.FC = () => {
     i18n.changeLanguage(lng);
   };
 
+  const currentLanguageLabel = i18n.language?.startsWith('en') ? 'English' : 'Español';
+
   const menuItems = [
     { name: t('app.catalog'), path: '/catalogo', icon: <Package className="w-5 h-5" />, roles: ['cliente', 'comercial', 'admin'] },
+    { name: t('app.my_orders'), path: '/mis-pedidos', icon: <ClipboardList className="w-5 h-5" />, roles: ['cliente'], badge: incidentCount },
     { name: t('app.admin_dashboard'), path: '/admin', icon: <LayoutDashboard className="w-5 h-5" />, roles: ['admin'] },
-    { name: t('app.admin_products'), path: '/admin/productos', icon: <Package className="w-5 h-5" />, roles: ['admin'] },
-    { name: t('app.admin_categories'), path: '/admin/categorias', icon: <FileText className="w-5 h-5" />, roles: ['admin'] },
-    { name: t('app.admin_manufacturers'), path: '/admin/fabricantes', icon: <FileText className="w-5 h-5" />, roles: ['admin'] },
+    { name: t('app.admin_products'), path: '/admin/productos', icon: <Package className="w-5 h-5" />, roles: ['admin', 'comercial'] },
+    { name: t('app.admin_categories'), path: '/admin/categorias', icon: <FileText className="w-5 h-5" />, roles: ['admin', 'comercial'] },
+    { name: t('app.admin_manufacturers'), path: '/admin/fabricantes', icon: <FileText className="w-5 h-5" />, roles: ['admin', 'comercial'] },
     { name: t('app.comercial_management'), path: '/comercial', icon: <FileText className="w-5 h-5" />, roles: ['comercial', 'admin'] },
   ].filter(m => rol && m.roles.includes(rol));
 
@@ -136,13 +199,17 @@ export const Layout: React.FC = () => {
                 render={
                   <Button variant="ghost" size="sm" className="gap-2 text-gray-600 h-8 px-3">
                     <Globe className="w-4 h-4" />
-                    <span className="hidden sm:inline-block">{i18n.language.toUpperCase()}</span>
+                    <span className="hidden sm:inline-block">{currentLanguageLabel}</span>
                   </Button>
                 }
               />
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => changeLanguage('es')}>Español</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => changeLanguage('en')}>English</DropdownMenuItem>
+              <DropdownMenuContent align="center" className="min-w-[7.5rem]">
+                <DropdownMenuItem className="justify-center" onClick={() => changeLanguage('es')}>
+                  Español
+                </DropdownMenuItem>
+                <DropdownMenuItem className="justify-center" onClick={() => changeLanguage('en')}>
+                  English
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -156,9 +223,12 @@ export const Layout: React.FC = () => {
                   </Button>
                 }
               />
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer font-medium" onClick={handleLogout}>
-                  <LogOut className="w-4 h-4 mr-2" />
+              <DropdownMenuContent align="center" className="min-w-[var(--anchor-width)]">
+                <DropdownMenuItem
+                  className="justify-center text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer font-medium"
+                  onClick={handleLogout}
+                >
+                  <LogOut className="w-4 h-4" />
                   {t('app.logout')}
                 </DropdownMenuItem>
               </DropdownMenuContent>

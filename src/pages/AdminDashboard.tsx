@@ -2,15 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Users, FileText, TrendingUp, Package, LayoutDashboard } from 'lucide-react';
+import { 
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, 
+  PieChart, Pie, Cell, Legend 
+} from 'recharts';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { useFormatCurrency } from '../lib/formatters';
 import { LoadingScreen, PageHeader } from '../components/shared';
 
+const MONTH_NAMES = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+
 export const AdminDashboard: React.FC = () => {
   const { t } = useTranslation();
   const formatCurrency = useFormatCurrency();
   const [loading, setLoading] = useState(true);
+  const [chartData, setChartData] = useState<any[]>([]);
+  const [statusData, setStatusData] = useState<any[]>([]);
   const [stats, setStats] = useState({
     usuarios: 0,
     clientes: 0,
@@ -29,7 +37,7 @@ export const AdminDashboard: React.FC = () => {
       setLoading(true);
       const [usersRes, cotRes, prodRes] = await Promise.all([
         supabase.from('usuarios').select('rol'),
-        supabase.from('cotizaciones').select('estado, total'),
+        supabase.from('cotizaciones').select('estado, total, created_at'),
         supabase.from('productos').select('*', { count: 'exact', head: true })
       ]);
 
@@ -39,6 +47,48 @@ export const AdminDashboard: React.FC = () => {
 
       const users = usersRes.data || [];
       const cots = cotRes.data || [];
+
+      // Procesar ingresos mensuales
+      const monthlyData: Record<string, number> = {};
+      const statusCounts: Record<string, number> = {
+        'pendiente': 0,
+        'aprobada': 0,
+        'rechazada': 0
+      };
+
+      cots.forEach(c => {
+        if (statusCounts[c.estado] !== undefined) {
+          statusCounts[c.estado]++;
+        }
+
+        if (c.estado === 'aprobada' && c.created_at) {
+          const date = new Date(c.created_at);
+          const monthYear = `${MONTH_NAMES[date.getMonth()]} ${date.getFullYear()}`;
+          if (!monthlyData[monthYear]) {
+            monthlyData[monthYear] = 0;
+          }
+          monthlyData[monthYear] += (c.total || 0);
+        }
+      });
+
+      // Formatear para gráficas (últimos 6 meses)
+      const last6Months = [];
+      const now = new Date();
+      for (let i = 5; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const name = `${MONTH_NAMES[d.getMonth()]} ${d.getFullYear()}`;
+        last6Months.push({
+          name,
+          ingresos: monthlyData[name] || 0
+        });
+      }
+      setChartData(last6Months);
+
+      setStatusData([
+        { name: t('quotes.status_approved', 'Aprobadas'), value: statusCounts['aprobada'], color: '#22c55e' },
+        { name: t('quotes.status_pending', 'Pendientes'), value: statusCounts['pendiente'], color: '#eab308' },
+        { name: t('quotes.status_rejected', 'Rechazadas'), value: statusCounts['rechazada'], color: '#ef4444' }
+      ]);
 
       setStats({
         usuarios: users.length,
@@ -107,6 +157,62 @@ export const AdminDashboard: React.FC = () => {
           <CardContent>
             <div className="text-3xl font-black text-gray-900">{stats.productosActivos}</div>
             <p className="text-xs text-orange-600 font-medium mt-1">{t('admin.product_refs')}</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="col-span-1 lg:col-span-2 shadow-sm border-gray-100 bg-white">
+          <CardHeader>
+            <CardTitle className="text-gray-900 font-bold">Evolución de Ingresos</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="h-80">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
+                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6b7280' }} dy={10} />
+                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#6b7280' }} tickFormatter={(val) => `€${val}`} />
+                  <RechartsTooltip 
+                    cursor={{ fill: '#f3f4f6' }}
+                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                    formatter={(value: number) => [formatCurrency(value), 'Ingresos']}
+                  />
+                  <Bar dataKey="ingresos" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="col-span-1 shadow-sm border-gray-100 bg-white">
+          <CardHeader>
+            <CardTitle className="text-gray-900 font-bold">Estado de Cotizaciones</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="h-80 flex flex-col items-center justify-center">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={statusData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={80}
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {statusData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <RechartsTooltip 
+                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                  />
+                  <Legend verticalAlign="bottom" height={36} iconType="circle" />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
       </div>

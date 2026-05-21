@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
@@ -38,6 +38,7 @@ export const ComercialDashboard: React.FC = () => {
   // Estados de filtrado
   const [searchTerm, setSearchTerm] = useState('');
   const [filterEstado, setFilterEstado] = useState('all');
+  const [sortBy, setSortBy] = useState<string>('date-desc');
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -82,8 +83,37 @@ export const ComercialDashboard: React.FC = () => {
 
   const cambiarEstado = async (nuevoEstado: string) => {
     if (!cotizacionSeleccionada) return;
+
+    // Aprobación: usar la RPC para control de stock
+    if (nuevoEstado === 'aprobada') {
+      try {
+        const { data, error } = await supabase.rpc('aprobar_cotizacion', {
+          p_cotizacion_id: cotizacionSeleccionada.id,
+        });
+        if (error) throw error;
+
+        if (data.resultado === 'aprobada') {
+          toast.success(t('comercial.approved_ok'));
+        } else if (data.resultado === 'pendiente_decision_cliente') {
+          toast.warning(t('comercial.stock_insufficient'), {
+            description: t('comercial.client_notified'),
+            duration: 6000,
+          });
+        }
+        setCotizacionSeleccionada(null);
+        cargarDashboard();
+      } catch (error: any) {
+        toast.error('Error: ' + error.message);
+      }
+      return;
+    }
+
+    // Rechazo: update directo
     try {
-      const { error } = await supabase.from('cotizaciones').update({ estado: nuevoEstado }).eq('id', cotizacionSeleccionada.id);
+      const { error } = await supabase
+        .from('cotizaciones')
+        .update({ estado: nuevoEstado })
+        .eq('id', cotizacionSeleccionada.id);
       if (error) throw error;
       toast.success(t('comercial.status_updated', { status: nuevoEstado }));
       setCotizacionSeleccionada(null);
@@ -96,21 +126,42 @@ export const ComercialDashboard: React.FC = () => {
   const limpiarFiltros = () => {
     setSearchTerm('');
     setFilterEstado('all');
+    setSortBy('date-desc');
   };
 
-  const cotizacionesFiltradas = cotizaciones.filter(cot => {
-    const nombreCompleto = `${cot.cliente?.nombre} ${cot.cliente?.apellidos}`.toLowerCase();
-    const matchSearch = nombreCompleto.includes(searchTerm.toLowerCase()) || 
-                        cot.cliente?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        cot.id.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchEstado = filterEstado === 'all' || cot.estado === filterEstado;
-    return matchSearch && matchEstado;
-  });
+  const cotizacionesFiltradas = useMemo(() => {
+    let result = cotizaciones.filter(cot => {
+      const nombreCompleto = `${cot.cliente?.nombre} ${cot.cliente?.apellidos}`.toLowerCase();
+      const matchSearch = nombreCompleto.includes(searchTerm.toLowerCase()) || 
+                          cot.cliente?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          cot.id.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchEstado = filterEstado === 'all' || cot.estado === filterEstado;
+      return matchSearch && matchEstado;
+    });
+
+    // Ordenación
+    switch (sortBy) {
+      case 'date-asc':
+        result.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+        break;
+      case 'date-desc':
+        result.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+        break;
+      case 'total-asc':
+        result.sort((a, b) => (a.total || 0) - (b.total || 0));
+        break;
+      case 'total-desc':
+        result.sort((a, b) => (b.total || 0) - (a.total || 0));
+        break;
+    }
+
+    return result;
+  }, [cotizaciones, searchTerm, filterEstado, sortBy]);
 
   if (loading) return <LoadingScreen />;
 
   const pendientes = cotizaciones.filter(c => c.estado === 'pendiente');
-  const isFilterActive = searchTerm !== '' || filterEstado !== 'all';
+  const isFilterActive = searchTerm !== '' || filterEstado !== 'all' || sortBy !== 'date-desc';
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
@@ -176,6 +227,17 @@ export const ComercialDashboard: React.FC = () => {
               <option value="pendiente">{t('common.status_pending')}</option>
               <option value="aprobada">{t('common.status_approved')}</option>
               <option value="rechazada">{t('common.status_rejected')}</option>
+            </select>
+            <select 
+              value={sortBy} 
+              onChange={(e) => setSortBy(e.target.value)}
+              className={`${selectClasses} py-2 text-xs w-full sm:w-48`}
+            >
+              <option value="date-desc">{t('catalog.sort_by')}</option>
+              <option value="date-desc">{t('comercial.sort_recent')}</option>
+              <option value="date-asc">{t('comercial.sort_oldest')}</option>
+              <option value="total-desc">{t('comercial.sort_price_desc')}</option>
+              <option value="total-asc">{t('comercial.sort_price_asc')}</option>
             </select>
           </FilterBar>
         </div>
@@ -275,11 +337,16 @@ export const ComercialDashboard: React.FC = () => {
           </ModalBody>
           <ModalFooter>
             <Button variant="outline" onClick={() => setCotizacionSeleccionada(null)}>{t('common.close')}</Button>
-            {cotizacionSeleccionada.estado === 'pendiente' && (
+            {cotizacionSeleccionada.estado === 'pendiente' && !['esperando_stock', 'esperando_stock_completo', 'pendiente_decision_cliente'].includes(cotizacionSeleccionada.tipo_incidencia) && (
               <>
                 <Button variant="destructive" onClick={() => cambiarEstado('rechazada')}>{t('comercial.reject')}</Button>
                 <Button className="bg-green-600 hover:bg-green-700 text-white" onClick={() => cambiarEstado('aprobada')}>{t('comercial.approve')}</Button>
               </>
+            )}
+            {['esperando_stock', 'esperando_stock_completo', 'pendiente_decision_cliente'].includes(cotizacionSeleccionada.tipo_incidencia) && (
+              <span className="text-amber-600 font-medium text-sm px-4">
+                {t('comercial.waiting_client_or_stock')}
+              </span>
             )}
           </ModalFooter>
         </ModalOverlay>

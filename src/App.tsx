@@ -3,6 +3,7 @@ import { Login } from './pages/Login';
 import { Registro } from './pages/Registro';
 import { Catalogo } from './pages/Catalogo';
 import { Checkout } from './pages/Checkout';
+import { MisPedidos } from './pages/MisPedidos';
 import { ComercialDashboard } from './pages/ComercialDashboard';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { AdminProductos } from './pages/AdminProductos';
@@ -42,17 +43,22 @@ function App() {
             <Route path="/checkout" element={<Checkout />} />
           </Route>
 
+          {/* Rutas exclusivas Cliente */}
+          <Route element={<PrivateRoute allowedRoles={['cliente']} />}>
+            <Route path="/mis-pedidos" element={<MisPedidos />} />
+          </Route>
+
           {/* Rutas Exclusivas Comercial y Admin */}
           <Route element={<PrivateRoute allowedRoles={['comercial', 'admin']} />}>
             <Route path="/comercial" element={<ComercialDashboard />} />
+            <Route path="/admin/productos" element={<AdminProductos />} />
+            <Route path="/admin/categorias" element={<AdminCategorias />} />
+            <Route path="/admin/fabricantes" element={<AdminFabricantes />} />
           </Route>
 
           {/* Rutas Exclusivas Administrador */}
           <Route element={<PrivateRoute allowedRoles={['admin']} />}>
             <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/admin/productos" element={<AdminProductos />} />
-            <Route path="/admin/categorias" element={<AdminCategorias />} />
-            <Route path="/admin/fabricantes" element={<AdminFabricantes />} />
           </Route>
 
           {/* Rutas Exclusivas Comercial */}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { Database } from '../types';
 import { Button } from '../components/ui/button';
@@ -36,6 +37,7 @@ type ProductoConRelaciones = Producto & {
 };
 
 export const AdminProductos: React.FC = () => {
+  const { rol } = useAuth();
   const { t } = useTranslation();
   const formatCurrency = useFormatCurrency();
   const [productos, setProductos] = useState<ProductoConRelaciones[]>([]);
@@ -115,31 +117,49 @@ export const AdminProductos: React.FC = () => {
   };
 
   const handleGuardar = async () => {
-    if (!nombre.trim()) {
+    const tNombre = nombre.trim();
+    const tDescripcion = descripcion.trim();
+
+    if (!tNombre) {
       toast.error(t('crud.field_required', { field: t('crud.name') }));
       return;
     }
+    if (tNombre.length < 2) {
+      toast.error('El nombre del producto debe tener al menos 2 caracteres.');
+      return;
+    }
+    
+    if (!categoriaId) {
+      toast.error('Debes seleccionar una categoría.');
+      return;
+    }
+    
+    if (!fabricanteId) {
+      toast.error('Debes seleccionar un fabricante.');
+      return;
+    }
+
     const precioNum = parseFloat(precio);
-    if (isNaN(precioNum) || precioNum < 0) {
-      toast.error(t('crud.invalid_price'));
+    if (isNaN(precioNum) || precioNum <= 0) {
+      toast.error('El precio debe ser un número mayor a 0.');
       return;
     }
     const stockNum = parseInt(stock, 10);
     if (isNaN(stockNum) || stockNum < 0) {
-      toast.error(t('crud.invalid_stock'));
+      toast.error('El stock no puede ser negativo ni inválido.');
       return;
     }
 
     try {
       setSaving(true);
       const payload = {
-        nombre: nombre.trim(),
-        descripcion: descripcion.trim() || null,
+        nombre: tNombre,
+        descripcion: tDescripcion || null,
         precio: precioNum,
         stock: stockNum,
         tipo_iva: parseFloat(tipoIva),
-        categoria_id: categoriaId || null,
-        fabricante_id: fabricanteId || null,
+        categoria_id: categoriaId,
+        fabricante_id: fabricanteId,
         activo,
         updated_at: new Date().toISOString(),
       };
@@ -223,9 +243,9 @@ export const AdminProductos: React.FC = () => {
         subtitle={t('crud.products_desc')}
         icon={Package}
         iconColor="text-orange-600"
-        actionLabel={t('crud.new_product')}
-        actionIcon={Plus}
-        onAction={abrirCrear}
+        actionLabel={rol === 'admin' ? t('crud.new_product') : undefined}
+        actionIcon={rol === 'admin' ? Plus : undefined}
+        onAction={rol === 'admin' ? abrirCrear : undefined}
       />
 
       <FilterBar onClear={limpiarFiltros} showClear={isFilterActive}>
@@ -297,13 +317,13 @@ export const AdminProductos: React.FC = () => {
           t('crud.price'), 
           t('crud.stock'), 
           t('common.status'), 
-          t('common.actions')
+          ...(rol === 'admin' ? [t('common.actions')] : [])
         ]}
         footer={`${productosFiltrados.length} / ${productos.length} ${t('crud.products').toLowerCase()}`}
       >
         {productosFiltrados.length === 0 ? (
           <tr>
-            <td colSpan={7}>
+            <td colSpan={rol === 'admin' ? 7 : 6}>
               <EmptyState icon={Package} title={t('crud.no_products')} />
             </td>
           </tr>
@@ -329,12 +349,14 @@ export const AdminProductos: React.FC = () => {
               <td className="px-5 py-4 text-center">
                 <StatusBadge status={prod.activo ? t('crud.active') : t('crud.inactive')} />
               </td>
-              <td className="px-5 py-4">
-                <RowActions 
-                  onEdit={() => abrirEditar(prod)}
-                  onDelete={() => setConfirmDelete(prod.id)}
-                />
-              </td>
+              {rol === 'admin' && (
+                <td className="px-5 py-4">
+                  <RowActions 
+                    onEdit={() => abrirEditar(prod)}
+                    onDelete={() => setConfirmDelete(prod.id)}
+                  />
+                </td>
+              )}
             </tr>
           ))
         )}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { Database } from '../types';
 import { Button } from '../components/ui/button';
@@ -25,6 +26,7 @@ import {
 type Fabricante = Database['public']['Tables']['fabricantes']['Row'];
 
 export const AdminFabricantes: React.FC = () => {
+  const { rol } = useAuth();
   const { t } = useTranslation();
   const [fabricantes, setFabricantes] = useState<Fabricante[]>([]);
   const [loading, setLoading] = useState(true);
@@ -82,18 +84,41 @@ export const AdminFabricantes: React.FC = () => {
   };
 
   const handleGuardar = async () => {
-    if (!nombre.trim()) {
+    const tNombre = nombre.trim();
+    const tContacto = contacto.trim();
+    const tTelefono = telefono.trim();
+    const tEmail = email.trim();
+    const tDireccion = direccion.trim();
+
+    if (!tNombre) {
       toast.error(t('crud.field_required', { field: t('crud.name') }));
       return;
     }
+    if (tNombre.length < 2) {
+      toast.error('El nombre debe tener al menos 2 caracteres.');
+      return;
+    }
+    if (tContacto && /\d/.test(tContacto)) {
+      toast.error('El nombre de contacto no puede contener números.');
+      return;
+    }
+    if (tTelefono && !/^\d{9}$/.test(tTelefono)) {
+      toast.error('El formato del número de teléfono es inválido. Debe contener exactamente 9 números (ej: 600000000).');
+      return;
+    }
+    if (tEmail && !/^\S+@\S+\.\S+$/.test(tEmail)) {
+      toast.error('El formato del correo electrónico es inválido.');
+      return;
+    }
+
     try {
       setSaving(true);
       const payload = {
-        nombre: nombre.trim(),
-        contacto: contacto.trim() || null,
-        telefono: telefono.trim() || null,
-        email: email.trim() || null,
-        direccion: direccion.trim() || null,
+        nombre: tNombre,
+        contacto: tContacto || null,
+        telefono: tTelefono || null,
+        email: tEmail || null,
+        direccion: tDireccion || null,
       };
 
       if (editando) {
@@ -155,9 +180,9 @@ export const AdminFabricantes: React.FC = () => {
         subtitle={t('crud.manufacturers_desc')}
         icon={Factory}
         iconColor="text-purple-600"
-        actionLabel={t('crud.new_manufacturer')}
-        actionIcon={Plus}
-        onAction={abrirCrear}
+        actionLabel={rol === 'admin' ? t('crud.new_manufacturer') : undefined}
+        actionIcon={rol === 'admin' ? Plus : undefined}
+        onAction={rol === 'admin' ? abrirCrear : undefined}
       />
 
       <FilterBar onClear={limpiarFiltros} showClear={searchTerm !== ''}>
@@ -174,13 +199,13 @@ export const AdminFabricantes: React.FC = () => {
         t('crud.contact'), 
         t('crud.phone'), 
         t('crud.email'), 
-        t('common.actions')
+        ...(rol === 'admin' ? [t('common.actions')] : [])
       ]}
       footer={`${fabricantesFiltrados.length} / ${fabricantes.length} ${t('crud.manufacturers').toLowerCase()}`}
       >
         {fabricantesFiltrados.length === 0 ? (
           <tr>
-            <td colSpan={5}>
+            <td colSpan={rol === 'admin' ? 5 : 4}>
               <EmptyState icon={Factory} title={t('crud.no_manufacturers')} />
             </td>
           </tr>
@@ -191,12 +216,14 @@ export const AdminFabricantes: React.FC = () => {
               <td className="px-6 py-4 text-gray-600">{fab.contacto || '—'}</td>
               <td className="px-6 py-4 text-gray-600">{fab.telefono || '—'}</td>
               <td className="px-6 py-4 text-gray-600">{fab.email || '—'}</td>
-              <td className="px-6 py-4">
-                <RowActions 
-                  onEdit={() => abrirEditar(fab)}
-                  onDelete={() => setConfirmDelete(fab.id)}
-                />
-              </td>
+              {rol === 'admin' && (
+                <td className="px-6 py-4">
+                  <RowActions 
+                    onEdit={() => abrirEditar(fab)}
+                    onDelete={() => setConfirmDelete(fab.id)}
+                  />
+                </td>
+              )}
             </tr>
           ))
         )}

@@ -36,6 +36,7 @@ export const Catalogo: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedManufacturer, setSelectedManufacturer] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<string>('default');
 
   useEffect(() => {
     cargarTodo();
@@ -64,26 +65,48 @@ export const Catalogo: React.FC = () => {
     }
   };
 
-  // Aplicar filtros
+  // Aplicar filtros y ordenación
   const productosFiltrados = useMemo(() => {
-    return productos.filter((prod) => {
+    let result = productos.filter((prod) => {
       const matchSearch = prod.nombre.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           (prod.descripcion && prod.descripcion.toLowerCase().includes(searchTerm.toLowerCase()));
       const matchCategory = selectedCategory === 'all' || prod.categoria_id === selectedCategory;
       const matchManufacturer = selectedManufacturer === 'all' || prod.fabricante_id === selectedManufacturer;
       return matchSearch && matchCategory && matchManufacturer;
     });
-  }, [productos, searchTerm, selectedCategory, selectedManufacturer]);
+
+    // Ordenación
+    switch (sortBy) {
+      case 'price-asc':
+        result.sort((a, b) => a.precio - b.precio);
+        break;
+      case 'price-desc':
+        result.sort((a, b) => b.precio - a.precio);
+        break;
+      case 'stock-asc':
+        result.sort((a, b) => a.stock - b.stock);
+        break;
+      case 'stock-desc':
+        result.sort((a, b) => b.stock - a.stock);
+        break;
+      default:
+        // Por defecto, se mantiene el orden de la BD o por nombre
+        result.sort((a, b) => a.nombre.localeCompare(b.nombre));
+    }
+
+    return result;
+  }, [productos, searchTerm, selectedCategory, selectedManufacturer, sortBy]);
 
   const limpiarFiltros = () => {
     setSearchTerm('');
     setSelectedCategory('all');
     setSelectedManufacturer('all');
+    setSortBy('default');
   };
 
   if (loading) return <LoadingScreen />;
 
-  const isFilterActive = searchTerm !== '' || selectedCategory !== 'all' || selectedManufacturer !== 'all';
+  const isFilterActive = searchTerm !== '' || selectedCategory !== 'all' || selectedManufacturer !== 'all' || sortBy !== 'default';
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
@@ -120,6 +143,18 @@ export const Catalogo: React.FC = () => {
             {fabricantes.map(fab => (
               <option key={fab.id} value={fab.id}>{fab.nombre}</option>
             ))}
+          </select>
+
+          <select 
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className={`${selectClasses} w-full sm:w-48 py-2`}
+          >
+            <option value="default">{t('catalog.sort_by')}</option>
+            <option value="price-asc">{t('catalog.price_low_high')}</option>
+            <option value="price-desc">{t('catalog.price_high_low')}</option>
+            <option value="stock-asc">{t('catalog.stock_low_high')}</option>
+            <option value="stock-desc">{t('catalog.stock_high_low')}</option>
           </select>
         </FilterBar>
       </PageHeader>
