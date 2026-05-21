@@ -1,3 +1,4 @@
+// Build fix for Vercel
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Login } from './pages/Login';
 import { Registro } from './pages/Registro';
