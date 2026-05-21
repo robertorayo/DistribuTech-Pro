@@ -149,7 +149,14 @@ const resources = {
         "mvp_description": "El motor central de DistribuTech Pro está completamente funcional. Has integrado autenticación, base de datos relacional de productos, triggers automáticos en la nube, un carrito reactivo y paneles de gestión B2B para clientes y comerciales.",
         "active_sales": "Comerciales Activos",
         "product_refs": "Referencias de producto",
-        "quotes_issued": "Cotizaciones emitidas"
+        "quotes_issued": "Cotizaciones emitidas",
+        "daily_revenue_title": "Ingresos diarios del mes",
+        "daily_revenue_subtitle": "Cotizaciones aprobadas agrupadas por día",
+        "select_month": "Mes",
+        "select_year": "Año",
+        "chart_day": "Día {{day}}",
+        "revenue_evolution": "Evolución de Ingresos",
+        "quotes_status": "Estado de Cotizaciones"
       },
       "auth": {
         "b2b_access": "Acceso a plataforma B2B",
@@ -380,7 +387,14 @@ const resources = {
         "mvp_description": "The core engine of DistribuTech Pro is fully functional. You have integrated authentication, relational product database, automatic cloud triggers, reactive cart and B2B management panels for clients and sales agents.",
         "active_sales": "Active Sales Agents",
         "product_refs": "Product references",
-        "quotes_issued": "Quotes issued"
+        "quotes_issued": "Quotes issued",
+        "daily_revenue_title": "Daily revenue for the month",
+        "daily_revenue_subtitle": "Approved quotes grouped by day",
+        "select_month": "Month",
+        "select_year": "Year",
+        "chart_day": "Day {{day}}",
+        "revenue_evolution": "Revenue Evolution",
+        "quotes_status": "Quote Status"
       },
       "auth": {
         "b2b_access": "B2B Platform Access",
