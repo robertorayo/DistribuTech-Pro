@@ -87,7 +87,7 @@ export const ComercialDashboard: React.FC = () => {
     // Aprobación: usar la RPC para control de stock
     if (nuevoEstado === 'aprobada') {
       try {
-        const { data, error } = await supabase.rpc('aprobar_cotizacion', {
+        const { data, error } = await (supabase.rpc as any)('aprobar_cotizacion', {
           p_cotizacion_id: cotizacionSeleccionada.id,
         });
         if (error) throw error;
@@ -110,8 +110,8 @@ export const ComercialDashboard: React.FC = () => {
 
     // Rechazo: update directo
     try {
-      const { error } = await supabase
-        .from('cotizaciones')
+      const { error } = await (supabase
+        .from('cotizaciones') as any)
         .update({ estado: nuevoEstado })
         .eq('id', cotizacionSeleccionada.id);
       if (error) throw error;

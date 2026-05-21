@@ -165,13 +165,13 @@ export const AdminProductos: React.FC = () => {
       };
 
       if (editando) {
-        const { error } = await supabase.from('productos').update(payload).eq('id', editando.id);
+        const { error } = await (supabase.from('productos') as any).update(payload).eq('id', editando.id);
         if (error) throw error;
-        toast.success(t('crud.updated_success'));
+        toast.success(t('products.update_success'));
       } else {
-        const { error } = await supabase.from('productos').insert(payload);
+        const { error } = await (supabase.from('productos') as any).insert(payload);
         if (error) throw error;
-        toast.success(t('crud.created_success'));
+        toast.success(t('products.create_success'));
       }
       setModalOpen(false);
       cargarTodo();

@@ -103,7 +103,7 @@ export const Layout: React.FC = () => {
     
     const subscription = supabase
       .channel('cotizaciones_realtime')
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'cotizaciones', filter }, (payload) => {
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'cotizaciones', filter }, (payload: any) => {
         const { new: newRow, old: oldRow } = payload;
         
         // Si el cliente tiene incidencias, actualizar el contador

@@ -3,7 +3,7 @@ import { supabase } from '../lib/supabase';
 import { Producto, Categoria, Fabricante } from '../types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { ShoppingCart, PackageOpen, FilterX, Package } from 'lucide-react';
+import { ShoppingCart, PackageOpen, Package } from 'lucide-react';
 import { toast } from 'sonner';
 import { ProductoDetalle } from '../components/ProductoDetalle';
 import { useTranslation } from 'react-i18next';

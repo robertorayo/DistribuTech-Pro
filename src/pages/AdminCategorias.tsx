@@ -105,13 +105,13 @@ export const AdminCategorias: React.FC = () => {
       const payload = { nombre: tNombre, descripcion: tDescripcion || null, sector };
       
       if (editando) {
-        const { error } = await supabase.from('categorias').update(payload).eq('id', editando.id);
+        const { error } = await (supabase.from('categorias') as any).update(payload).eq('id', editando.id);
         if (error) throw error;
-        toast.success(t('crud.updated_success'));
+        toast.success(t('categories.update_success'));
       } else {
-        const { error } = await supabase.from('categorias').insert(payload);
+        const { error } = await (supabase.from('categorias') as any).insert(payload);
         if (error) throw error;
-        toast.success(t('crud.created_success'));
+        toast.success(t('categories.create_success'));
       }
       setModalOpen(false);
       cargarCategorias();

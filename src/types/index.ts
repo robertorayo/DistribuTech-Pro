@@ -308,5 +308,29 @@ export interface Database {
         }
       }
     }
+    Functions: {
+      aprobar_cotizacion: {
+        Args: { p_cotizacion_id: string }
+        Returns: { resultado: string }
+      }
+      dividir_cotizacion: {
+        Args: { p_cotizacion_id: string }
+        Returns: Json
+      }
+      mantener_cotizacion_pendiente: {
+        Args: { p_cotizacion_id: string }
+        Returns: void
+      }
+    }
+    Enums: {
+      rol_usuario: 'cliente' | 'comercial' | 'admin'
+    }
   }
 }
+
+export type Producto = Database['public']['Tables']['productos']['Row']
+export type Categoria = Database['public']['Tables']['categorias']['Row']
+export type Fabricante = Database['public']['Tables']['fabricantes']['Row']
+export type Cotizacion = Database['public']['Tables']['cotizaciones']['Row']
+export type Usuario = Database['public']['Tables']['usuarios']['Row']
+export type DetalleCotizacion = Database['public']['Tables']['detalle_cotizacion']['Row']

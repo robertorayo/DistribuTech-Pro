@@ -198,8 +198,8 @@ export const AdminDashboard: React.FC = () => {
 
       setStats({
         usuarios: users.length,
-        clientes: users.filter((u) => u.rol === 'cliente').length,
-        comerciales: users.filter((u) => u.rol === 'comercial').length,
+        clientes: users.filter((u: any) => u.rol === 'cliente').length,
+        comerciales: users.filter((u: any) => u.rol === 'comercial').length,
         cotizacionesTotal: cots.length,
         ingresosAprobados: cots.filter((c) => c.estado === 'aprobada').reduce((acc, curr) => acc + (curr.total || 0), 0),
         productosActivos: prodRes.count || 0,

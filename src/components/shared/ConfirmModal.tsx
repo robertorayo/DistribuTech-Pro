@@ -1,7 +1,7 @@
 import React from 'react';
 import { AlertTriangle, X } from 'lucide-react';
 import { Button } from '../ui/button';
-import { ModalOverlay, ModalHeader, ModalBody, ModalFooter } from './ModalOverlay';
+import { ModalOverlay } from './ModalOverlay';
 
 interface ConfirmModalProps {
   isOpen: boolean;
