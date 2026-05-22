@@ -1,0 +1,17 @@
+# Dependencias y builds
+node_modules/
+dist/
+.vercel/
+
+# Entorno y secretos (crítico para seguridad)
+.env
+.env.local
+.env*.local
+*.env
+
+# Sistema
+.DS_Store
+*.log
+
+# Lockfiles (ruido puro, no aportan contexto)
+package-lock.json

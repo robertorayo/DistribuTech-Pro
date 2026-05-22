@@ -2,8 +2,7 @@
 
 > **Plataforma B2B para distribución multisectorial** — ferretería, fontanería, riego, baño e industrial.
 
-⚠️ *Este README se actualizará con las instrucciones completas de instalación y configuración una vez finalizado el desarrollo (tarea T-66).*
-
+⚠️ *Este README se actualizará con las instrucciones completas de instalación y configuración una vez finalizado el desarrollo
 ---
 
 ## Estado del proyecto
@@ -12,13 +11,15 @@
 
 ## Tecnologías
 
-| Capa | Tecnología |
-|------|-----------|
-| Frontend | React 18 + Vite + React Router DOM v6 |
-| Backend | Node.js 18+ + Express |
-| Base de datos | PostgreSQL (Supabase) |
-| Auth | JWT + bcrypt |
-| i18n | i18next (ES / EN) |
+| Capa          | Tecnología                                      |
+| ------------- | ----------------------------------------------- |
+| Frontend      | React 18 + TypeScript + Vite 5                  |
+| Estilos       | Tailwind CSS 3 + shadcn/ui + @base-ui/react     |
+| Enrutamiento  | React Router DOM v6                             |
+| Backend       | Supabase (Auth + PostgreSQL + RLS)              |
+| Estado global | Zustand v5                                      |
+| i18n          | i18next (ES / EN)                               |
+| Deploy        | Vercel                                          |
 
 ---
 
