@@ -180,7 +180,19 @@ const resources = {
         "strength_medium": "Media",
         "strength_strong": "Fuerte",
         "already_have_account": "¿Ya tienes cuenta?",
-        "login_now": "Inicia Sesión"
+        "login_now": "Inicia Sesión",
+        "forgot_password_title": "Recuperar Contraseña",
+        "forgot_password_subtitle": "Introduce tu correo corporativo y te enviaremos un enlace para restablecer tu contraseña.",
+        "send_reset_link": "Enviar enlace de recuperación",
+        "reset_link_sent": "Te hemos enviado un correo con instrucciones para restablecer tu contraseña. Revisa tu bandeja de entrada.",
+        "back_to_login": "Volver a Iniciar Sesión",
+        "reset_password_title": "Establecer Nueva Contraseña",
+        "reset_password_subtitle": "Elige una contraseña segura para tu cuenta corporativa.",
+        "new_password": "Nueva Contraseña",
+        "update_password": "Actualizar Contraseña",
+        "password_updated_success": "Contraseña actualizada con éxito. Ya puedes iniciar sesión con tus nuevas credenciales.",
+        "updating_password": "Actualizando contraseña...",
+        "sending_link": "Enviando enlace..."
       },
       "crud": {
         "categories": "Gestión de Categorías",
@@ -418,7 +430,19 @@ const resources = {
         "strength_medium": "Medium",
         "strength_strong": "Strong",
         "already_have_account": "Already have an account?",
-        "login_now": "Login now"
+        "login_now": "Login now",
+        "forgot_password_title": "Recover Password",
+        "forgot_password_subtitle": "Enter your corporate email and we will send you a password reset link.",
+        "send_reset_link": "Send recovery link",
+        "reset_link_sent": "We have sent an email with instructions to reset your password. Please check your inbox.",
+        "back_to_login": "Back to Login",
+        "reset_password_title": "Set New Password",
+        "reset_password_subtitle": "Choose a secure password for your corporate account.",
+        "new_password": "New Password",
+        "update_password": "Update Password",
+        "password_updated_success": "Password updated successfully. You can now login with your new credentials.",
+        "updating_password": "Updating password...",
+        "sending_link": "Sending link..."
       },
       "crud": {
         "categories": "Category Management",

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
   import { useNavigate, Link } from 'react-router-dom';
   import { supabase } from '../lib/supabase';
   import { useTranslation } from 'react-i18next';
@@ -18,6 +18,15 @@ import React, { useState } from 'react';
     const [loading, setLoading] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [isCapsLock, setIsCapsLock] = useState(false);
+
+    // Cargar correo recordado al montar el componente
+    useEffect(() => {
+      const savedEmail = localStorage.getItem('remembered_email');
+      if (savedEmail) {
+        setEmail(savedEmail);
+        setRememberMe(true);
+      }
+    }, []);
 
     // Detectar Bloq Mayús
     const checkCapsLock = (e: React.KeyboardEvent) => {
@@ -60,6 +69,11 @@ import React, { useState } from 'react';
         setError(error.message);
         setLoading(false);
       } else {
+        if (rememberMe) {
+          localStorage.setItem('remembered_email', email);
+        } else {
+          localStorage.removeItem('remembered_email');
+        }
         navigate('/');
       }
     };

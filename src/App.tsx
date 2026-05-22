@@ -2,6 +2,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Login } from './pages/Login';
 import { Registro } from './pages/Registro';
+import { ForgotPassword } from './pages/ForgotPassword';
+import { ResetPassword } from './pages/ResetPassword';
 import { Catalogo } from './pages/Catalogo';
 import { Checkout } from './pages/Checkout';
 import { MisPedidos } from './pages/MisPedidos';
@@ -31,6 +33,8 @@ function App() {
         {/* Rutas Públicas */}
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         {/* Redirección inteligente en la raíz */}
         <Route path="/" element={<HomeRedirect />} />
