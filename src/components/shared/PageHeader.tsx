@@ -30,15 +30,15 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
   return (
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
-          {Icon && <Icon className={`w-8 h-8 ${iconColor}`} />}
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-2 sm:gap-3">
+          {Icon && <Icon className={`w-6 h-6 sm:w-8 sm:h-8 ${iconColor}`} />}
           {title}
         </h1>
-        {subtitle && <p className="text-gray-500 mt-1">{subtitle}</p>}
+        {subtitle && <p className="text-sm sm:text-base text-gray-500 mt-1">{subtitle}</p>}
       </div>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 w-full sm:w-auto">
         {actionLabel && onAction && (
-          <Button onClick={onAction} className="gap-2 font-bold shadow-md">
+          <Button onClick={onAction} className="flex-1 sm:flex-none gap-2 font-bold shadow-md">
             {ActionIcon && <ActionIcon className="w-4 h-4" />}
             {actionLabel}
           </Button>

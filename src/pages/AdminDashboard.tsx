@@ -286,21 +286,21 @@ export const AdminDashboard: React.FC = () => {
             <CardTitle className="text-gray-900 font-bold">{t('admin.revenue_evolution')}</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-80">
+            <div className="h-64 sm:h-80">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                <BarChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
                   <XAxis
                     dataKey="name"
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fontSize: 12, fill: '#6b7280' }}
+                    tick={{ fontSize: 10, fill: '#6b7280' }}
                     dy={10}
                   />
                   <YAxis
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fontSize: 12, fill: '#6b7280' }}
+                    tick={{ fontSize: 10, fill: '#6b7280' }}
                     tickFormatter={(val) => `€${val}`}
                   />
                   <RechartsTooltip

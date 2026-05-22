@@ -88,42 +88,48 @@ export const Checkout: React.FC = () => {
         {/* Lista de Productos */}
         <div className="lg:col-span-2 space-y-4">
           {items.map((item) => (
-            <div key={item.producto.id} className="flex flex-col sm:flex-row items-center gap-4 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-md">
-              <div className="w-24 h-24 bg-gray-50/80 rounded-xl border border-gray-100 flex items-center justify-center shrink-0">
+            <div key={item.producto.id} className="flex flex-col sm:flex-row items-center gap-4 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-md relative">
+              <div className="w-full sm:w-24 h-40 sm:h-24 bg-gray-50/80 rounded-xl border border-gray-100 flex items-center justify-center shrink-0">
                 <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{t('common.no_img')}</span>
               </div>
               
-              <div className="flex-1 text-center sm:text-left w-full">
-                <h3 className="font-bold text-gray-900 line-clamp-1">{item.producto.nombre}</h3>
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mt-1 mb-3">
+              <div className="flex-1 text-center sm:text-left w-full px-2">
+                <h3 className="font-bold text-gray-900 line-clamp-2 sm:line-clamp-1">{item.producto.nombre}</h3>
+                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mt-1 mb-2 sm:mb-3">
                   {item.producto.fabricantes?.nombre || 'General'}
                 </p>
-                <p className="font-black text-blue-600 text-lg">
+                <p className="font-black text-blue-600 text-base sm:text-lg">
                   {formatCurrency(item.producto.precio)} <span className="text-xs text-gray-400 font-medium">/ud</span>
                 </p>
               </div>
 
-              <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-0 pt-4 sm:pt-0">
-                <div className="flex items-center border border-gray-200 rounded-lg bg-white overflow-hidden shadow-sm h-10">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-0 pt-4 sm:pt-0 mt-2 sm:mt-0">
+                <div className="flex items-center border border-gray-200 rounded-lg bg-white overflow-hidden shadow-sm h-9 sm:h-10">
                   <button 
-                    className="px-3 hover:bg-gray-50 text-gray-600 font-bold border-r border-gray-200 transition-colors h-full disabled:opacity-30"
+                    className="px-2.5 sm:px-3 hover:bg-gray-50 text-gray-600 font-bold border-r border-gray-200 transition-colors h-full disabled:opacity-30"
                     onClick={() => updateQuantity(item.producto.id, item.cantidad - 1)}
                     disabled={item.cantidad <= 1}
                   >-</button>
-                  <span className="w-12 text-center text-sm font-bold">{item.cantidad}</span>
+                  <span className="w-10 sm:w-12 text-center text-sm font-bold">{item.cantidad}</span>
                   <button 
-                    className="px-3 hover:bg-gray-50 text-gray-600 font-bold border-l border-gray-200 transition-colors h-full disabled:opacity-30"
+                    className="px-2.5 sm:px-3 hover:bg-gray-50 text-gray-600 font-bold border-l border-gray-200 transition-colors h-full disabled:opacity-30"
                     onClick={() => updateQuantity(item.producto.id, item.cantidad + 1)}
                     disabled={item.cantidad >= item.producto.stock}
                   >+</button>
                 </div>
                 
-                <p className="font-bold text-gray-900 min-w-[80px] text-right text-lg">
+                <p className="font-bold text-gray-900 min-w-[70px] sm:min-w-[80px] text-right text-base sm:text-lg flex-1 sm:flex-none">
                   {formatCurrency(item.producto.precio * item.cantidad)}
                 </p>
 
-                <Button variant="ghost" size="icon" className="text-red-400 hover:text-red-600 hover:bg-red-50 shrink-0 rounded-full" onClick={() => removeItem(item.producto.id)} title={t('common.delete')}>
-                  <Trash2 className="w-5 h-5" />
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="text-red-400 hover:text-red-600 hover:bg-red-50 shrink-0 rounded-full h-9 w-9" 
+                  onClick={() => removeItem(item.producto.id)} 
+                  title={t('common.delete')}
+                >
+                  <Trash2 className="w-4 h-4 sm:w-5 h-5" />
                 </Button>
               </div>
             </div>
