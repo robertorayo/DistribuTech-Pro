@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabase';
 import { Button } from '../components/ui/button';
 import { User, Mail, Phone, ShieldCheck, Loader2 } from 'lucide-react';
@@ -27,6 +28,7 @@ interface ValidationErrors {
 
 export const Perfil: React.FC = () => {
   const { user, rol } = useAuth();
+  const { t } = useTranslation();
   
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -81,7 +83,7 @@ export const Perfil: React.FC = () => {
         setOriginalData(profile);
       }
     } catch (error: any) {
-      toast.error('Error al cargar perfil: ' + error.message);
+      toast.error(`${t('profile.load_error')} ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -96,11 +98,11 @@ export const Perfil: React.FC = () => {
     // Validate Nombre
     const nombreTrim = nombre.trim();
     if (!nombreTrim) {
-      newErrors.nombre = 'El nombre es obligatorio.';
+      newErrors.nombre = t('profile.error_name_req');
     } else if (nombreTrim.length < 2 || nombreTrim.length > 50) {
-      newErrors.nombre = 'El nombre debe tener entre 2 y 50 caracteres.';
+      newErrors.nombre = t('profile.error_name_len');
     } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(nombreTrim)) {
-      newErrors.nombre = 'El nombre solo puede contener letras y espacios.';
+      newErrors.nombre = t('profile.error_name_format');
     } else {
       newErrors.nombre = '';
     }
@@ -108,11 +110,11 @@ export const Perfil: React.FC = () => {
     // Validate Apellidos
     const apellidosTrim = apellidos.trim();
     if (!apellidosTrim) {
-      newErrors.apellidos = 'Los apellidos son obligatorios.';
+      newErrors.apellidos = t('profile.error_lastname_req');
     } else if (apellidosTrim.length < 2 || apellidosTrim.length > 50) {
-      newErrors.apellidos = 'Los apellidos deben tener entre 2 y 50 caracteres.';
+      newErrors.apellidos = t('profile.error_lastname_len');
     } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(apellidosTrim)) {
-      newErrors.apellidos = 'Los apellidos solo pueden contener letras y espacios.';
+      newErrors.apellidos = t('profile.error_lastname_format');
     } else {
       newErrors.apellidos = '';
     }
@@ -120,9 +122,9 @@ export const Perfil: React.FC = () => {
     // Validate Email format
     const emailTrim = email.trim();
     if (!emailTrim) {
-      newErrors.email = 'El correo electrónico es obligatorio.';
+      newErrors.email = t('profile.error_email_req');
     } else if (!/^\S+@\S+\.\S+$/.test(emailTrim)) {
-      newErrors.email = 'El formato del correo electrónico es inválido.';
+      newErrors.email = t('profile.error_email_format');
     } else {
       newErrors.email = '';
     }
@@ -130,7 +132,7 @@ export const Perfil: React.FC = () => {
     // Validate Telefono (optional)
     const telefonoTrim = telefono.trim();
     if (telefonoTrim && !/^\d{9}$/.test(telefonoTrim)) {
-      newErrors.telefono = 'El teléfono debe tener exactamente 9 dígitos numéricos (ej: 600000000).';
+      newErrors.telefono = t('profile.error_phone_format');
     } else {
       newErrors.telefono = '';
     }
@@ -247,12 +249,12 @@ export const Perfil: React.FC = () => {
       setOriginalData(updatedProfile);
 
       if (emailChanged) {
-        toast.success('¡Perfil guardado! Se ha enviado un correo de confirmación a tu nueva dirección.');
+        toast.success(t('profile.save_success_email'));
       } else {
-        toast.success('Cambios guardados correctamente.');
+        toast.success(t('profile.save_success'));
       }
     } catch (error: any) {
-      toast.error('Error al guardar los cambios: ' + error.message);
+      toast.error(`${t('profile.save_error')} ${error.message}`);
     } finally {
       setSaving(false);
     }
@@ -263,8 +265,8 @@ export const Perfil: React.FC = () => {
   return (
     <div className="space-y-6 max-w-4xl mx-auto animate-in fade-in duration-500 font-sans">
       <PageHeader 
-        title="Mi Perfil" 
-        subtitle="Gestiona tu información personal y los datos de tu cuenta corporativa."
+        title={t('profile.title')} 
+        subtitle={t('profile.subtitle')}
         icon={User}
         iconColor="text-blue-600"
       />
@@ -285,7 +287,7 @@ export const Perfil: React.FC = () => {
             
             <div className="border-t border-gray-50 pt-4 flex justify-center items-center gap-1.5">
               <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-100">
-                Rol: {rol}
+                {t('profile.role', { role: rol })}
               </span>
             </div>
           </div>
@@ -294,9 +296,9 @@ export const Perfil: React.FC = () => {
             <div className="flex items-start gap-2.5">
               <ShieldCheck className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
               <div>
-                <p className="text-xs font-bold text-gray-900">Seguridad RLS activa</p>
+                <p className="text-xs font-bold text-gray-900">{t('profile.rls_active')}</p>
                 <p className="text-[10px] text-gray-500 leading-normal mt-0.5">
-                  El acceso a tus datos está blindado por políticas de nivel de fila. Solo tú y el personal autorizado comercial tienen acceso.
+                  {t('profile.rls_desc')}
                 </p>
               </div>
             </div>
@@ -306,13 +308,13 @@ export const Perfil: React.FC = () => {
         {/* Card principal con Formulario */}
         <div className="bg-white rounded-2xl border border-gray-100 p-8 shadow-sm md:col-span-2">
           <div className="border-b border-gray-100 pb-4 mb-6">
-            <h3 className="text-lg font-bold text-gray-900">Información de la Cuenta</h3>
-            <p className="text-xs text-gray-500 mt-0.5">Mantén tus datos de contacto corporativo actualizados para agilizar la facturación y la logística.</p>
+            <h3 className="text-lg font-bold text-gray-900">{t('profile.account_info')}</h3>
+            <p className="text-xs text-gray-500 mt-0.5">{t('profile.account_desc')}</p>
           </div>
 
           <form onSubmit={handleGuardar} className="space-y-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <FormField label="Nombre" required>
+              <FormField label={t('profile.name')} required>
                 <div className="relative">
                   <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
                     <User className="w-4 h-4" />
@@ -322,7 +324,7 @@ export const Perfil: React.FC = () => {
                     value={nombre}
                     onChange={(e) => setNombre(e.target.value)}
                     className={`${inputClasses} pl-10`}
-                    placeholder="Tu nombre"
+                    placeholder={t('profile.name_placeholder')}
                     disabled={saving}
                   />
                 </div>
@@ -333,7 +335,7 @@ export const Perfil: React.FC = () => {
                 )}
               </FormField>
 
-              <FormField label="Apellidos" required>
+              <FormField label={t('profile.last_name')} required>
                 <div className="relative">
                   <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
                     <User className="w-4 h-4" />
@@ -343,7 +345,7 @@ export const Perfil: React.FC = () => {
                     value={apellidos}
                     onChange={(e) => setApellidos(e.target.value)}
                     className={`${inputClasses} pl-10`}
-                    placeholder="Tus apellidos"
+                    placeholder={t('profile.last_name_placeholder')}
                     disabled={saving}
                   />
                 </div>
@@ -355,7 +357,7 @@ export const Perfil: React.FC = () => {
               </FormField>
             </div>
 
-            <FormField label="Correo Electrónico" required>
+            <FormField label={t('profile.email')} required>
               <div className="relative">
                 <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
                   <Mail className="w-4 h-4" />
@@ -365,7 +367,7 @@ export const Perfil: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className={`${inputClasses} pl-10 ${emailInUse ? 'border-red-300 focus:ring-red-600 focus:border-red-600' : ''}`}
-                  placeholder="ejemplo@empresa.com"
+                  placeholder={t('profile.email_placeholder')}
                   disabled={saving}
                 />
                 {checkingEmail && (
@@ -381,12 +383,12 @@ export const Perfil: React.FC = () => {
               )}
               {emailInUse && (
                 <p className="text-xs text-red-600 mt-1.5 font-medium animate-in slide-in-from-top-1 duration-200">
-                  Este correo electrónico ya está en uso por otro usuario.
+                  {t('profile.email_in_use')}
                 </p>
               )}
             </FormField>
 
-            <FormField label="Teléfono Corporativo">
+            <FormField label={t('profile.phone')}>
               <div className="relative">
                 <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
                   <Phone className="w-4 h-4" />
@@ -396,7 +398,7 @@ export const Perfil: React.FC = () => {
                   value={telefono}
                   onChange={(e) => setTelefono(e.target.value)}
                   className={`${inputClasses} pl-10`}
-                  placeholder="Ej: 600123456"
+                  placeholder={t('profile.phone_placeholder')}
                   disabled={saving}
                 />
               </div>
@@ -406,7 +408,7 @@ export const Perfil: React.FC = () => {
                 </p>
               ) : (
                 <p className="text-[10px] text-gray-400 mt-1.5">
-                  Opcional. Formato de 9 dígitos numéricos de España. Puede guardarse vacío.
+                  {t('profile.phone_desc')}
                 </p>
               )}
             </FormField>
@@ -420,10 +422,10 @@ export const Perfil: React.FC = () => {
                 {saving ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Guardando...
+                    {t('profile.saving')}
                   </>
                 ) : (
-                  'Guardar cambios'
+                  t('profile.save')
                 )}
               </Button>
             </div>
