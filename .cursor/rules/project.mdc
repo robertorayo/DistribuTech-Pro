@@ -1,3 +1,8 @@
+---
+description: Reglas generales del proyecto DistribuTech Pro
+alwaysApply: true
+---
+
 # Tech Stack
 - Frontend: React 18 + TypeScript + Vite 5
 - Estilos: Tailwind CSS 3 + shadcn/ui + @base-ui/react
