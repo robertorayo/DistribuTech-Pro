@@ -18,7 +18,7 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   rol: null,
   isLoading: true,
-  signOut: async () => {},
+  signOut: async () => { },
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -36,7 +36,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           .select('rol')
           .eq('id', userId)
           .single() as any;
-        
+
         if (error) throw error;
         setRol(data?.rol || null);
       } catch (error) {
@@ -50,9 +50,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // 1. Obtener la sesión activa al recargar la página
     supabase.auth.getSession().then(({ data: { session } }: { data: { session: any } }) => {
+      // Verificación de expiración de sesión (24h)
+      const expiry = localStorage.getItem('session_expiry');
+      if (expiry && Date.now() > parseInt(expiry)) {
+        // Sesión expirada: limpiar y forzar logout
+        localStorage.removeItem('session_expiry');
+        localStorage.removeItem('remembered_email');
+        supabase.auth.signOut();
+        setSession(null);
+        setUser(null);
+        setRol(null);
+        setIsLoading(false);
+        return; // Salir sin continuar con la sesión "expirada"
+      }
+
       setSession(session);
       setUser(session?.user ?? null);
-      
       if (session?.user) {
         fetchUserRole(session.user.id);
       } else {
@@ -64,7 +77,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event: string, session: any) => {
       setSession(session);
       setUser(session?.user ?? null);
-      
+
       if (session?.user) {
         fetchUserRole(session.user.id);
       } else {
