@@ -225,7 +225,14 @@ export const Layout: React.FC = () => {
               />
               <DropdownMenuContent align="center" className="min-w-[var(--anchor-width)]">
                 <DropdownMenuItem
-                  className="justify-center text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer font-medium"
+                  className="justify-center gap-2 text-gray-700 hover:bg-gray-50 cursor-pointer font-medium border-b border-gray-100 pb-2 mb-1"
+                  onClick={() => navigate('/perfil')}
+                >
+                  <UserIcon className="w-4 h-4 text-gray-500" />
+                  {t('app.my_profile')}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="justify-center gap-2 text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer font-medium"
                   onClick={handleLogout}
                 >
                   <LogOut className="w-4 h-4" />

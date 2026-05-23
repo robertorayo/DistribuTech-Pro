@@ -12,6 +12,7 @@ import { AdminDashboard } from './pages/AdminDashboard';
 import { AdminProductos } from './pages/AdminProductos';
 import { AdminCategorias } from './pages/AdminCategorias';
 import { AdminFabricantes } from './pages/AdminFabricantes';
+import { Perfil } from './pages/Perfil';
 import { PrivateRoute } from './components/PrivateRoute';
 import { Layout } from './components/Layout';
 import { useAuth } from './context/AuthContext';
@@ -46,6 +47,7 @@ function App() {
           <Route element={<PrivateRoute allowedRoles={['cliente', 'comercial', 'admin']} />}>
             <Route path="/catalogo" element={<Catalogo />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/perfil" element={<Perfil />} />
           </Route>
 
           {/* Rutas exclusivas Cliente */}
