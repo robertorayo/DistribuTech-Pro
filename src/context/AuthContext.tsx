@@ -50,18 +50,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // 1. Obtener la sesión activa al recargar la página
     supabase.auth.getSession().then(({ data: { session } }: { data: { session: any } }) => {
-      // Verificación de expiración de sesión (24h)
+      // Limpieza del "recordar email" tras 24h (sin expulsar al usuario)
       const expiry = localStorage.getItem('session_expiry');
       if (expiry && Date.now() > parseInt(expiry)) {
-        // Sesión expirada: limpiar y forzar logout
+        // Sesión expirada: limpiar por completo la credencial
         localStorage.removeItem('session_expiry');
         localStorage.removeItem('remembered_email');
-        supabase.auth.signOut();
-        setSession(null);
-        setUser(null);
-        setRol(null);
-        setIsLoading(false);
-        return; // Salir sin continuar con la sesión "expirada"
       }
 
       setSession(session);
@@ -93,7 +87,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signOut = async () => {
     setIsLoading(true);
-    await supabase.auth.signOut();
+    localStorage.removeItem('session_expiry');      // Borra el temporizador
+    localStorage.removeItem('remembered_email');    // Borra el rastro del email
+    await supabase.auth.signOut();                  // Cierra sesión en Supabase
   };
 
   return (
