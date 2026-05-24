@@ -284,6 +284,32 @@ const resources = {
         "save_error": "Error al guardar los cambios:",
         "save_success_email": "¡Perfil guardado! Se ha enviado un correo de confirmación a tu nueva dirección.",
         "save_success": "Cambios guardados correctamente."
+      },
+      "about": {
+        "title": "Sobre Nosotros",
+        "subtitle": "Conoce más acerca de nuestra historia, misión y equipo de trabajo.",
+        "history_title": "Nuestra Historia",
+        "history_p1_1": "Fundada en ",
+        "history_p1_bold": "1998",
+        "history_p1_2": ", DistribuTech Pro comenzó como un pequeño almacén local de suministros industriales. Con más de 25 años de experiencia, hemos evolucionado hasta convertirnos en uno de los principales distribuidores B2B a nivel nacional, ofreciendo soluciones integrales para profesionales y empresas del sector de la construcción, fontanería y climatización.",
+        "mission_title": "Misión y Visión",
+        "mission_label": "Misión:",
+        "mission_desc": "Proveer a nuestros clientes con productos de la más alta calidad, garantizando un servicio logístico excepcional y un soporte técnico especializado que impulse el éxito de sus proyectos.",
+        "vision_label": "Visión:",
+        "vision_desc": "Ser el socio estratégico líder en distribución industrial y ferretería profesional, destacando por nuestra innovación digital y compromiso con la sostenibilidad.",
+        "team_title": "Nuestro Equipo Directivo",
+        "ceo_name": "Carlos Jiménez",
+        "ceo_role": "Director General (CEO)",
+        "sales_director_name": "María Rodríguez",
+        "sales_director_role": "Directora Comercial",
+        "contact_title": "Información de Contacto",
+        "hq_title": "Sede Central",
+        "hq_line1": "Polígono Industrial Norte",
+        "hq_line2": "Calle Innovación, 45",
+        "hq_line3": "28080 Madrid, España",
+        "support_title": "Atención al Cliente",
+        "support_schedule": "L-V de 8:00 a 18:00",
+        "email_title": "Correo Electrónico"
       }
     }
   },
@@ -568,6 +594,32 @@ const resources = {
         "save_error": "Error saving changes:",
         "save_success_email": "Profile saved! A confirmation email has been sent to your new address.",
         "save_success": "Changes saved successfully."
+      },
+      "about": {
+        "title": "About Us",
+        "subtitle": "Learn more about our history, mission, and team.",
+        "history_title": "Our History",
+        "history_p1_1": "Founded in ",
+        "history_p1_bold": "1998",
+        "history_p1_2": ", DistribuTech Pro started as a small local warehouse for industrial supplies. With over 25 years of experience, we have evolved to become one of the leading B2B distributors nationwide, offering comprehensive solutions for professionals and companies in the construction, plumbing, and HVAC sectors.",
+        "mission_title": "Mission and Vision",
+        "mission_label": "Mission:",
+        "mission_desc": "To provide our clients with the highest quality products, ensuring exceptional logistical service and specialized technical support that drives the success of their projects.",
+        "vision_label": "Vision:",
+        "vision_desc": "To be the leading strategic partner in industrial distribution and professional hardware, standing out for our digital innovation and commitment to sustainability.",
+        "team_title": "Our Executive Team",
+        "ceo_name": "Carlos Jiménez",
+        "ceo_role": "Chief Executive Officer (CEO)",
+        "sales_director_name": "María Rodríguez",
+        "sales_director_role": "Sales Director",
+        "contact_title": "Contact Information",
+        "hq_title": "Headquarters",
+        "hq_line1": "North Industrial Estate",
+        "hq_line2": "Innovation Street, 45",
+        "hq_line3": "28080 Madrid, Spain",
+        "support_title": "Customer Support",
+        "support_schedule": "Mon-Fri from 8:00 to 18:00",
+        "email_title": "Email Address"
       }
     }
   }

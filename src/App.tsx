@@ -13,6 +13,7 @@ import { AdminProductos } from './pages/AdminProductos';
 import { AdminCategorias } from './pages/AdminCategorias';
 import { AdminFabricantes } from './pages/AdminFabricantes';
 import { Perfil } from './pages/Perfil';
+import { SobreNosotros } from './pages/SobreNosotros';
 import { PrivateRoute } from './components/PrivateRoute';
 import { Layout } from './components/Layout';
 import { useAuth } from './context/AuthContext';
@@ -53,6 +54,7 @@ function App() {
           {/* Rutas exclusivas Cliente */}
           <Route element={<PrivateRoute allowedRoles={['cliente']} />}>
             <Route path="/mis-pedidos" element={<MisPedidos />} />
+            <Route path="/sobre-nosotros" element={<SobreNosotros />} />
           </Route>
 
           {/* Rutas Exclusivas Comercial y Admin */}

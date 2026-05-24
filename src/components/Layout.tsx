@@ -8,7 +8,7 @@ import {
 } from './ui/dropdown-menu';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from './ui/sheet';
 import { 
-  Menu, Package, LogOut, Globe, User as UserIcon, LayoutDashboard, FileText, ShoppingCart, ClipboardList
+  Menu, Package, LogOut, Globe, User as UserIcon, LayoutDashboard, FileText, ShoppingCart, ClipboardList, Building2
 } from 'lucide-react';
 import { useCartStore } from '../store/cartStore';
 import { supabase } from '../lib/supabase';
@@ -141,6 +141,7 @@ export const Layout: React.FC = () => {
   const menuItems = [
     { name: t('app.catalog'), path: '/catalogo', icon: <Package className="w-5 h-5" />, roles: ['cliente', 'comercial', 'admin'] },
     { name: t('app.my_orders'), path: '/mis-pedidos', icon: <ClipboardList className="w-5 h-5" />, roles: ['cliente'], badge: incidentCount },
+    { name: t('app.about_us', 'Sobre Nosotros'), path: '/sobre-nosotros', icon: <Building2 className="w-5 h-5" />, roles: ['cliente'] },
     { name: t('app.admin_dashboard'), path: '/admin', icon: <LayoutDashboard className="w-5 h-5" />, roles: ['admin'] },
     { name: t('app.admin_products'), path: '/admin/productos', icon: <Package className="w-5 h-5" />, roles: ['admin', 'comercial'] },
     { name: t('app.admin_categories'), path: '/admin/categorias', icon: <FileText className="w-5 h-5" />, roles: ['admin', 'comercial'] },
