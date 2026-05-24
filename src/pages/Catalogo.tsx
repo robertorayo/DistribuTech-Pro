@@ -9,10 +9,10 @@ import { ProductoDetalle } from '../components/ProductoDetalle';
 import { useTranslation } from 'react-i18next';
 import { useFormatCurrency } from '../lib/formatters';
 import { useCartStore } from '../store/cartStore';
-import { 
-  LoadingScreen, 
-  PageHeader, 
-  SearchInput, 
+import {
+  LoadingScreen,
+  PageHeader,
+  SearchInput,
   EmptyState,
   selectClasses,
   FilterBar
@@ -31,7 +31,7 @@ export const Catalogo: React.FC = () => {
   const [fabricantes, setFabricantes] = useState<Fabricante[]>([]);
   const [loading, setLoading] = useState(true);
   const [productoSeleccionado, setProductoSeleccionado] = useState<ProductoConDetalles | null>(null);
-  
+
   // Estados para los filtros
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -50,11 +50,11 @@ export const Catalogo: React.FC = () => {
         supabase.from('categorias').select('*').order('nombre'),
         supabase.from('fabricantes').select('*').order('nombre'),
       ]);
-      
+
       if (prodRes.error) throw prodRes.error;
       if (catRes.error) throw catRes.error;
       if (fabRes.error) throw fabRes.error;
-      
+
       setProductos(prodRes.data as unknown as ProductoConDetalles[]);
       setCategorias(catRes.data || []);
       setFabricantes(fabRes.data || []);
@@ -68,8 +68,8 @@ export const Catalogo: React.FC = () => {
   // Aplicar filtros y ordenación
   const productosFiltrados = useMemo(() => {
     let result = productos.filter((prod) => {
-      const matchSearch = prod.nombre.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          (prod.descripcion && prod.descripcion.toLowerCase().includes(searchTerm.toLowerCase()));
+      const matchSearch = prod.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (prod.descripcion && prod.descripcion.toLowerCase().includes(searchTerm.toLowerCase()));
       const matchCategory = selectedCategory === 'all' || prod.categoria_id === selectedCategory;
       const matchManufacturer = selectedManufacturer === 'all' || prod.fabricante_id === selectedManufacturer;
       return matchSearch && matchCategory && matchManufacturer;
@@ -110,20 +110,20 @@ export const Catalogo: React.FC = () => {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
-      <PageHeader 
-        title={t('catalog.title')} 
+      <PageHeader
+        title={t('catalog.title')}
         subtitle={t('catalog.subtitle')}
         icon={Package}
       >
         <FilterBar onClear={limpiarFiltros} showClear={isFilterActive}>
-          <SearchInput 
-            value={searchTerm} 
-            onChange={setSearchTerm} 
+          <SearchInput
+            value={searchTerm}
+            onChange={setSearchTerm}
             placeholder={t('catalog.search_placeholder')}
             className="w-full sm:max-w-xs"
           />
-          
-          <select 
+
+          <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
             className={`${selectClasses} w-full sm:w-48 py-2`}
@@ -134,7 +134,7 @@ export const Catalogo: React.FC = () => {
             ))}
           </select>
 
-          <select 
+          <select
             value={selectedManufacturer}
             onChange={(e) => setSelectedManufacturer(e.target.value)}
             className={`${selectClasses} w-full sm:w-48 py-2`}
@@ -145,7 +145,7 @@ export const Catalogo: React.FC = () => {
             ))}
           </select>
 
-          <select 
+          <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
             className={`${selectClasses} w-full sm:w-48 py-2`}
@@ -160,9 +160,9 @@ export const Catalogo: React.FC = () => {
       </PageHeader>
 
       {productosFiltrados.length === 0 ? (
-        <EmptyState 
-          icon={PackageOpen} 
-          title={t('catalog.no_results')} 
+        <EmptyState
+          icon={PackageOpen}
+          title={t('catalog.no_results')}
           description={t('catalog.no_results_desc')}
           actionLabel={(searchTerm !== '' || selectedCategory !== 'all') ? t('catalog.reset_search') : undefined}
           onAction={limpiarFiltros}
@@ -182,7 +182,7 @@ export const Catalogo: React.FC = () => {
                   {prod.nombre}
                 </CardTitle>
               </CardHeader>
-              
+
               <CardContent className="flex-1 flex flex-col">
                 <p className="text-sm text-gray-600 line-clamp-3 mb-6 flex-1">
                   {prod.descripcion}
@@ -200,18 +200,17 @@ export const Catalogo: React.FC = () => {
                   </div>
                 </div>
               </CardContent>
-              
+
               <CardFooter className="pt-0 flex gap-2">
-                <Button 
-                  className="flex-1 font-semibold shadow-sm" 
-                  disabled={prod.stock === 0}
+                <Button
+                  className="flex-1 font-semibold shadow-sm"
                   onClick={() => setProductoSeleccionado(prod)}
                   variant="outline"
                 >
                   {t('catalog.details')}
                 </Button>
-                <Button 
-                  className="font-semibold shadow-sm px-3" 
+                <Button
+                  className="font-semibold shadow-sm px-3"
                   disabled={prod.stock === 0}
                   onClick={() => {
                     useCartStore.getState().addItem(prod, 1);
@@ -219,7 +218,7 @@ export const Catalogo: React.FC = () => {
                   }}
                   title="Añadir 1 al Carrito"
                 >
-                  <ShoppingCart className="w-5 h-5" /> 
+                  <ShoppingCart className="w-5 h-5" />
                 </Button>
               </CardFooter>
             </Card>
@@ -228,7 +227,7 @@ export const Catalogo: React.FC = () => {
       )}
 
       {/* Modal de Detalle de Producto */}
-      <ProductoDetalle 
+      <ProductoDetalle
         producto={productoSeleccionado}
         isOpen={!!productoSeleccionado}
         onClose={() => setProductoSeleccionado(null)}
