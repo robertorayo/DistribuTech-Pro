@@ -193,7 +193,6 @@ export const MisPedidos: React.FC = () => {
         subtitle={t('mispedidos.subtitle')}
         icon={ClipboardList}
       />
-
       <DataTable columns={[t('common.id'), t('common.date'), t('common.status'), t('mispedidos.incident'), t('common.total'), t('common.actions')]}>
         {cotizaciones.length === 0 ? (
           <tr>
@@ -204,14 +203,14 @@ export const MisPedidos: React.FC = () => {
         ) : (
           cotizaciones.map((cot) => (
             <tr key={cot.id} className="hover:bg-gray-50 transition-colors">
-              <td className="px-6 py-4 font-mono text-xs text-gray-400">#{cot.id.split('-')[0]}</td>
-              <td className="px-6 py-4 text-gray-600">{formatDate(cot.created_at)}</td>
-              <td className="px-6 py-4">
+              <td className="px-3 sm:px-6 py-3 sm:py-4 font-mono text-xs text-gray-400">#{cot.id.split('-')[0]}</td>
+              <td className="px-3 sm:px-6 py-3 sm:py-4 text-gray-600 text-xs sm:text-sm">{formatDate(cot.created_at)}</td>
+              <td className="px-3 sm:px-6 py-3 sm:py-4">
                 <StatusBadge status={cot.estado} />
               </td>
-              <td className="px-6 py-4">{getIncidenciaBadge(cot) || <span className="text-gray-300 text-xs">—</span>}</td>
-              <td className="px-6 py-4 text-right font-black text-gray-900">{formatCurrency(cot.total || 0)}</td>
-              <td className="px-6 py-4 text-center">
+              <td className="hidden sm:table-cell px-3 sm:px-6 py-3 sm:py-4">{getIncidenciaBadge(cot) || <span className="text-gray-300 text-xs">—</span>}</td>
+              <td className="px-3 sm:px-6 py-3 sm:py-4 text-right font-black text-gray-900 text-sm sm:text-base">{formatCurrency(cot.total || 0)}</td>
+              <td className="px-3 sm:px-6 py-3 sm:py-4 text-center">
                 <Button variant="outline" size="sm" onClick={() => abrirDetalle(cot)}>
                   {t('mispedidos.view')}
                 </Button>
@@ -227,7 +226,7 @@ export const MisPedidos: React.FC = () => {
           <ModalHeader>
             <div className="flex justify-between items-center">
               <div>
-                <h3 className="text-2xl font-bold text-gray-900">{t('mispedidos.detail_title')}</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900">{t('mispedidos.detail_title')}</h3>
                 <p className="text-xs text-gray-400 mt-1">ID: {cotizacionSeleccionada.id}</p>
               </div>
               <Button variant="ghost" size="icon" onClick={cerrarModal} className="text-gray-400">&times;</Button>

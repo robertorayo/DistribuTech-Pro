@@ -410,47 +410,50 @@ export const AdminDashboard: React.FC = () => {
         </CardHeader>
         <CardContent>
           <ChartContainer config={dailyChartConfig} className="aspect-auto h-80 w-full">
-            <LineChart
-              data={dailyChartData}
-              margin={{ top: 10, right: 12, left: 4, bottom: 0 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
-              <XAxis
-                dataKey="label"
-                axisLine={false}
-                tickLine={false}
-                tickMargin={8}
-                interval="preserveStartEnd"
-              />
-              <YAxis
-                axisLine={false}
-                tickLine={false}
-                tickMargin={8}
-                width={56}
-                tickFormatter={(val) =>
-                  val >= 1000 ? `€${(val / 1000).toFixed(0)}k` : `€${val}`
-                }
-              />
-              <ChartTooltip
-                content={
-                  <ChartTooltipContent
-                    labelFormatter={(_, payload) => {
-                      const day = payload?.[0]?.payload?.day;
-                      return day != null ? t('admin.chart_day', { day }) : '';
-                    }}
-                    formatter={(value) => formatCurrency(Number(value))}
-                  />
-                }
-              />
-              <Line
-                type="monotone"
-                dataKey="ingresos"
-                stroke="var(--color-ingresos)"
-                strokeWidth={2}
-                dot={{ r: 3, fill: 'var(--color-ingresos)', strokeWidth: 0 }}
-                activeDot={{ r: 5 }}
-              />
-            </LineChart>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={dailyChartData}
+                margin={{ top: 10, right: 12, left: 4, bottom: 0 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis
+                  dataKey="label"
+                  axisLine={false}
+                  tickLine={false}
+                  tickMargin={8}
+                  interval="preserveStartEnd"
+                />
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tickMargin={8}
+                  width={56}
+                  tickFormatter={(val) =>
+                    val >= 1000 ? `€${(val / 1000).toFixed(0)}k` : `€${val}`
+                  }
+                />
+                <ChartTooltip
+                  content={
+                    <ChartTooltipContent
+                      labelFormatter={(_, payload) => {
+                        const day = payload?.[0]?.payload?.day;
+                        return day != null ? t('admin.chart_day', { day }) : '';
+                      }}
+                      formatter={(value) => formatCurrency(Number(value))}
+                    />
+                  }
+                />
+                <Line
+                  type="monotone"
+                  dataKey="ingresos"
+                  stroke="var(--color-ingresos)"
+                  strokeWidth={2}
+                  dot={{ r: 3, fill: 'var(--color-ingresos)', strokeWidth: 0 }}
+                  activeDot={{ r: 5 }}
+                  connectNulls={true}
+                />
+              </LineChart>
+            </ResponsiveContainer>
           </ChartContainer>
         </CardContent>
       </Card>

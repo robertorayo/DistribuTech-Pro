@@ -259,19 +259,19 @@ export const ComercialDashboard: React.FC = () => {
           ) : (
             cotizacionesFiltradas.map(cot => (
               <tr key={cot.id} className="hover:bg-gray-50 transition-colors">
-                <td className="px-6 py-4 font-mono text-xs text-gray-400">#{cot.id.split('-')[0]}</td>
-                <td className="px-6 py-4">
+                <td className="px-3 sm:px-6 py-3 sm:py-4 font-mono text-xs text-gray-400">#{cot.id.split('-')[0]}</td>
+                <td className="px-3 sm:px-6 py-3 sm:py-4">
                   <p className="font-bold text-gray-900">{cot.cliente?.nombre} {cot.cliente?.apellidos}</p>
                   <p className="text-xs text-gray-500">{cot.cliente?.email}</p>
                 </td>
-                <td className="px-6 py-4 text-gray-600">{formatDate(cot.created_at)}</td>
-                <td className="px-6 py-4">
+                <td className="px-3 sm:px-6 py-3 sm:py-4 text-gray-600 text-xs sm:text-sm">{formatDate(cot.created_at)}</td>
+                <td className="px-3 sm:px-6 py-3 sm:py-4">
                   <StatusBadge status={cot.estado} />
                 </td>
-                <td className="px-6 py-4 text-right">
-                  <span className="font-black text-gray-900 text-lg">{formatCurrency(cot.total || 0)}</span>
+                <td className="px-3 sm:px-6 py-3 sm:py-4 text-right">
+                  <span className="font-black text-gray-900 text-base sm:text-lg">{formatCurrency(cot.total || 0)}</span>
                 </td>
-                <td className="px-6 py-4 text-center">
+                <td className="px-3 sm:px-6 py-3 sm:py-4 text-center">
                   <Button variant="outline" size="sm" className="font-semibold" onClick={() => abrirRevision(cot)}>
                     {t('comercial.review')}
                   </Button>
@@ -287,7 +287,7 @@ export const ComercialDashboard: React.FC = () => {
           <ModalHeader>
             <div className="flex justify-between items-center">
               <div>
-                <h3 className="text-2xl font-bold text-gray-900">{t('comercial.quote_review')}</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-900">{t('comercial.quote_review')}</h3>
                 <p className="text-sm text-gray-500">ID: {cotizacionSeleccionada.id}</p>
               </div>
               <Button variant="ghost" size="icon" onClick={() => setCotizacionSeleccionada(null)} className="text-gray-400">&times;</Button>
@@ -298,15 +298,15 @@ export const ComercialDashboard: React.FC = () => {
               <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>
             ) : (
               <div className="space-y-6">
-                <div className="bg-white p-6 rounded-xl border border-gray-200 flex justify-between items-center shadow-sm">
+                <div className="bg-white p-4 sm:p-6 rounded-xl border border-gray-200 flex flex-col sm:flex-row justify-between sm:items-center gap-4 shadow-sm">
                   <div>
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{t('common.client')}</p>
                     <p className="font-bold text-gray-900 text-lg">{cotizacionSeleccionada.cliente?.nombre} {cotizacionSeleccionada.cliente?.apellidos}</p>
                     <p className="text-sm text-gray-500">{cotizacionSeleccionada.cliente?.email}</p>
                   </div>
-                  <div className="text-right">
+                  <div className="text-left sm:text-right">
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{t('common.total')}</p>
-                    <p className="font-black text-blue-700 text-3xl">{formatCurrency(cotizacionSeleccionada.total || 0)}</p>
+                    <p className="font-black text-blue-700 text-2xl sm:text-3xl">{formatCurrency(cotizacionSeleccionada.total || 0)}</p>
                   </div>
                 </div>
 

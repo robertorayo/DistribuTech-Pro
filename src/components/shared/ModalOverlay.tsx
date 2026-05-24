@@ -45,7 +45,7 @@ export const ModalBody: React.FC<{ children: React.ReactNode; className?: string
 }) => <div className={`p-6 space-y-5 ${className}`}>{children}</div>;
 
 export const ModalFooter: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="p-6 border-t border-gray-100 bg-white flex justify-end gap-3 sticky bottom-0">
+  <div className="p-4 sm:p-6 border-t border-gray-100 bg-white flex flex-wrap justify-end gap-2 sm:gap-3 sticky bottom-0">
     {children}
   </div>
 );
