@@ -192,7 +192,8 @@ const resources = {
         "update_password": "Actualizar Contraseña",
         "password_updated_success": "Contraseña actualizada con éxito. Ya puedes iniciar sesión con tus nuevas credenciales.",
         "updating_password": "Actualizando contraseña...",
-        "sending_link": "Enviando enlace..."
+        "sending_link": "Enviando enlace...",
+        "session_already_active": "Ya tienes una sesión activa en otro dispositivo o navegador."
       },
       "crud": {
         "categories": "Gestión de Categorías",
@@ -502,7 +503,8 @@ const resources = {
         "update_password": "Update Password",
         "password_updated_success": "Password updated successfully. You can now login with your new credentials.",
         "updating_password": "Updating password...",
-        "sending_link": "Sending link..."
+        "sending_link": "Sending link...",
+        "session_already_active": "You already have an active session on another device or browser."
       },
       "crud": {
         "categories": "Category Management",

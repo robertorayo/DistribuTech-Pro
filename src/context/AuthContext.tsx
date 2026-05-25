@@ -89,8 +89,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoading(true);
     localStorage.removeItem('session_expiry');      // Borra el temporizador
     localStorage.removeItem('remembered_email');    // Borra el rastro del email
+    try {
+      await supabase.rpc('cerrar_sesion_activa');
+    } catch (e) {
+      console.error('Error al cerrar sesión activa:', e);
+    }
     await supabase.auth.signOut();                  // Cierra sesión en Supabase
   };
+
+  useEffect(() => {
+    if (!session) return;
+
+    // Heartbeat cada 1 minuto
+    const interval = setInterval(async () => {
+      try {
+        const { data: isValid, error } = await supabase.rpc('registrar_actividad_sesion');
+        if (!error && isValid === false) {
+          console.warn('Sesión duplicada detectada. Cerrando sesión actual.');
+          signOut();
+        }
+      } catch (err) {
+        console.error('Error en heartbeat:', err);
+      }
+    }, 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, [session]);
 
   return (
     <AuthContext.Provider value={{ session, user, rol, isLoading, signOut }}>

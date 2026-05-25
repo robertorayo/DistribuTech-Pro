@@ -69,6 +69,15 @@ export const Login: React.FC = () => {
       setError(error.message);
       setLoading(false);
     } else {
+      // Validar sesión única
+      const { data: isSessionValid, error: rpcError } = await supabase.rpc('registrar_actividad_sesion');
+      if (rpcError || !isSessionValid) {
+        await supabase.auth.signOut();
+        setError(t('auth.session_already_active'));
+        setLoading(false);
+        return;
+      }
+
       if (rememberMe) {
         localStorage.setItem('remembered_email', email);
         // Guardar fecha de expiración de sesión (24 horas)
