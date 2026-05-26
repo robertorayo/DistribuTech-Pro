@@ -51,9 +51,6 @@ export const ProductoDetalle: React.FC<ProductoDetalleProps> = ({ producto, isOp
 
         {/* Encabezado visual: Banner gris suave y título */}
         <div className="bg-muted/10/80 p-4 sm:p-6 border-b border-border/50 flex flex-row items-start gap-4 relative shrink-0">
-          <div className="w-16 h-16 sm:w-24 sm:h-24 bg-card rounded-xl border border-border flex items-center justify-center shadow-sm shrink-0">
-            <span className="text-gray-300 font-semibold text-[10px] text-center px-1">{t('common.no_img')}</span>
-          </div>
 
           <div className="flex-1 space-y-1.5 min-w-0">
             <div className="flex items-center flex-wrap gap-2">

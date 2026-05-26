@@ -89,9 +89,6 @@ export const Checkout: React.FC = () => {
         <div className="lg:col-span-2 space-y-4">
           {items.map((item) => (
             <div key={item.producto.id} className="flex flex-col sm:flex-row items-center gap-4 bg-card p-4 rounded-2xl border border-border/50 shadow-sm transition-all hover:shadow-md relative">
-              <div className="w-full sm:w-24 h-40 sm:h-24 bg-muted/10/80 rounded-xl border border-border/50 flex items-center justify-center shrink-0">
-                <span className="text-[10px] text-muted-foreground/70 font-bold uppercase tracking-widest">{t('common.no_img')}</span>
-              </div>
               
               <div className="flex-1 text-center sm:text-left w-full px-2">
                 <h3 className="font-bold text-foreground line-clamp-2 sm:line-clamp-1">{item.producto.nombre}</h3>
