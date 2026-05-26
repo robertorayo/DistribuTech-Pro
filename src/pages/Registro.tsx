@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useTranslation } from 'react-i18next';
-import { Eye, EyeOff, ShieldCheck, ShieldAlert, Shield, Check } from 'lucide-react';
+import { Eye, EyeOff, ShieldCheck, ShieldAlert, Shield } from 'lucide-react';
 
 export const Registro: React.FC = () => {
   const [nombre, setNombre] = useState('');
@@ -29,7 +29,7 @@ export const Registro: React.FC = () => {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (password !== confirmPassword) {
       setError(t('auth.passwords_not_match'));
       return;
@@ -71,11 +71,11 @@ export const Registro: React.FC = () => {
           </div>
           <h2 className="text-3xl font-bold text-foreground mb-4">¡Casi listo!</h2>
           <p className="text-muted-foreground mb-8 leading-relaxed">
-            Hemos enviado un enlace de confirmación a <strong className="text-foreground">{email}</strong>.<br/>
+            Hemos enviado un enlace de confirmación a <strong className="text-foreground">{email}</strong>.<br />
             Por favor, revisa tu correo para activar tu cuenta.
           </p>
-          <Link 
-            to="/login" 
+          <Link
+            to="/login"
             className="inline-block w-full rounded-xl bg-primary py-4 font-bold text-white shadow-xl shadow-primary/20 transition-all hover:bg-primary/90"
           >
             Volver al Login
@@ -92,13 +92,13 @@ export const Registro: React.FC = () => {
           <h2 className="text-4xl font-extrabold text-foreground tracking-tight">{t('auth.register_title')}</h2>
           <p className="mt-2 text-muted-foreground font-medium">{t('auth.register_subtitle')}</p>
         </div>
-        
+
         {error && (
           <div className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700 border border-red-200">
             {error}
           </div>
         )}
-        
+
         <form onSubmit={handleRegister} className="space-y-4">
           <div className="flex gap-4">
             <div className="w-1/2">
@@ -168,7 +168,7 @@ export const Registro: React.FC = () => {
                   {strength === 3 && <span className="text-primary/80 flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Fuerte</span>}
                   {strength === 4 && <span className="text-green-600 flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Muy Fuerte</span>}
                 </div>
-                
+
                 {/* Requisitos Checklist */}
                 <div className="grid grid-cols-2 gap-1 text-[11px] text-muted-foreground">
                   <div className={`flex items-center gap-1 ${criteria.length ? 'text-green-600 font-semibold' : ''}`}>
@@ -219,7 +219,7 @@ export const Registro: React.FC = () => {
             {loading ? t('auth.creating_account') : t('auth.create_account')}
           </button>
         </form>
-        
+
         <p className="mt-6 text-center text-sm text-muted-foreground">
           {t('auth.already_have_account')}{' '}
           <Link to="/login" className="font-medium text-primary hover:text-primary/80 hover:underline">
