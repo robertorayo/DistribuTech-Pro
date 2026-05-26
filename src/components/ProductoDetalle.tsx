@@ -123,7 +123,19 @@ export const ProductoDetalle: React.FC<ProductoDetalleProps> = ({ producto, isOp
               <div>
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">{t('product.availability')}</p>
                 <div className="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border border-gray-100 shadow-sm w-fit">
-                  <div className={`w-2.5 h-2.5 rounded-full ${producto.stock > 0 ? 'bg-green-500' : 'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]'}`}></div>
+                  <span className="relative flex h-2.5 w-2.5">
+                    {producto.stock > 0 ? (
+                      <>
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-50"></span>
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-40"></span>
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                      </>
+                    )}
+                  </span>
                   <span className={`text-xs font-bold uppercase tracking-wider ${producto.stock > 0 ? 'text-green-700' : 'text-red-600'}`}>
                     {producto.stock > 0 ? t('product.stock_units', { count: producto.stock }) : t('product.out_of_stock')}
                   </span>

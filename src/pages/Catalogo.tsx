@@ -224,11 +224,14 @@ export const Catalogo: React.FC = () => {
                       <span className="relative flex h-2.5 w-2.5">
                         {prod.stock > 0 ? (
                           <>
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-60"></span>
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-50"></span>
                             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
                           </>
                         ) : (
-                          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                          <>
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-40"></span>
+                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                          </>
                         )}
                       </span>
                       <p className="text-xs font-semibold text-gray-500">
@@ -239,9 +242,9 @@ export const Catalogo: React.FC = () => {
                 </CardContent>
 
                 {/* Action footer */}
-                <CardFooter className="pt-0 pb-5 px-5 flex gap-2">
+                <CardFooter className="pt-4 pb-5 px-5 flex gap-2">
                   <Button
-                    className="flex-1 font-bold shadow-sm hover:shadow transition-all"
+                    className="flex-1 font-bold shadow-sm hover:bg-muted hover:border-foreground/40 transition-all duration-150"
                     onClick={() => setProductoSeleccionado(prod)}
                     variant="outline"
                   >
