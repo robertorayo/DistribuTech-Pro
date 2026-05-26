@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
@@ -44,11 +44,7 @@ export const MisPedidos: React.FC = () => {
   const [cargandoDetalles, setCargandoDetalles] = useState(false);
   const [accionLoading, setAccionLoading] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (session?.user?.id) cargarPedidos();
-  }, [session]);
-
-  const cargarPedidos = async () => {
+  const cargarPedidos = useCallback(async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -63,7 +59,11 @@ export const MisPedidos: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [session, t]);
+
+  useEffect(() => {
+    if (session?.user?.id) cargarPedidos();
+  }, [session, cargarPedidos]);
 
   const abrirDetalle = async (cot: any) => {
     setCotizacionSeleccionada(cot);

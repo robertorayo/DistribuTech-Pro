@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { Database } from '../types';
@@ -6,17 +6,17 @@ import { Button } from '../components/ui/button';
 import { Plus, Factory } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
-import { 
-  LoadingScreen, 
-  PageHeader, 
-  DataTable, 
-  RowActions, 
-  ModalOverlay, 
-  ModalHeader, 
-  ModalBody, 
-  ModalFooter, 
-  FormField, 
-  inputClasses, 
+import {
+  LoadingScreen,
+  PageHeader,
+  DataTable,
+  RowActions,
+  ModalOverlay,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  FormField,
+  inputClasses,
   EmptyState,
   FilterBar,
   SearchInput,
@@ -45,16 +45,7 @@ export const AdminFabricantes: React.FC = () => {
   const [saving, setSaving] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Resetear página al filtrar
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm]);
-
-  useEffect(() => {
-    cargarFabricantes();
-  }, []);
-
-  const cargarFabricantes = async () => {
+  const cargarFabricantes = useCallback(async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -68,7 +59,11 @@ export const AdminFabricantes: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [t]);
+
+  useEffect(() => {
+    cargarFabricantes();
+  }, [cargarFabricantes]);
 
   const abrirCrear = () => {
     setEditando(null);
@@ -172,25 +167,26 @@ export const AdminFabricantes: React.FC = () => {
 
   const fabricantesFiltrados = fabricantes.filter(fab => {
     const search = searchTerm.toLowerCase();
-    return fab.nombre.toLowerCase().includes(search) || 
-           (fab.contacto || '').toLowerCase().includes(search) ||
-           (fab.email || '').toLowerCase().includes(search) ||
-           (fab.telefono || '').toLowerCase().includes(search);
+    return fab.nombre.toLowerCase().includes(search) ||
+      (fab.contacto || '').toLowerCase().includes(search) ||
+      (fab.email || '').toLowerCase().includes(search) ||
+      (fab.telefono || '').toLowerCase().includes(search);
   });
 
   const itemsPerPage = 10;
   const totalPages = Math.ceil(fabricantesFiltrados.length / itemsPerPage);
+  const paginaEfectiva = currentPage > totalPages ? 1 : currentPage;
   const fabricantesPaginados = fabricantesFiltrados.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    (paginaEfectiva - 1) * itemsPerPage,
+    paginaEfectiva * itemsPerPage
   );
 
   if (loading) return <LoadingScreen />;
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <PageHeader 
-        title={t('crud.manufacturers')} 
+      <PageHeader
+        title={t('crud.manufacturers')}
         subtitle={t('crud.manufacturers_desc')}
         icon={Factory}
         iconColor="text-purple-600"
@@ -200,22 +196,22 @@ export const AdminFabricantes: React.FC = () => {
       />
 
       <FilterBar onClear={limpiarFiltros} showClear={searchTerm !== ''}>
-        <SearchInput 
-          value={searchTerm} 
-          onChange={setSearchTerm} 
+        <SearchInput
+          value={searchTerm}
+          onChange={setSearchTerm}
           placeholder={t('catalog.search_placeholder')}
           className="w-full sm:max-w-md"
         />
       </FilterBar>
 
       <DataTable columns={[
-        t('crud.name'), 
-        t('crud.contact'), 
-        t('crud.phone'), 
-        t('crud.email'), 
+        t('crud.name'),
+        t('crud.contact'),
+        t('crud.phone'),
+        t('crud.email'),
         ...(rol === 'admin' ? [t('common.actions')] : [])
       ]}
-      footer={`${fabricantesFiltrados.length} / ${fabricantes.length} ${t('crud.manufacturers').toLowerCase()}`}
+        footer={`${fabricantesFiltrados.length} / ${fabricantes.length} ${t('crud.manufacturers').toLowerCase()}`}
       >
         {fabricantesFiltrados.length === 0 ? (
           <tr>
@@ -232,7 +228,7 @@ export const AdminFabricantes: React.FC = () => {
               <td className="px-6 py-4 text-muted-foreground">{fab.email || '—'}</td>
               {rol === 'admin' && (
                 <td className="px-6 py-4">
-                  <RowActions 
+                  <RowActions
                     onEdit={() => abrirEditar(fab)}
                     onDelete={() => setConfirmDelete(fab.id)}
                   />
@@ -244,7 +240,7 @@ export const AdminFabricantes: React.FC = () => {
       </DataTable>
 
       <Pagination
-        currentPage={currentPage}
+        currentPage={paginaEfectiva}
         totalPages={totalPages}
         onPageChange={setCurrentPage}
       />

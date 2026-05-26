@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
@@ -7,14 +7,14 @@ import { Button } from '../components/ui/button';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { useFormatCurrency, useFormatDate } from '../lib/formatters';
-import { 
-  LoadingScreen, 
-  PageHeader, 
-  DataTable, 
-  StatusBadge, 
-  ModalOverlay, 
-  ModalHeader, 
-  ModalBody, 
+import {
+  LoadingScreen,
+  PageHeader,
+  DataTable,
+  StatusBadge,
+  ModalOverlay,
+  ModalHeader,
+  ModalBody,
   ModalFooter,
   EmptyState,
   FilterBar,
@@ -28,32 +28,21 @@ export const ComercialDashboard: React.FC = () => {
   const { t } = useTranslation();
   const formatCurrency = useFormatCurrency();
   const formatDate = useFormatDate();
-  
+
   const [loading, setLoading] = useState(true);
   const [clientes, setClientes] = useState<any[]>([]);
   const [cotizaciones, setCotizaciones] = useState<any[]>([]);
   const [cotizacionSeleccionada, setCotizacionSeleccionada] = useState<any | null>(null);
   const [detallesCotizacion, setDetallesCotizacion] = useState<any[]>([]);
   const [cargandoDetalles, setCargandoDetalles] = useState(false);
-  
+
   // Estados de filtrado y paginación
   const [searchTerm, setSearchTerm] = useState('');
   const [filterEstado, setFilterEstado] = useState('all');
   const [sortBy, setSortBy] = useState<string>('date-desc');
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Resetear página al filtrar
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, filterEstado, sortBy]);
-
-  useEffect(() => {
-    if (session?.user?.id) {
-      cargarDashboard();
-    }
-  }, [session]);
-
-  const cargarDashboard = async () => {
+  const cargarDashboard = useCallback(async () => {
     try {
       setLoading(true);
       const [clientsRes, cotRes] = await Promise.all([
@@ -69,7 +58,13 @@ export const ComercialDashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [t]);
+
+  useEffect(() => {
+    if (session?.user?.id) {
+      cargarDashboard();
+    }
+  }, [session, cargarDashboard]);
 
   const abrirRevision = async (cot: any) => {
     setCotizacionSeleccionada(cot);
@@ -139,9 +134,9 @@ export const ComercialDashboard: React.FC = () => {
   const cotizacionesFiltradas = useMemo(() => {
     let result = cotizaciones.filter(cot => {
       const nombreCompleto = `${cot.cliente?.nombre} ${cot.cliente?.apellidos}`.toLowerCase();
-      const matchSearch = nombreCompleto.includes(searchTerm.toLowerCase()) || 
-                          cot.cliente?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          cot.id.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchSearch = nombreCompleto.includes(searchTerm.toLowerCase()) ||
+        cot.cliente?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        cot.id.toLowerCase().includes(searchTerm.toLowerCase());
       const matchEstado = filterEstado === 'all' || cot.estado === filterEstado;
       return matchSearch && matchEstado;
     });
@@ -167,10 +162,11 @@ export const ComercialDashboard: React.FC = () => {
 
   const itemsPerPage = 15;
   const totalPages = Math.ceil(cotizacionesFiltradas.length / itemsPerPage);
+  const paginaEfectiva = currentPage > totalPages ? 1 : currentPage;
   const cotizacionesPaginadas = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
+    const start = (paginaEfectiva - 1) * itemsPerPage;
     return cotizacionesFiltradas.slice(start, start + itemsPerPage);
-  }, [cotizacionesFiltradas, currentPage]);
+  }, [cotizacionesFiltradas, paginaEfectiva]);
 
   if (loading) return <LoadingScreen />;
 
@@ -179,8 +175,8 @@ export const ComercialDashboard: React.FC = () => {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
-      <PageHeader 
-        title={t('comercial.title')} 
+      <PageHeader
+        title={t('comercial.title')}
         subtitle={t('comercial.subtitle')}
         icon={LayoutDashboard}
       />
@@ -226,14 +222,14 @@ export const ComercialDashboard: React.FC = () => {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <h2 className="text-xl font-bold text-foreground">{t('comercial.table_title')}</h2>
           <FilterBar onClear={limpiarFiltros} showClear={isFilterActive}>
-            <SearchInput 
-              value={searchTerm} 
-              onChange={setSearchTerm} 
+            <SearchInput
+              value={searchTerm}
+              onChange={setSearchTerm}
               placeholder={t('catalog.search_placeholder')}
               className="w-full sm:max-w-xs"
             />
-            <select 
-              value={filterEstado} 
+            <select
+              value={filterEstado}
               onChange={(e) => setFilterEstado(e.target.value)}
               className={`${selectClasses} py-2 text-xs w-full sm:w-40`}
             >
@@ -242,8 +238,8 @@ export const ComercialDashboard: React.FC = () => {
               <option value="aprobada">{t('common.status_approved')}</option>
               <option value="rechazada">{t('common.status_rejected')}</option>
             </select>
-            <select 
-              value={sortBy} 
+            <select
+              value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
               className={`${selectClasses} py-2 text-xs w-full sm:w-48`}
             >
@@ -257,11 +253,11 @@ export const ComercialDashboard: React.FC = () => {
         </div>
 
         <DataTable columns={[
-          t('common.id'), 
-          t('common.client'), 
-          t('common.date'), 
-          t('common.status'), 
-          t('common.total'), 
+          t('common.id'),
+          t('common.client'),
+          t('common.date'),
+          t('common.status'),
+          t('common.total'),
           t('common.actions')
         ]}>
           {cotizacionesFiltradas.length === 0 ? (
@@ -296,7 +292,7 @@ export const ComercialDashboard: React.FC = () => {
         </DataTable>
 
         <Pagination
-          currentPage={currentPage}
+          currentPage={paginaEfectiva}
           totalPages={totalPages}
           onPageChange={setCurrentPage}
         />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { Producto, Categoria, Fabricante } from '../types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../components/ui/card';
@@ -40,16 +40,7 @@ export const Catalogo: React.FC = () => {
   const [sortBy, setSortBy] = useState<string>('default');
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Resetear página al cambiar filtros
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, selectedCategory, selectedManufacturer, sortBy]);
-
-  useEffect(() => {
-    cargarTodo();
-  }, []);
-
-  const cargarTodo = async () => {
+  const cargarTodo = useCallback(async () => {
     try {
       setLoading(true);
       const [prodRes, catRes, fabRes] = await Promise.all([
@@ -57,11 +48,9 @@ export const Catalogo: React.FC = () => {
         supabase.from('categorias').select('*').order('nombre'),
         supabase.from('fabricantes').select('*').order('nombre'),
       ]);
-
       if (prodRes.error) throw prodRes.error;
       if (catRes.error) throw catRes.error;
       if (fabRes.error) throw fabRes.error;
-
       setProductos(prodRes.data as unknown as ProductoConDetalles[]);
       setCategorias(catRes.data || []);
       setFabricantes(fabRes.data || []);
@@ -70,7 +59,11 @@ export const Catalogo: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [t]);
+
+  useEffect(() => {
+    cargarTodo();
+  }, [cargarTodo]);
 
   // Aplicar filtros y ordenación
   const productosFiltrados = useMemo(() => {
@@ -106,7 +99,7 @@ export const Catalogo: React.FC = () => {
 
   const itemsPerPage = 12;
   const totalPages = Math.ceil(productosFiltrados.length / itemsPerPage);
-  
+
   const productosPaginados = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return productosFiltrados.slice(start, start + itemsPerPage);
@@ -195,8 +188,8 @@ export const Catalogo: React.FC = () => {
                     </span>
                     <span className="text-[10px] text-muted-foreground/70 font-bold uppercase tracking-wider">{prod.fabricantes?.nombre || 'Marca Blanca'}</span>
                   </div>
-                  <CardTitle 
-                    className="text-base font-extrabold text-foreground leading-snug line-clamp-2 hover:text-primary transition-colors cursor-pointer" 
+                  <CardTitle
+                    className="text-base font-extrabold text-foreground leading-snug line-clamp-2 hover:text-primary transition-colors cursor-pointer"
                     onClick={() => setProductoSeleccionado(prod)}
                   >
                     {prod.nombre}
@@ -209,7 +202,7 @@ export const Catalogo: React.FC = () => {
                   <div className="bg-slate-50/40 p-3.5 rounded-xl border border-slate-100 text-xs sm:text-sm text-muted-foreground leading-relaxed font-normal line-clamp-3 mb-4 flex-1">
                     {prod.descripcion || 'Sin descripción disponible para este producto profesional.'}
                   </div>
-                  
+
                   {/* Visual Divider and Pricing info */}
                   <div className="mt-auto border-t border-border/50 pt-3 flex flex-col gap-2">
                     <div className="flex justify-between items-baseline">

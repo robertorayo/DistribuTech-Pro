@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { Database } from '../types';
@@ -7,20 +7,20 @@ import { Plus, Package } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { useFormatCurrency } from '../lib/formatters';
-import { 
-  LoadingScreen, 
-  PageHeader, 
-  SearchInput, 
-  DataTable, 
-  RowActions, 
-  StatusBadge, 
-  ModalOverlay, 
-  ModalHeader, 
-  ModalBody, 
-  ModalFooter, 
-  FormField, 
-  inputClasses, 
-  selectClasses, 
+import {
+  LoadingScreen,
+  PageHeader,
+  SearchInput,
+  DataTable,
+  RowActions,
+  StatusBadge,
+  ModalOverlay,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  FormField,
+  inputClasses,
+  selectClasses,
   textareaClasses,
   EmptyState,
   FilterBar,
@@ -67,16 +67,7 @@ export const AdminProductos: React.FC = () => {
   const [saving, setSaving] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Resetear página al filtrar
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, filterCategoria, filterFabricante, filterStock, filterActivo, sortByPrice]);
-
-  useEffect(() => {
-    cargarTodo();
-  }, []);
-
-  const cargarTodo = async () => {
+  const cargarTodo = useCallback(async () => {
     try {
       setLoading(true);
       const [prodRes, catRes, fabRes] = await Promise.all([
@@ -95,7 +86,11 @@ export const AdminProductos: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [t]);
+
+  useEffect(() => {
+    cargarTodo();
+  }, [cargarTodo]);
 
   const abrirCrear = () => {
     setEditando(null);
@@ -135,12 +130,12 @@ export const AdminProductos: React.FC = () => {
       toast.error(t('crud.name_min_length'));
       return;
     }
-    
+
     if (!categoriaId) {
       toast.error(t('crud.select_category'));
       return;
     }
-    
+
     if (!fabricanteId) {
       toast.error(t('crud.select_manufacturer'));
       return;
@@ -220,17 +215,17 @@ export const AdminProductos: React.FC = () => {
 
   const productosFiltrados = productos.filter((p) => {
     const matchSearch = p.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        (p.categorias?.nombre || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        (p.fabricantes?.nombre || '').toLowerCase().includes(searchTerm.toLowerCase());
-    
+      (p.categorias?.nombre || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (p.fabricantes?.nombre || '').toLowerCase().includes(searchTerm.toLowerCase());
+
     const matchCategoria = filterCategoria === 'all' || p.categoria_id === filterCategoria;
     const matchFabricante = filterFabricante === 'all' || p.fabricante_id === filterFabricante;
-    
-    const matchStock = filterStock === 'all' || 
-                       (filterStock === 'in' ? p.stock > 0 : p.stock === 0);
-                       
-    const matchActivo = filterActivo === 'all' || 
-                        (filterActivo === 'active' ? p.activo : !p.activo);
+
+    const matchStock = filterStock === 'all' ||
+      (filterStock === 'in' ? p.stock > 0 : p.stock === 0);
+
+    const matchActivo = filterActivo === 'all' ||
+      (filterActivo === 'active' ? p.activo : !p.activo);
 
     return matchSearch && matchCategoria && matchFabricante && matchStock && matchActivo;
   }).sort((a, b) => {
@@ -241,9 +236,10 @@ export const AdminProductos: React.FC = () => {
 
   const itemsPerPage = 15;
   const totalPages = Math.ceil(productosFiltrados.length / itemsPerPage);
+  const paginaEfectiva = currentPage > totalPages ? 1 : currentPage;
   const productosPaginados = productosFiltrados.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    (paginaEfectiva - 1) * itemsPerPage,
+    paginaEfectiva * itemsPerPage
   );
 
   if (loading) return <LoadingScreen />;
@@ -252,8 +248,8 @@ export const AdminProductos: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <PageHeader 
-        title={t('crud.products')} 
+      <PageHeader
+        title={t('crud.products')}
         subtitle={t('crud.products_desc')}
         icon={Package}
         iconColor="text-orange-600"
@@ -263,15 +259,15 @@ export const AdminProductos: React.FC = () => {
       />
 
       <FilterBar onClear={limpiarFiltros} showClear={isFilterActive}>
-        <SearchInput 
-          value={searchTerm} 
-          onChange={setSearchTerm} 
+        <SearchInput
+          value={searchTerm}
+          onChange={setSearchTerm}
           placeholder={t('catalog.search_placeholder')}
           className="w-full sm:max-w-xs"
         />
-        
-        <select 
-          value={filterCategoria} 
+
+        <select
+          value={filterCategoria}
           onChange={(e) => setFilterCategoria(e.target.value)}
           className={`${selectClasses} py-2 text-xs !w-auto min-w-[160px]`}
         >
@@ -281,8 +277,8 @@ export const AdminProductos: React.FC = () => {
           ))}
         </select>
 
-        <select 
-          value={filterFabricante} 
+        <select
+          value={filterFabricante}
           onChange={(e) => setFilterFabricante(e.target.value)}
           className={`${selectClasses} py-2 text-xs !w-auto min-w-[160px]`}
         >
@@ -292,8 +288,8 @@ export const AdminProductos: React.FC = () => {
           ))}
         </select>
 
-        <select 
-          value={filterStock} 
+        <select
+          value={filterStock}
           onChange={(e) => setFilterStock(e.target.value)}
           className={`${selectClasses} py-2 text-xs !w-auto min-w-[160px]`}
         >
@@ -302,8 +298,8 @@ export const AdminProductos: React.FC = () => {
           <option value="out">{t('crud.out_of_stock')}</option>
         </select>
 
-        <select 
-          value={filterActivo} 
+        <select
+          value={filterActivo}
           onChange={(e) => setFilterActivo(e.target.value)}
           className={`${selectClasses} py-2 text-xs !w-auto min-w-[160px]`}
         >
@@ -312,8 +308,8 @@ export const AdminProductos: React.FC = () => {
           <option value="inactive">{t('crud.inactive')}</option>
         </select>
 
-        <select 
-          value={sortByPrice} 
+        <select
+          value={sortByPrice}
           onChange={(e) => setSortByPrice(e.target.value)}
           className={`${selectClasses} py-2 text-xs !w-auto min-w-[160px]`}
         >
@@ -323,14 +319,14 @@ export const AdminProductos: React.FC = () => {
         </select>
       </FilterBar>
 
-      <DataTable 
+      <DataTable
         columns={[
-          t('crud.name'), 
-          t('crud.category'), 
-          t('crud.manufacturer'), 
-          t('crud.price'), 
-          t('crud.stock'), 
-          t('common.status'), 
+          t('crud.name'),
+          t('crud.category'),
+          t('crud.manufacturer'),
+          t('crud.price'),
+          t('crud.stock'),
+          t('common.status'),
           ...(rol === 'admin' ? [t('common.actions')] : [])
         ]}
         footer={`${productosFiltrados.length} / ${productos.length} ${t('crud.products').toLowerCase()}`}
@@ -365,7 +361,7 @@ export const AdminProductos: React.FC = () => {
               </td>
               {rol === 'admin' && (
                 <td className="px-5 py-4">
-                  <RowActions 
+                  <RowActions
                     onEdit={() => abrirEditar(prod)}
                     onDelete={() => setConfirmDelete(prod.id)}
                   />
@@ -377,7 +373,7 @@ export const AdminProductos: React.FC = () => {
       </DataTable>
 
       <Pagination
-        currentPage={currentPage}
+        currentPage={paginaEfectiva}
         totalPages={totalPages}
         onPageChange={setCurrentPage}
       />

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { Database } from '../types';
@@ -6,18 +6,18 @@ import { Button } from '../components/ui/button';
 import { Plus, Tag } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
-import { 
-  LoadingScreen, 
-  PageHeader, 
-  DataTable, 
-  RowActions, 
-  ModalOverlay, 
-  ModalHeader, 
-  ModalBody, 
-  ModalFooter, 
-  FormField, 
-  inputClasses, 
-  selectClasses, 
+import {
+  LoadingScreen,
+  PageHeader,
+  DataTable,
+  RowActions,
+  ModalOverlay,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  FormField,
+  inputClasses,
+  selectClasses,
   textareaClasses,
   EmptyState,
   FilterBar,
@@ -49,16 +49,7 @@ export const AdminCategorias: React.FC = () => {
   const [saving, setSaving] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Resetear página al filtrar
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, filterSector]);
-
-  useEffect(() => {
-    cargarCategorias();
-  }, []);
-
-  const cargarCategorias = async () => {
+  const cargarCategorias = useCallback(async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -72,7 +63,11 @@ export const AdminCategorias: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [t]);
+
+  useEffect(() => {
+    cargarCategorias();
+  }, [cargarCategorias]);
 
   const abrirCrear = () => {
     setEditando(null);
@@ -93,7 +88,7 @@ export const AdminCategorias: React.FC = () => {
   const handleGuardar = async () => {
     const tNombre = nombre.trim();
     const tDescripcion = descripcion.trim();
-    
+
     if (!tNombre) {
       toast.error(t('crud.field_required', { field: t('crud.name') }));
       return;
@@ -106,11 +101,11 @@ export const AdminCategorias: React.FC = () => {
       toast.error(t('crud.select_sector'));
       return;
     }
-    
+
     try {
       setSaving(true);
       const payload = { nombre: tNombre, descripcion: tDescripcion || null, sector };
-      
+
       if (editando) {
         const { error } = await (supabase.from('categorias') as any).update(payload).eq('id', editando.id);
         if (error) throw error;
@@ -155,17 +150,18 @@ export const AdminCategorias: React.FC = () => {
   };
 
   const categoriasFiltradas = categorias.filter(cat => {
-    const matchSearch = cat.nombre.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                        (cat.descripcion || '').toLowerCase().includes(searchTerm.toLowerCase());
+    const matchSearch = cat.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (cat.descripcion || '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchSector = filterSector === 'all' || cat.sector === filterSector;
     return matchSearch && matchSector;
   });
 
   const itemsPerPage = 10;
   const totalPages = Math.ceil(categoriasFiltradas.length / itemsPerPage);
+  const paginaEfectiva = currentPage > totalPages ? 1 : currentPage;
   const categoriasPaginadas = categoriasFiltradas.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    (paginaEfectiva - 1) * itemsPerPage,
+    paginaEfectiva * itemsPerPage
   );
 
   if (loading) return <LoadingScreen />;
@@ -174,8 +170,8 @@ export const AdminCategorias: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <PageHeader 
-        title={t('crud.categories')} 
+      <PageHeader
+        title={t('crud.categories')}
         subtitle={t('crud.categories_desc')}
         icon={Tag}
         actionLabel={rol === 'admin' ? t('crud.new_category') : undefined}
@@ -184,14 +180,14 @@ export const AdminCategorias: React.FC = () => {
       />
 
       <FilterBar onClear={limpiarFiltros} showClear={isFilterActive}>
-        <SearchInput 
-          value={searchTerm} 
-          onChange={setSearchTerm} 
+        <SearchInput
+          value={searchTerm}
+          onChange={setSearchTerm}
           placeholder={t('catalog.search_placeholder')}
           className="w-full sm:max-w-xs"
         />
-        <select 
-          value={filterSector} 
+        <select
+          value={filterSector}
           onChange={(e) => setFilterSector(e.target.value)}
           className={`${selectClasses} py-2 text-xs w-full sm:w-48`}
         >
@@ -203,12 +199,12 @@ export const AdminCategorias: React.FC = () => {
       </FilterBar>
 
       <DataTable columns={[
-        t('crud.name'), 
-        t('crud.description'), 
-        t('crud.sector'), 
+        t('crud.name'),
+        t('crud.description'),
+        t('crud.sector'),
         ...(rol === 'admin' ? [t('common.actions')] : [])
       ]}
-      footer={`${categoriasFiltradas.length} / ${categorias.length} ${t('crud.categories').toLowerCase()}`}
+        footer={`${categoriasFiltradas.length} / ${categorias.length} ${t('crud.categories').toLowerCase()}`}
       >
         {categoriasFiltradas.length === 0 ? (
           <tr>
@@ -228,7 +224,7 @@ export const AdminCategorias: React.FC = () => {
               </td>
               {rol === 'admin' && (
                 <td className="px-6 py-4">
-                  <RowActions 
+                  <RowActions
                     onEdit={() => abrirEditar(cat)}
                     onDelete={() => setConfirmDelete(cat.id)}
                   />
@@ -240,7 +236,7 @@ export const AdminCategorias: React.FC = () => {
       </DataTable>
 
       <Pagination
-        currentPage={currentPage}
+        currentPage={paginaEfectiva}
         totalPages={totalPages}
         onPageChange={setCurrentPage}
       />

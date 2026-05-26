@@ -61,7 +61,8 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   return (
     <ModalOverlay onClose={onClose} maxWidth="max-w-md">
       <div className="relative p-8">
-        <button 
+        <button
+          type="button"
           onClick={onClose}
           className="absolute right-3 top-3 p-2 text-muted-foreground/70 hover:text-muted-foreground transition-colors"
         >
@@ -72,7 +73,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
           <div className={`p-4 rounded-full ${styles.bg} mb-6 animate-in zoom-in duration-300`}>
             {styles.icon}
           </div>
-          
+
           <h3 className="text-xl font-bold text-foreground mb-3">{title}</h3>
           <p className="text-sm text-muted-foreground leading-relaxed px-2">
             {description}
@@ -80,15 +81,15 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
         </div>
 
         <div className="grid grid-cols-2 gap-4 mt-10">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={onClose}
             className="font-bold h-11"
             disabled={loading}
           >
             {finalCancelLabel}
           </Button>
-          <Button 
+          <Button
             onClick={onConfirm}
             className={`font-bold h-11 shadow-lg ${styles.btn}`}
             disabled={loading}

@@ -143,6 +143,7 @@ export const ProductoDetalle: React.FC<ProductoDetalleProps> = ({ producto, isOp
                 <label className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest block">{t('product.quantity')}</label>
                 <div className="flex items-center border border-border rounded-lg bg-card overflow-hidden shadow-sm">
                   <button
+                    type="button"
                     className="px-4 py-2.5 bg-muted/10 hover:bg-muted/30 text-muted-foreground font-bold border-r border-border transition-colors disabled:opacity-30 disabled:hover:bg-muted/10"
                     onClick={() => setCantidad(Math.max(1, cantidad - 1))}
                     disabled={cantidad <= 1}

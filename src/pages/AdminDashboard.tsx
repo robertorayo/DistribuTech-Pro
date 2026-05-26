@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Label } from '../components/ui/label';
@@ -86,10 +86,10 @@ function buildDailyRevenue(cots: CotizacionRow[], year: number, month: number): 
   return Array.from({ length: daysInMonth }, (_, i) => {
     const day = i + 1;
     const isFuture = year === CURRENT_YEAR && month === CURRENT_MONTH && day > CURRENT_DAY;
-    return { 
-      day, 
-      label: String(day), 
-      ingresos: isFuture ? (null as any) : daily[day] 
+    return {
+      day,
+      label: String(day),
+      ingresos: isFuture ? (null as any) : daily[day]
     };
   });
 }
@@ -135,11 +135,7 @@ export const AdminDashboard: React.FC = () => {
     return `${name} ${yearNumber}`;
   }, [i18n.language, yearNumber, monthIndex]);
 
-  useEffect(() => {
-    cargarEstadisticas();
-  }, []);
-
-  const cargarEstadisticas = async () => {
+  const cargarEstadisticas = useCallback(async () => {
     try {
       setLoading(true);
       const [usersRes, cotRes, prodRes] = await Promise.all([
@@ -147,55 +143,36 @@ export const AdminDashboard: React.FC = () => {
         supabase.from('cotizaciones').select('estado, total, created_at'),
         supabase.from('productos').select('*', { count: 'exact', head: true }),
       ]);
-
       if (usersRes.error) throw usersRes.error;
       if (cotRes.error) throw cotRes.error;
       if (prodRes.error) throw prodRes.error;
-
       const users = usersRes.data || [];
       const cots = (cotRes.data || []) as CotizacionRow[];
       setCotizaciones(cots);
-
       const monthlyData: Record<string, number> = {};
-      const statusCounts: Record<string, number> = {
-        pendiente: 0,
-        aprobada: 0,
-        rechazada: 0,
-      };
-
+      const statusCounts: Record<string, number> = { pendiente: 0, aprobada: 0, rechazada: 0 };
       cots.forEach((c) => {
-        if (statusCounts[c.estado] !== undefined) {
-          statusCounts[c.estado]++;
-        }
-
+        if (statusCounts[c.estado] !== undefined) statusCounts[c.estado]++;
         if (c.estado === 'aprobada' && c.created_at) {
           const date = new Date(c.created_at);
           const monthYear = `${MONTH_NAMES[date.getMonth()]} ${date.getFullYear()}`;
-          if (!monthlyData[monthYear]) {
-            monthlyData[monthYear] = 0;
-          }
+          if (!monthlyData[monthYear]) monthlyData[monthYear] = 0;
           monthlyData[monthYear] += c.total || 0;
         }
       });
-
       const last6Months = [];
       const now = new Date();
       for (let i = 5; i >= 0; i--) {
         const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
         const name = `${MONTH_NAMES[d.getMonth()]} ${d.getFullYear()}`;
-        last6Months.push({
-          name,
-          ingresos: monthlyData[name] || 0,
-        });
+        last6Months.push({ name, ingresos: monthlyData[name] || 0 });
       }
       setChartData(last6Months);
-
       setStatusData([
         { name: t('quotes.status_approved', 'Aprobadas'), value: statusCounts.aprobada, color: '#22c55e' },
         { name: t('quotes.status_pending', 'Pendientes'), value: statusCounts.pendiente, color: '#eab308' },
         { name: t('quotes.status_rejected', 'Rechazadas'), value: statusCounts.rechazada, color: '#ef4444' },
       ]);
-
       setStats({
         usuarios: users.length,
         clientes: users.filter((u: any) => u.rol === 'cliente').length,
@@ -210,7 +187,11 @@ export const AdminDashboard: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [t]);
+
+  useEffect(() => {
+    cargarEstadisticas();
+  }, [cargarEstadisticas]);
 
   if (loading) return <LoadingScreen />;
 
@@ -338,8 +319,8 @@ export const AdminDashboard: React.FC = () => {
                     paddingAngle={5}
                     dataKey="value"
                   >
-                    {statusData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    {statusData.map((entry) => (
+                      <Cell key={entry.name} fill={entry.color} />
                     ))}
                   </Pie>
                   <RechartsTooltip
@@ -372,14 +353,14 @@ export const AdminDashboard: React.FC = () => {
                 <SelectTrigger id="admin-month-select" className="min-w-[140px] w-full sm:w-auto bg-card">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent 
-                  side="bottom" 
-                  alignItemWithTrigger={false} 
+                <SelectContent
+                  side="bottom"
+                  alignItemWithTrigger={false}
                   className="bg-popover border border-border shadow-lg"
                 >
                   {MONTH_NAMES_FULL.map((name, index) => (
-                    <SelectItem 
-                      key={index} 
+                    <SelectItem
+                      key={index}
                       value={String(index)}
                       disabled={yearNumber === CURRENT_YEAR && index > CURRENT_MONTH}
                     >
@@ -397,8 +378,8 @@ export const AdminDashboard: React.FC = () => {
                 <SelectTrigger id="admin-year-select" className="min-w-[100px] w-full sm:w-auto bg-card">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent 
-                  side="bottom" 
+                <SelectContent
+                  side="bottom"
                   alignItemWithTrigger={false}
                   className="bg-popover border border-border shadow-lg"
                 >
