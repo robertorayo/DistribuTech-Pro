@@ -11,7 +11,7 @@ interface FilterBarProps {
 export const FilterBar: React.FC<FilterBarProps> = ({ children, onClear, showClear }) => {
   return (
     <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3 w-full bg-card/50 p-1 rounded-xl">
-      <div className="flex flex-col sm:flex-row flex-wrap items-stretch lg:items-center gap-2 lg:gap-3 w-full">
+      <div className="flex flex-wrap items-center gap-2 lg:gap-3 w-full">
         {children}
       </div>
       {showClear && onClear && (

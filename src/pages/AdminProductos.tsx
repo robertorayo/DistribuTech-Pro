@@ -273,7 +273,7 @@ export const AdminProductos: React.FC = () => {
         <select 
           value={filterCategoria} 
           onChange={(e) => setFilterCategoria(e.target.value)}
-          className={`${selectClasses} py-2 text-xs`}
+          className={`${selectClasses} py-2 text-xs !w-auto min-w-[160px]`}
         >
           <option value="all">{t('catalog.all_categories')}</option>
           {categorias.map(cat => (
@@ -284,7 +284,7 @@ export const AdminProductos: React.FC = () => {
         <select 
           value={filterFabricante} 
           onChange={(e) => setFilterFabricante(e.target.value)}
-          className={`${selectClasses} py-2 text-xs`}
+          className={`${selectClasses} py-2 text-xs !w-auto min-w-[160px]`}
         >
           <option value="all">{t('crud.all_manufacturers')}</option>
           {fabricantes.map(fab => (
@@ -295,7 +295,7 @@ export const AdminProductos: React.FC = () => {
         <select 
           value={filterStock} 
           onChange={(e) => setFilterStock(e.target.value)}
-          className={`${selectClasses} py-2 text-xs`}
+          className={`${selectClasses} py-2 text-xs !w-auto min-w-[160px]`}
         >
           <option value="all">{t('crud.all_stock')}</option>
           <option value="in">{t('crud.in_stock')}</option>
@@ -305,7 +305,7 @@ export const AdminProductos: React.FC = () => {
         <select 
           value={filterActivo} 
           onChange={(e) => setFilterActivo(e.target.value)}
-          className={`${selectClasses} py-2 text-xs`}
+          className={`${selectClasses} py-2 text-xs !w-auto min-w-[160px]`}
         >
           <option value="all">{t('crud.all_status')}</option>
           <option value="active">{t('crud.active')}</option>
@@ -315,7 +315,7 @@ export const AdminProductos: React.FC = () => {
         <select 
           value={sortByPrice} 
           onChange={(e) => setSortByPrice(e.target.value)}
-          className={`${selectClasses} py-2 text-xs`}
+          className={`${selectClasses} py-2 text-xs !w-auto min-w-[160px]`}
         >
           <option value="none">{t('crud.sort_price')}</option>
           <option value="asc">{t('crud.price_asc')}</option>
