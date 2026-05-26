@@ -26,9 +26,9 @@ export const ProductoDetalle: React.FC<ProductoDetalleProps> = ({ producto, isOp
   if (!producto) return null;
 
   const formatearMoneda = (valor: number) => {
-    return new Intl.NumberFormat(i18n.language === 'es' ? 'es-ES' : 'en-US', { 
-      style: 'currency', 
-      currency: 'EUR' 
+    return new Intl.NumberFormat(i18n.language === 'es' ? 'es-ES' : 'en-US', {
+      style: 'currency',
+      currency: 'EUR'
     }).format(valor);
   };
 
@@ -44,44 +44,44 @@ export const ProductoDetalle: React.FC<ProductoDetalleProps> = ({ producto, isOp
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-[750px] p-0 overflow-hidden gap-0 bg-card shadow-2xl rounded-2xl border-0 max-h-[95dvh] flex flex-col">
-        
+
         {/* Cabecera Oculta para Accesibilidad (Requerido por Radix UI) */}
         <DialogTitle className="sr-only">Detalles de {producto.nombre}</DialogTitle>
         <DialogDescription className="sr-only">{producto.descripcion}</DialogDescription>
 
         {/* Encabezado visual: Banner gris suave y título */}
         <div className="bg-muted/10/80 p-4 sm:p-6 border-b border-border/50 flex flex-row items-start gap-4 relative shrink-0">
-           <div className="w-16 h-16 sm:w-24 sm:h-24 bg-card rounded-xl border border-border flex items-center justify-center shadow-sm shrink-0">
-             <span className="text-gray-300 font-semibold text-[10px] text-center px-1">{t('common.no_img')}</span>
-           </div>
-           
-           <div className="flex-1 space-y-1.5 min-w-0">
-             <div className="flex items-center flex-wrap gap-2">
-               <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider bg-primary/10/50 text-primary px-2 py-0.5 rounded-md border border-primary/20">
-                 {producto.categorias?.nombre || 'General'}
-               </span>
-               <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
-                 {producto.fabricantes?.nombre || 'Marca Blanca'}
-               </span>
-             </div>
-             
-             <h2 className="text-lg sm:text-2xl font-bold text-foreground leading-tight line-clamp-2">
-               {producto.nombre}
-             </h2>
-             
-             <div className="flex items-end gap-2">
-               <span className="text-2xl sm:text-3xl font-black text-foreground tracking-tighter">
-                 {formatearMoneda(producto.precio)}
-               </span>
-               <span className="text-xs font-medium text-muted-foreground mb-0.5">/ud (Sin IVA)</span>
-             </div>
-           </div>
+          <div className="w-16 h-16 sm:w-24 sm:h-24 bg-card rounded-xl border border-border flex items-center justify-center shadow-sm shrink-0">
+            <span className="text-gray-300 font-semibold text-[10px] text-center px-1">{t('common.no_img')}</span>
+          </div>
+
+          <div className="flex-1 space-y-1.5 min-w-0">
+            <div className="flex items-center flex-wrap gap-2">
+              <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider bg-primary/10/50 text-primary px-2 py-0.5 rounded-md border border-primary/20">
+                {producto.categorias?.nombre || 'General'}
+              </span>
+              <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
+                {producto.fabricantes?.nombre || 'Marca Blanca'}
+              </span>
+            </div>
+
+            <h2 className="text-lg sm:text-2xl font-bold text-foreground leading-tight line-clamp-2">
+              {producto.nombre}
+            </h2>
+
+            <div className="flex items-end gap-2">
+              <span className="text-2xl sm:text-3xl font-black text-foreground tracking-tighter">
+                {formatearMoneda(producto.precio)}
+              </span>
+              <span className="text-xs font-medium text-muted-foreground mb-0.5">/ud (Sin IVA)</span>
+            </div>
+          </div>
         </div>
 
         {/* Cuerpo Inferior: Descripción, Specs y Controles — con scroll */}
         <div className="overflow-y-auto flex-1">
           <div className="p-4 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8 bg-card">
-            
+
             {/* Columna Izquierda: Información — en mobile va ABAJO del panel de compra */}
             <div className="md:col-span-2 space-y-5 order-2 md:order-1">
               <section>
@@ -145,20 +145,20 @@ export const ProductoDetalle: React.FC<ProductoDetalleProps> = ({ producto, isOp
               <div className="space-y-2 pt-3 border-t border-border/60">
                 <label className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest block">{t('product.quantity')}</label>
                 <div className="flex items-center border border-border rounded-lg bg-card overflow-hidden shadow-sm">
-                  <button 
+                  <button
                     className="px-4 py-2.5 bg-muted/10 hover:bg-muted/30 text-muted-foreground font-bold border-r border-border transition-colors disabled:opacity-30 disabled:hover:bg-muted/10"
                     onClick={() => setCantidad(Math.max(1, cantidad - 1))}
                     disabled={cantidad <= 1}
                   >-</button>
-                  <input 
-                    type="number" 
-                    value={cantidad} 
+                  <input
+                    type="number"
+                    value={cantidad}
                     onChange={(e) => setCantidad(Math.max(1, Math.min(producto.stock, parseInt(e.target.value) || 1)))}
-                    className="w-full text-center py-2.5 text-base font-bold text-foreground focus:outline-none"
+                    className="w-full text-center py-2.5 text-base font-bold bg-card text-foreground focus:outline-none"
                     min="1"
                     max={producto.stock}
                   />
-                  <button 
+                  <button
                     className="px-4 py-2.5 bg-muted/10 hover:bg-muted/30 text-muted-foreground font-bold border-l border-border transition-colors disabled:opacity-30 disabled:hover:bg-muted/10"
                     onClick={() => setCantidad(Math.min(producto.stock, cantidad + 1))}
                     disabled={cantidad >= producto.stock || producto.stock === 0}
@@ -166,13 +166,13 @@ export const ProductoDetalle: React.FC<ProductoDetalleProps> = ({ producto, isOp
                 </div>
               </div>
 
-              <Button 
-                className="w-full gap-2 font-bold shadow-md hover:shadow-lg transition-all" 
+              <Button
+                className="w-full gap-2 font-bold shadow-md hover:shadow-lg transition-all"
                 size="lg"
                 disabled={producto.stock === 0}
                 onClick={handleAddToCart}
               >
-                <ShoppingCart className="w-5 h-5" /> 
+                <ShoppingCart className="w-5 h-5" />
                 {producto.stock > 0 ? t('product.add_to_cart') : t('product.no_stock')}
               </Button>
 
