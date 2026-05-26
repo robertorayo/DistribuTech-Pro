@@ -29,8 +29,8 @@ export const FormField: React.FC<FormFieldProps> = ({
 
 /* Estilos reutilizables para inputs */
 export const inputClasses =
-  'w-full rounded-md border border-border p-2.5 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors';
+  'w-full rounded-md border border-border bg-card text-foreground placeholder:text-muted-foreground p-2.5 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors';
 
-export const selectClasses = `${inputClasses} bg-card`;
+export const selectClasses = `${inputClasses}`;
 
 export const textareaClasses = `${inputClasses} resize-none`;
