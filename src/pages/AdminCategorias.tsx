@@ -218,11 +218,11 @@ export const AdminCategorias: React.FC = () => {
           </tr>
         ) : (
           categoriasPaginadas.map((cat) => (
-            <tr key={cat.id} className="hover:bg-gray-50 transition-colors">
-              <td className="px-6 py-4 font-bold text-gray-900">{cat.nombre}</td>
-              <td className="px-6 py-4 text-gray-600 max-w-xs truncate">{cat.descripcion || '—'}</td>
+            <tr key={cat.id} className="hover:bg-muted/10 transition-colors">
+              <td className="px-6 py-4 font-bold text-foreground">{cat.nombre}</td>
+              <td className="px-6 py-4 text-muted-foreground max-w-xs truncate">{cat.descripcion || '—'}</td>
               <td className="px-6 py-4">
-                <span className="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-100">
+                <span className="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-primary/5 text-primary border border-primary/20">
                   {cat.sector}
                 </span>
               </td>
@@ -248,7 +248,7 @@ export const AdminCategorias: React.FC = () => {
       {modalOpen && (
         <ModalOverlay onClose={() => setModalOpen(false)}>
           <ModalHeader>
-            <h3 className="text-xl font-bold text-gray-900">
+            <h3 className="text-xl font-bold text-foreground">
               {editando ? t('crud.edit_category') : t('crud.new_category')}
             </h3>
           </ModalHeader>

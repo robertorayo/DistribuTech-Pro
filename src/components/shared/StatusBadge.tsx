@@ -21,7 +21,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({
   status,
   colorMap = DEFAULT_COLOR_MAP,
 }) => {
-  const colorClasses = colorMap[status.toLowerCase()] || 'bg-gray-50 text-gray-700 border-gray-200';
+  const colorClasses = colorMap[status.toLowerCase()] || 'bg-muted/10 text-foreground/90 border-border';
 
   return (
     <span

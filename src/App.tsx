@@ -72,7 +72,7 @@ function App() {
 
           {/* Rutas Exclusivas Comercial */}
           <Route element={<PrivateRoute allowedRoles={['comercial']} />}>
-            <Route path="/comercial" element={<div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">Panel de Gestión Comercial</div>} />
+            <Route path="/comercial" element={<div className="bg-card rounded-xl shadow-sm border border-border/50 p-8">Panel de Gestión Comercial</div>} />
           </Route>
 
         </Route>

@@ -186,17 +186,17 @@ export const Catalogo: React.FC = () => {
         <div className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {productosPaginados.map((prod) => (
-              <Card key={prod.id} className="flex flex-col h-full hover:shadow-lg hover:border-blue-200 transition-all duration-300 group overflow-hidden border-gray-200 bg-white rounded-2xl shadow-sm">
+              <Card key={prod.id} className="flex flex-col h-full hover:shadow-lg hover:border-primary/30 transition-all duration-300 group overflow-hidden border-border bg-card rounded-2xl shadow-sm">
                 {/* Header card with category and brand */}
                 <CardHeader className="pb-3 pt-5 px-5">
                   <div className="flex justify-between items-center mb-2.5">
-                    <span className="text-[10px] uppercase font-bold tracking-wider bg-blue-50 text-blue-700 px-2 py-0.5 rounded-md border border-blue-100">
+                    <span className="text-[10px] uppercase font-bold tracking-wider bg-primary/5 text-primary px-2 py-0.5 rounded-md border border-primary/20">
                       {prod.categorias?.nombre || 'General'}
                     </span>
-                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">{prod.fabricantes?.nombre || 'Marca Blanca'}</span>
+                    <span className="text-[10px] text-muted-foreground/70 font-bold uppercase tracking-wider">{prod.fabricantes?.nombre || 'Marca Blanca'}</span>
                   </div>
                   <CardTitle 
-                    className="text-base font-extrabold text-gray-900 leading-snug line-clamp-2 hover:text-blue-700 transition-colors cursor-pointer" 
+                    className="text-base font-extrabold text-foreground leading-snug line-clamp-2 hover:text-primary transition-colors cursor-pointer" 
                     onClick={() => setProductoSeleccionado(prod)}
                   >
                     {prod.nombre}
@@ -206,18 +206,18 @@ export const Catalogo: React.FC = () => {
                 {/* Card Content with structured description */}
                 <CardContent className="flex-1 flex flex-col px-5 pb-4">
                   {/* Subtle card-like box for description */}
-                  <div className="bg-slate-50/40 p-3.5 rounded-xl border border-slate-100 text-xs sm:text-sm text-gray-500 leading-relaxed font-normal line-clamp-3 mb-4 flex-1">
+                  <div className="bg-slate-50/40 p-3.5 rounded-xl border border-slate-100 text-xs sm:text-sm text-muted-foreground leading-relaxed font-normal line-clamp-3 mb-4 flex-1">
                     {prod.descripcion || 'Sin descripción disponible para este producto profesional.'}
                   </div>
                   
                   {/* Visual Divider and Pricing info */}
-                  <div className="mt-auto border-t border-gray-100 pt-3 flex flex-col gap-2">
+                  <div className="mt-auto border-t border-border/50 pt-3 flex flex-col gap-2">
                     <div className="flex justify-between items-baseline">
-                      <p className="text-2xl font-black text-gray-900 tracking-tight">
+                      <p className="text-2xl font-black text-foreground tracking-tight">
                         {formatCurrency(prod.precio)}
-                        <span className="text-[10px] font-bold text-gray-400 tracking-normal ml-0.5">/ud</span>
+                        <span className="text-[10px] font-bold text-muted-foreground/70 tracking-normal ml-0.5">/ud</span>
                       </p>
-                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Sin IVA</p>
+                      <p className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest">Sin IVA</p>
                     </div>
 
                     <div className="flex items-center gap-2 mt-1">
@@ -234,7 +234,7 @@ export const Catalogo: React.FC = () => {
                           </>
                         )}
                       </span>
-                      <p className="text-xs font-semibold text-gray-500">
+                      <p className="text-xs font-semibold text-muted-foreground">
                         {prod.stock > 0 ? t('catalog.units_in_stock', { count: prod.stock }) : t('catalog.out_of_stock_temp')}
                       </p>
                     </div>

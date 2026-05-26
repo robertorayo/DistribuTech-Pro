@@ -8,9 +8,10 @@ import {
 } from './ui/dropdown-menu';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from './ui/sheet';
 import { 
-  Menu, Package, LogOut, Globe, User as UserIcon, LayoutDashboard, FileText, ShoppingCart, ClipboardList, Building2
+  Menu, Package, LogOut, Globe, User as UserIcon, LayoutDashboard, FileText, ShoppingCart, ClipboardList, Building2, Sun, Moon
 } from 'lucide-react';
 import { useCartStore } from '../store/cartStore';
+import { useTheme } from '../context/ThemeContext';
 import { supabase } from '../lib/supabase';
 import { toast } from 'sonner';
 
@@ -24,10 +25,10 @@ interface SidebarProps {
 
 const SidebarContent: React.FC<SidebarProps> = ({ onClose, rol, user, location, menuItems }) => {
   return (
-    <div className="flex flex-col h-full bg-white border-r">
-      <div className="p-6 border-b">
-        <h2 className="text-2xl font-bold text-blue-700 tracking-tight">DistribuTech</h2>
-        <p className="text-xs text-gray-500 uppercase tracking-widest mt-1 font-semibold">{rol}</p>
+    <div className="flex flex-col h-full bg-background border-r border-border">
+      <div className="p-6 border-b border-border">
+        <h2 className="text-2xl font-bold text-primary tracking-tight">DistribuTech</h2>
+        <p className="text-xs text-muted-foreground uppercase tracking-widest mt-1 font-semibold">{rol}</p>
       </div>
       <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
         {menuItems.map((item) => (
@@ -37,8 +38,8 @@ const SidebarContent: React.FC<SidebarProps> = ({ onClose, rol, user, location, 
             onClick={onClose}
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
               location.pathname.startsWith(item.path)
-                ? 'bg-blue-50 text-blue-700 font-medium'
-                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                ? 'bg-primary/10 text-primary font-medium'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground'
             }`}
           >
             <div className="flex items-center justify-between w-full">
@@ -55,14 +56,14 @@ const SidebarContent: React.FC<SidebarProps> = ({ onClose, rol, user, location, 
           </Link>
         ))}
       </nav>
-      <div className="p-4 border-t bg-gray-50/50">
-        <div className="flex items-center gap-3 px-2 py-2 text-sm text-gray-600">
-          <div className="w-9 h-9 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-lg shrink-0">
+      <div className="p-4 border-t border-border bg-muted/30">
+        <div className="flex items-center gap-3 px-2 py-2 text-sm text-foreground">
+          <div className="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-lg shrink-0">
             {user?.user_metadata?.nombre?.charAt(0) || 'U'}
           </div>
           <div className="flex-1 truncate">
-            <p className="font-medium text-gray-900 truncate">{user?.user_metadata?.nombre} {user?.user_metadata?.apellidos}</p>
-            <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+            <p className="font-medium text-foreground truncate">{user?.user_metadata?.nombre} {user?.user_metadata?.apellidos}</p>
+            <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
           </div>
         </div>
       </div>
@@ -72,6 +73,7 @@ const SidebarContent: React.FC<SidebarProps> = ({ onClose, rol, user, location, 
 
 export const Layout: React.FC = () => {
   const { user, rol, signOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -150,15 +152,15 @@ export const Layout: React.FC = () => {
   ].filter(m => rol && m.roles.includes(rol));
 
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden font-sans">
+    <div className="flex h-screen bg-background overflow-hidden font-sans">
       {/* Sidebar Escritorio */}
-      <aside className="hidden md:block w-72 shrink-0 h-full">
+      <aside className="hidden md:block w-72 shrink-0 h-full border-r border-border">
         <SidebarContent rol={rol} user={user} location={location} menuItems={menuItems} />
       </aside>
 
       <div className="flex flex-col flex-1 min-w-0">
         {/* Barra Superior Navbar */}
-        <header className="h-16 bg-white border-b flex items-center justify-between px-4 sm:px-6 shrink-0 shadow-sm z-10">
+        <header className="h-16 bg-background border-b border-border flex items-center justify-between px-4 sm:px-6 shrink-0 z-10">
           <div className="flex items-center gap-4">
             {/* Botón Menú Móvil */}
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
@@ -185,8 +187,8 @@ export const Layout: React.FC = () => {
 
           <div className="flex items-center gap-2 sm:gap-4">
             {/* Botón Carrito */}
-            <Link to="/checkout" className="relative inline-flex items-center justify-center h-9 w-9 rounded-full hover:bg-gray-100 transition-colors mr-1 sm:mr-3">
-              <ShoppingCart className="w-5 h-5 text-gray-700" />
+            <Link to="/checkout" className="relative inline-flex items-center justify-center h-9 w-9 rounded-full hover:bg-muted transition-colors mr-1 sm:mr-3">
+              <ShoppingCart className="w-5 h-5 text-foreground" />
               {cartItemsCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-sm animate-in zoom-in duration-300">
                   {cartItemsCount > 99 ? '99+' : cartItemsCount}
@@ -194,17 +196,27 @@ export const Layout: React.FC = () => {
               )}
             </Link>
 
+            {/* Toggle Tema Oscuro/Claro */}
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-foreground h-8 w-8 p-0" 
+              onClick={toggleTheme}
+            >
+              {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </Button>
+
             {/* Selector de Idiomas */}
             <DropdownMenu>
               <DropdownMenuTrigger 
                 render={
-                  <Button variant="ghost" size="sm" className="gap-2 text-gray-600 h-8 px-3">
+                  <Button variant="ghost" size="sm" className="gap-2 text-foreground h-8 px-3">
                     <Globe className="w-4 h-4" />
                     <span className="hidden sm:inline-block">{currentLanguageLabel}</span>
                   </Button>
                 }
               />
-              <DropdownMenuContent align="center" className="min-w-[7.5rem]">
+              <DropdownMenuContent align="center" className="min-w-[7.5rem] bg-popover border border-border rounded-md shadow-md">
                 <DropdownMenuItem className="justify-center" onClick={() => changeLanguage('es')}>
                   Español
                 </DropdownMenuItem>
@@ -218,18 +230,18 @@ export const Layout: React.FC = () => {
             <DropdownMenu>
               <DropdownMenuTrigger 
                 render={
-                  <Button variant="outline" size="sm" className="gap-2 rounded-full h-8 px-4 border-gray-200 text-gray-700">
-                    <UserIcon className="w-4 h-4 text-gray-500" />
+                  <Button variant="outline" size="sm" className="gap-2 rounded-full h-8 px-4 border-border text-foreground">
+                    <UserIcon className="w-4 h-4 text-muted-foreground" />
                     <span className="hidden sm:inline-block">Cuenta</span>
                   </Button>
                 }
               />
-              <DropdownMenuContent align="center" className="min-w-[var(--anchor-width)]">
+              <DropdownMenuContent align="center" className="min-w-[var(--anchor-width)] bg-popover border border-border rounded-md shadow-md">
                 <DropdownMenuItem
-                  className="justify-center gap-2 text-gray-700 hover:bg-gray-50 cursor-pointer font-medium border-b border-gray-100 pb-2 mb-1"
+                  className="justify-center gap-2 text-foreground hover:bg-muted cursor-pointer font-medium border-b border-border pb-2 mb-1"
                   onClick={() => navigate('/perfil')}
                 >
-                  <UserIcon className="w-4 h-4 text-gray-500" />
+                  <UserIcon className="w-4 h-4 text-muted-foreground" />
                   {t('app.my_profile')}
                 </DropdownMenuItem>
                 <DropdownMenuItem
@@ -245,7 +257,7 @@ export const Layout: React.FC = () => {
         </header>
 
         {/* Zona Central */}
-        <main className="flex-1 overflow-auto p-3 sm:p-8">
+        <main className="flex-1 overflow-auto p-3 sm:p-8 bg-muted/10">
           <Outlet />
         </main>
       </div>

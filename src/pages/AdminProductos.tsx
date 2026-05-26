@@ -343,18 +343,18 @@ export const AdminProductos: React.FC = () => {
           </tr>
         ) : (
           productosPaginados.map((prod) => (
-            <tr key={prod.id} className="hover:bg-gray-50 transition-colors">
+            <tr key={prod.id} className="hover:bg-muted/10 transition-colors">
               <td className="px-5 py-4">
-                <p className="font-bold text-gray-900">{prod.nombre}</p>
-                <p className="text-xs text-gray-500 truncate max-w-[200px]">{prod.descripcion || '—'}</p>
+                <p className="font-bold text-foreground">{prod.nombre}</p>
+                <p className="text-xs text-muted-foreground truncate max-w-[200px]">{prod.descripcion || '—'}</p>
               </td>
               <td className="px-5 py-4">
-                <span className="text-xs font-medium text-gray-700 bg-gray-100 px-2 py-1 rounded">
+                <span className="text-xs font-medium text-foreground/90 bg-muted/30 px-2 py-1 rounded">
                   {prod.categorias?.nombre || '—'}
                 </span>
               </td>
-              <td className="px-5 py-4 text-gray-600 text-sm">{prod.fabricantes?.nombre || '—'}</td>
-              <td className="px-5 py-4 text-right font-bold text-gray-900">{formatCurrency(prod.precio)}</td>
+              <td className="px-5 py-4 text-muted-foreground text-sm">{prod.fabricantes?.nombre || '—'}</td>
+              <td className="px-5 py-4 text-right font-bold text-foreground">{formatCurrency(prod.precio)}</td>
               <td className="px-5 py-4 text-center">
                 <span className={`font-bold ${prod.stock > 0 ? 'text-green-700' : 'text-red-600'}`}>
                   {prod.stock}
@@ -385,7 +385,7 @@ export const AdminProductos: React.FC = () => {
       {modalOpen && (
         <ModalOverlay onClose={() => setModalOpen(false)} maxWidth="max-w-2xl">
           <ModalHeader>
-            <h3 className="text-xl font-bold text-gray-900">
+            <h3 className="text-xl font-bold text-foreground">
               {editando ? t('crud.edit_product') : t('crud.new_product')}
             </h3>
           </ModalHeader>
@@ -469,9 +469,9 @@ export const AdminProductos: React.FC = () => {
                 id="activo"
                 checked={activo}
                 onChange={(e) => setActivo(e.target.checked)}
-                className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                className="w-4 h-4 rounded border-border text-primary focus:ring-primary"
               />
-              <label htmlFor="activo" className="text-sm font-medium text-gray-700">{t('crud.product_active')}</label>
+              <label htmlFor="activo" className="text-sm font-medium text-foreground/90">{t('crud.product_active')}</label>
             </div>
           </ModalBody>
           <ModalFooter>

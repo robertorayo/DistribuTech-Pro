@@ -44,9 +44,9 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
         };
       default:
         return {
-          icon: <AlertTriangle className="w-6 h-6 text-blue-600" />,
-          bg: 'bg-blue-50',
-          btn: 'bg-blue-600 hover:bg-blue-700 text-white',
+          icon: <AlertTriangle className="w-6 h-6 text-primary" />,
+          bg: 'bg-primary/5',
+          btn: 'bg-primary hover:bg-primary/90 text-white',
         };
     }
   };
@@ -58,7 +58,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
       <div className="relative p-8">
         <button 
           onClick={onClose}
-          className="absolute right-3 top-3 p-2 text-gray-400 hover:text-gray-600 transition-colors"
+          className="absolute right-3 top-3 p-2 text-muted-foreground/70 hover:text-muted-foreground transition-colors"
         >
           <X className="w-5 h-5" />
         </button>
@@ -68,8 +68,8 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
             {styles.icon}
           </div>
           
-          <h3 className="text-xl font-bold text-gray-900 mb-3">{title}</h3>
-          <p className="text-sm text-gray-500 leading-relaxed px-2">
+          <h3 className="text-xl font-bold text-foreground mb-3">{title}</h3>
+          <p className="text-sm text-muted-foreground leading-relaxed px-2">
             {description}
           </p>
         </div>

@@ -65,11 +65,11 @@ export const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 px-6 bg-white border border-gray-100 rounded-xl shadow-sm mt-4">
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 px-6 bg-card border border-border/50 rounded-xl shadow-sm mt-4">
       {/* Page Info */}
-      <div className="text-xs font-semibold text-gray-500">
-        Página <span className="text-gray-900 font-bold">{currentPage}</span> de{' '}
-        <span className="text-gray-900 font-bold">{totalPages}</span>
+      <div className="text-xs font-semibold text-muted-foreground">
+        Página <span className="text-foreground font-bold">{currentPage}</span> de{' '}
+        <span className="text-foreground font-bold">{totalPages}</span>
       </div>
 
       {/* Page Navigation */}
@@ -80,7 +80,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           onClick={() => onPageChange(1)}
           disabled={currentPage === 1}
           title="Primera página"
-          className="border-gray-200"
+          className="border-border"
         >
           <ChevronsLeft className="w-3.5 h-3.5" />
         </Button>
@@ -90,7 +90,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
           title="Página anterior"
-          className="border-gray-200"
+          className="border-border"
         >
           <ChevronLeft className="w-3.5 h-3.5" />
         </Button>
@@ -98,7 +98,7 @@ export const Pagination: React.FC<PaginationProps> = ({
         {getPageNumbers().map((p, idx) => {
           if (p === 'ellipsis-start' || p === 'ellipsis-end') {
             return (
-              <span key={`ellipsis-${idx}`} className="px-2 text-xs text-gray-400 font-bold">
+              <span key={`ellipsis-${idx}`} className="px-2 text-xs text-muted-foreground/70 font-bold">
                 ...
               </span>
             );
@@ -115,8 +115,8 @@ export const Pagination: React.FC<PaginationProps> = ({
               onClick={() => onPageChange(pageNum)}
               className={`h-7 w-7 text-xs font-bold ${
                 isCurrent 
-                  ? 'bg-blue-600 hover:bg-blue-700 text-white border-blue-600 shadow-sm' 
-                  : 'border-gray-200 hover:bg-gray-50 text-gray-700'
+                  ? 'bg-primary hover:bg-primary/90 text-white border-blue-600 shadow-sm' 
+                  : 'border-border hover:bg-muted/10 text-foreground/90'
               }`}
             >
               {pageNum}
@@ -130,7 +130,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
           title="Página siguiente"
-          className="border-gray-200"
+          className="border-border"
         >
           <ChevronRight className="w-3.5 h-3.5" />
         </Button>
@@ -140,7 +140,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           onClick={() => onPageChange(totalPages)}
           disabled={currentPage === totalPages}
           title="Última página"
-          className="border-gray-200"
+          className="border-border"
         >
           <ChevronsRight className="w-3.5 h-3.5" />
         </Button>
@@ -148,7 +148,7 @@ export const Pagination: React.FC<PaginationProps> = ({
 
       {/* Direct Jump to Page Form */}
       <form onSubmit={handleJump} className="flex items-center gap-2">
-        <label htmlFor="jump-page-input" className="text-xs font-semibold text-gray-500">
+        <label htmlFor="jump-page-input" className="text-xs font-semibold text-muted-foreground">
           Ir a:
         </label>
         <input
@@ -158,13 +158,13 @@ export const Pagination: React.FC<PaginationProps> = ({
           max={totalPages}
           value={jumpPage}
           onChange={(e) => setJumpPage(e.target.value)}
-          className="w-12 h-7 rounded-lg border border-gray-200 text-center text-xs font-bold focus:border-blue-500 focus:outline-none"
+          className="w-12 h-7 rounded-lg border border-border text-center text-xs font-bold focus:border-primary focus:outline-none"
         />
         <Button
           type="submit"
           variant="outline"
           size="sm"
-          className="h-7 text-[10px] uppercase font-bold tracking-wider px-2 hover:bg-blue-50 hover:text-blue-600 border-gray-200 transition-colors"
+          className="h-7 text-[10px] uppercase font-bold tracking-wider px-2 hover:bg-primary/5 hover:text-primary border-border transition-colors"
         >
           Saltar
         </Button>

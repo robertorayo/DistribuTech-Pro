@@ -7,115 +7,119 @@
 
 @layer base {
   :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
+    /* ─── MODO CLARO: Azul corporativo con fondos fríos suaves ─── */
+    --background:         220 20% 97%;
+    --foreground:         222 30% 15%;
 
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
+    --card:               0 0% 100%;
+    --card-foreground:    222 30% 15%;
 
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
+    --popover:            0 0% 100%;
+    --popover-foreground: 222 30% 15%;
 
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
+    --primary:            221 83% 53%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
+    --secondary:          220 15% 92%;
+    --secondary-foreground: 222 30% 25%;
 
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
+    --muted:              220 15% 94%;
+    --muted-foreground:   220 10% 50%;
 
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
+    --accent:             221 83% 95%;
+    --accent-foreground:  221 83% 35%;
 
-    --destructive: oklch(0.577 0.245 27.325);
-    --destructive-foreground: 210 40% 98%;
+    --destructive:        0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
+    --border:             220 15% 88%;
+    --input:              220 15% 88%;
+    --ring:               221 83% 53%;
 
     --radius: 0.625rem;
 
-    --chart-1: oklch(0.87 0 0);
+    /* Chart colors */
+    --chart-1: 221 83% 53%;
+    --chart-2: 142 71% 45%;
+    --chart-3: 38 92% 50%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
 
-    --chart-2: oklch(0.556 0 0);
-
-    --chart-3: oklch(0.439 0 0);
-
-    --chart-4: oklch(0.371 0 0);
-
-    --chart-5: oklch(0.269 0 0);
-
-    --sidebar: oklch(0.985 0 0);
-
-    --sidebar-foreground: oklch(0.145 0 0);
-
-    --sidebar-primary: oklch(0.205 0 0);
-
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-
-    --sidebar-accent: oklch(0.97 0 0);
-
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-
-    --sidebar-border: oklch(0.922 0 0);
-
-    --sidebar-ring: oklch(0.708 0 0);
+    /* Sidebar */
+    --sidebar:                    220 20% 95%;
+    --sidebar-foreground:         222 30% 15%;
+    --sidebar-primary:            221 83% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent:             221 83% 95%;
+    --sidebar-accent-foreground:  221 83% 35%;
+    --sidebar-border:             220 15% 88%;
+    --sidebar-ring:               221 83% 53%;
   }
+
   .theme {
     --font-heading: var(--font-sans);
     --font-sans: 'Geist Variable', sans-serif;
   }
+
   .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
+    /* ─── MODO OSCURO: Azul noche con profundidad real ─── */
+    --background:         222 30% 10%;
+    --foreground:         210 20% 92%;
+
+    --card:               222 28% 14%;
+    --card-foreground:    210 20% 92%;
+
+    --popover:            222 28% 14%;
+    --popover-foreground: 210 20% 92%;
+
+    --primary:            221 83% 62%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary:          222 25% 20%;
+    --secondary-foreground: 210 20% 80%;
+
+    --muted:              222 25% 18%;
+    --muted-foreground:   220 10% 55%;
+
+    --accent:             221 83% 20%;
+    --accent-foreground:  221 83% 78%;
+
+    --destructive:        0 70% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border:             222 25% 22%;
+    --input:              222 25% 22%;
+    --ring:               221 83% 62%;
+
+    /* Chart colors */
+    --chart-1: 221 83% 62%;
+    --chart-2: 142 60% 55%;
+    --chart-3: 38 85% 60%;
+    --chart-4: 280 60% 70%;
+    --chart-5: 340 70% 65%;
+
+    /* Sidebar */
+    --sidebar:                    222 30% 8%;
+    --sidebar-foreground:         210 20% 92%;
+    --sidebar-primary:            221 83% 62%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent:             221 83% 20%;
+    --sidebar-accent-foreground:  221 83% 78%;
+    --sidebar-border:             222 25% 20%;
+    --sidebar-ring:               221 83% 62%;
   }
+
   * {
     @apply border-border outline-ring/50;
+    transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
-  html {
-    @apply font-sans;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
+  .animate-ping, .animate-spin, [data-slot="button"] svg {
+    transition: none;
   }
   body {
     @apply bg-background text-foreground font-sans antialiased;
+  }
+  html {
+    @apply font-sans;
   }
 }

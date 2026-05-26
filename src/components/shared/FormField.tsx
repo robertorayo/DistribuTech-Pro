@@ -19,7 +19,7 @@ export const FormField: React.FC<FormFieldProps> = ({
 }) => {
   return (
     <div className={className}>
-      <label className="mb-1 block text-sm font-medium text-gray-700">
+      <label className="mb-1 block text-sm font-medium text-foreground/90">
         {label} {required && <span className="text-red-500">*</span>}
       </label>
       {children}
@@ -29,8 +29,8 @@ export const FormField: React.FC<FormFieldProps> = ({
 
 /* Estilos reutilizables para inputs */
 export const inputClasses =
-  'w-full rounded-md border border-gray-300 p-2.5 focus:border-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-600 transition-colors';
+  'w-full rounded-md border border-border p-2.5 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors';
 
-export const selectClasses = `${inputClasses} bg-white`;
+export const selectClasses = `${inputClasses} bg-card`;
 
 export const textareaClasses = `${inputClasses} resize-none`;

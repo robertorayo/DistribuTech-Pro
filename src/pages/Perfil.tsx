@@ -268,36 +268,36 @@ export const Perfil: React.FC = () => {
         title={t('profile.title')} 
         subtitle={t('profile.subtitle')}
         icon={User}
-        iconColor="text-blue-600"
+        iconColor="text-primary"
       />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Card resumen lateral */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm flex flex-col items-center justify-between text-center md:col-span-1 h-fit">
+        <div className="bg-card rounded-2xl border border-border/50 p-6 shadow-sm flex flex-col items-center justify-between text-center md:col-span-1 h-fit">
           <div className="space-y-4 py-4 w-full">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-700 text-white flex items-center justify-center font-bold text-3xl shadow-md mx-auto">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-primary to-primary/70 text-primary-foreground flex items-center justify-center font-bold text-3xl shadow-md mx-auto">
               {originalData?.nombre?.charAt(0) || 'U'}
             </div>
             <div>
-              <h4 className="text-lg font-bold text-gray-900 truncate">
+              <h4 className="text-lg font-bold text-foreground truncate">
                 {originalData?.nombre} {originalData?.apellidos}
               </h4>
-              <p className="text-xs text-gray-500 truncate">{originalData?.email}</p>
+              <p className="text-xs text-muted-foreground truncate">{originalData?.email}</p>
             </div>
             
-            <div className="border-t border-gray-50 pt-4 flex justify-center items-center gap-1.5">
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-100">
+            <div className="border-t border-border/20 pt-4 flex justify-center items-center gap-1.5">
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-primary/5 text-primary border border-primary/20">
                 {t('profile.role', { role: rol })}
               </span>
             </div>
           </div>
           
-          <div className="w-full bg-gray-50 rounded-xl p-4 mt-2 text-left">
+          <div className="w-full bg-muted/10 rounded-xl p-4 mt-2 text-left">
             <div className="flex items-start gap-2.5">
               <ShieldCheck className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
               <div>
-                <p className="text-xs font-bold text-gray-900">{t('profile.rls_active')}</p>
-                <p className="text-[10px] text-gray-500 leading-normal mt-0.5">
+                <p className="text-xs font-bold text-foreground">{t('profile.rls_active')}</p>
+                <p className="text-[10px] text-muted-foreground leading-normal mt-0.5">
                   {t('profile.rls_desc')}
                 </p>
               </div>
@@ -306,17 +306,17 @@ export const Perfil: React.FC = () => {
         </div>
 
         {/* Card principal con Formulario */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-8 shadow-sm md:col-span-2">
-          <div className="border-b border-gray-100 pb-4 mb-6">
-            <h3 className="text-lg font-bold text-gray-900">{t('profile.account_info')}</h3>
-            <p className="text-xs text-gray-500 mt-0.5">{t('profile.account_desc')}</p>
+        <div className="bg-card rounded-2xl border border-border/50 p-8 shadow-sm md:col-span-2">
+          <div className="border-b border-border/50 pb-4 mb-6">
+            <h3 className="text-lg font-bold text-foreground">{t('profile.account_info')}</h3>
+            <p className="text-xs text-muted-foreground mt-0.5">{t('profile.account_desc')}</p>
           </div>
 
           <form onSubmit={handleGuardar} className="space-y-5">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <FormField label={t('profile.name')} required>
                 <div className="relative">
-                  <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                  <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground/70">
                     <User className="w-4 h-4" />
                   </span>
                   <input
@@ -337,7 +337,7 @@ export const Perfil: React.FC = () => {
 
               <FormField label={t('profile.last_name')} required>
                 <div className="relative">
-                  <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                  <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground/70">
                     <User className="w-4 h-4" />
                   </span>
                   <input
@@ -359,7 +359,7 @@ export const Perfil: React.FC = () => {
 
             <FormField label={t('profile.email')} required>
               <div className="relative">
-                <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground/70">
                   <Mail className="w-4 h-4" />
                 </span>
                 <input
@@ -371,7 +371,7 @@ export const Perfil: React.FC = () => {
                   disabled={saving}
                 />
                 {checkingEmail && (
-                  <span className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-gray-400">
+                  <span className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-muted-foreground/70">
                     <Loader2 className="w-4 h-4 animate-spin" />
                   </span>
                 )}
@@ -390,7 +390,7 @@ export const Perfil: React.FC = () => {
 
             <FormField label={t('profile.phone')}>
               <div className="relative">
-                <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-muted-foreground/70">
                   <Phone className="w-4 h-4" />
                 </span>
                 <input
@@ -407,17 +407,17 @@ export const Perfil: React.FC = () => {
                   {errors.telefono}
                 </p>
               ) : (
-                <p className="text-[10px] text-gray-400 mt-1.5">
+                <p className="text-[10px] text-muted-foreground/70 mt-1.5">
                   {t('profile.phone_desc')}
                 </p>
               )}
             </FormField>
 
-            <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
+            <div className="flex justify-end gap-3 pt-4 border-t border-border/50">
               <Button 
                 type="submit" 
                 disabled={!canSave}
-                className="font-bold min-w-[150px] shadow-sm shadow-blue-500/10"
+                className="font-bold min-w-[150px] shadow-sm shadow-primary/10"
               >
                 {saving ? (
                   <>

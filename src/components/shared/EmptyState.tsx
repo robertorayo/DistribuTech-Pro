@@ -23,12 +23,12 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
 }) => {
   return (
     <div className="flex flex-col items-center justify-center py-16 animate-in fade-in">
-      <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 border border-gray-100">
+      <div className="w-16 h-16 bg-muted/10 rounded-full flex items-center justify-center mb-4 border border-border/50">
         <Icon className="w-8 h-8 text-gray-300" />
       </div>
-      <h3 className="text-lg font-semibold text-gray-900 mb-1">{title}</h3>
+      <h3 className="text-lg font-semibold text-foreground mb-1">{title}</h3>
       {description && (
-        <p className="text-gray-500 max-w-sm text-center text-sm">{description}</p>
+        <p className="text-muted-foreground max-w-sm text-center text-sm">{description}</p>
       )}
       {actionLabel && onAction && (
         <Button variant="outline" className="mt-6" onClick={onAction}>

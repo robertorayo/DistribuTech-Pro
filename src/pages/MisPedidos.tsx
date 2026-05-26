@@ -156,7 +156,7 @@ export const MisPedidos: React.FC = () => {
     }
     if (cot.tipo_incidencia === 'esperando_stock_completo') {
       return (
-        <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full">
+        <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-primary/5 text-primary border border-primary/30 px-2 py-0.5 rounded-full">
           <Hourglass className="w-3 h-3" /> {t('mispedidos.waiting_stock')}
         </span>
       );
@@ -202,14 +202,14 @@ export const MisPedidos: React.FC = () => {
           </tr>
         ) : (
           cotizaciones.map((cot) => (
-            <tr key={cot.id} className="hover:bg-gray-50 transition-colors">
-              <td className="px-3 sm:px-6 py-3 sm:py-4 font-mono text-xs text-gray-400">#{cot.id.split('-')[0]}</td>
-              <td className="px-3 sm:px-6 py-3 sm:py-4 text-gray-600 text-xs sm:text-sm">{formatDate(cot.created_at)}</td>
+            <tr key={cot.id} className="hover:bg-muted/10 transition-colors">
+              <td className="px-3 sm:px-6 py-3 sm:py-4 font-mono text-xs text-muted-foreground/70">#{cot.id.split('-')[0]}</td>
+              <td className="px-3 sm:px-6 py-3 sm:py-4 text-muted-foreground text-xs sm:text-sm">{formatDate(cot.created_at)}</td>
               <td className="px-3 sm:px-6 py-3 sm:py-4">
                 <StatusBadge status={cot.estado} />
               </td>
               <td className="hidden sm:table-cell px-3 sm:px-6 py-3 sm:py-4">{getIncidenciaBadge(cot) || <span className="text-gray-300 text-xs">—</span>}</td>
-              <td className="px-3 sm:px-6 py-3 sm:py-4 text-right font-black text-gray-900 text-sm sm:text-base">{formatCurrency(cot.total || 0)}</td>
+              <td className="px-3 sm:px-6 py-3 sm:py-4 text-right font-black text-foreground text-sm sm:text-base">{formatCurrency(cot.total || 0)}</td>
               <td className="px-3 sm:px-6 py-3 sm:py-4 text-center">
                 <Button variant="outline" size="sm" onClick={() => abrirDetalle(cot)}>
                   {t('mispedidos.view')}
@@ -226,10 +226,10 @@ export const MisPedidos: React.FC = () => {
           <ModalHeader>
             <div className="flex justify-between items-center">
               <div>
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900">{t('mispedidos.detail_title')}</h3>
-                <p className="text-xs text-gray-400 mt-1">ID: #{cotizacionSeleccionada.id.split('-')[0]}</p>
+                <h3 className="text-xl sm:text-2xl font-bold text-foreground">{t('mispedidos.detail_title')}</h3>
+                <p className="text-xs text-muted-foreground/70 mt-1">ID: #{cotizacionSeleccionada.id.split('-')[0]}</p>
               </div>
-              <Button variant="ghost" size="icon" onClick={cerrarModal} className="text-gray-400">&times;</Button>
+              <Button variant="ghost" size="icon" onClick={cerrarModal} className="text-muted-foreground/70">&times;</Button>
             </div>
           </ModalHeader>
 
@@ -261,10 +261,10 @@ export const MisPedidos: React.FC = () => {
                             <th className="px-3 py-2 text-center font-bold uppercase text-red-700">{t('mispedidos.missing')}</th>
                           </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-amber-100">
+                        <tbody className="bg-card divide-y divide-amber-100">
                           {notasStock.disponible.map((item) => (
                             <tr key={item.producto_id}>
-                              <td className="px-3 py-2 font-medium text-gray-800">{item.nombre}</td>
+                              <td className="px-3 py-2 font-medium text-card-foreground">{item.nombre}</td>
                               <td className="px-3 py-2 text-center">{item.cantidad_pedida}</td>
                               <td className="px-3 py-2 text-center font-bold text-green-600">{item.cantidad_disponible}</td>
                               <td className="px-3 py-2 text-center font-bold text-red-500">{item.cantidad_faltante}</td>
@@ -280,24 +280,24 @@ export const MisPedidos: React.FC = () => {
 
                 {/* Alerta informativa — Esperando stock completo */}
                 {cotizacionSeleccionada.tipo_incidencia === 'esperando_stock_completo' && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-center gap-3 text-blue-800">
-                    <Hourglass className="w-5 h-5 text-blue-500 shrink-0" />
+                  <div className="bg-primary/5 border border-primary/30 rounded-xl p-4 flex items-center gap-3 text-primary/90">
+                    <Hourglass className="w-5 h-5 text-primary/80 shrink-0" />
                     <p className="text-sm">{t('mispedidos.waiting_full_stock_msg')}</p>
                   </div>
                 )}
 
                 {/* Nota informativa general */}
                 {cotizacionSeleccionada.notas_stock && !esDecisionPendiente && (
-                  <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm text-gray-600">
-                    <p className="font-semibold text-gray-800 mb-1">{t('mispedidos.notes')}</p>
+                  <div className="bg-muted/10 border border-border rounded-xl p-4 text-sm text-muted-foreground">
+                    <p className="font-semibold text-card-foreground mb-1">{t('mispedidos.notes')}</p>
                     <p>{cotizacionSeleccionada.notas_stock.startsWith('{') ? t('mispedidos.processed') : cotizacionSeleccionada.notas_stock}</p>
                   </div>
                 )}
 
                 {/* Detalle de productos */}
-                <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="bg-card rounded-xl border border-border overflow-hidden">
                   <table className="w-full text-sm text-left">
-                    <thead className="bg-gray-50 text-gray-500 border-b">
+                    <thead className="bg-muted/10 text-muted-foreground border-b">
                       <tr>
                         <th className="px-4 py-3 font-bold text-[10px] uppercase">{t('common.product')}</th>
                         <th className="px-4 py-3 font-bold text-[10px] uppercase text-center">{t('common.quantity')}</th>
@@ -307,8 +307,8 @@ export const MisPedidos: React.FC = () => {
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                       {detalles.map((d) => (
-                        <tr key={d.id} className="hover:bg-gray-50">
-                          <td className="px-4 py-3 font-medium text-gray-900">{d.productos?.nombre}</td>
+                        <tr key={d.id} className="hover:bg-muted/10">
+                          <td className="px-4 py-3 font-medium text-foreground">{d.productos?.nombre}</td>
                           <td className="px-4 py-3 text-center font-bold">{d.cantidad}</td>
                           <td className="px-4 py-3 text-right">{formatCurrency(d.precio_unitario)}</td>
                           <td className="px-4 py-3 text-right font-bold">{formatCurrency(d.precio_unitario * d.cantidad)}</td>
@@ -318,9 +318,9 @@ export const MisPedidos: React.FC = () => {
                   </table>
                 </div>
 
-                <div className="flex justify-between items-center bg-gray-50 rounded-xl p-4">
-                  <span className="text-sm font-bold text-gray-500 uppercase tracking-widest">{t('common.total')}</span>
-                  <span className="text-2xl font-black text-blue-700">{formatCurrency(cotizacionSeleccionada.total || 0)}</span>
+                <div className="flex justify-between items-center bg-muted/10 rounded-xl p-4">
+                  <span className="text-sm font-bold text-muted-foreground uppercase tracking-widest">{t('common.total')}</span>
+                  <span className="text-2xl font-black text-primary">{formatCurrency(cotizacionSeleccionada.total || 0)}</span>
                 </div>
               </div>
             )}
@@ -341,7 +341,7 @@ export const MisPedidos: React.FC = () => {
                 </Button>
                 <Button
                   variant="outline"
-                  className="border-blue-200 text-blue-700 hover:bg-blue-50"
+                  className="border-primary/30 text-primary hover:bg-primary/5"
                   onClick={handleMantener}
                   disabled={!!accionLoading}
                 >

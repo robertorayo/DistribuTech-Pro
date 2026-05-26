@@ -225,11 +225,11 @@ export const AdminFabricantes: React.FC = () => {
           </tr>
         ) : (
           fabricantesPaginados.map((fab) => (
-            <tr key={fab.id} className="hover:bg-gray-50 transition-colors">
-              <td className="px-6 py-4 font-bold text-gray-900">{fab.nombre}</td>
-              <td className="px-6 py-4 text-gray-600">{fab.contacto || '—'}</td>
-              <td className="px-6 py-4 text-gray-600">{fab.telefono || '—'}</td>
-              <td className="px-6 py-4 text-gray-600">{fab.email || '—'}</td>
+            <tr key={fab.id} className="hover:bg-muted/10 transition-colors">
+              <td className="px-6 py-4 font-bold text-foreground">{fab.nombre}</td>
+              <td className="px-6 py-4 text-muted-foreground">{fab.contacto || '—'}</td>
+              <td className="px-6 py-4 text-muted-foreground">{fab.telefono || '—'}</td>
+              <td className="px-6 py-4 text-muted-foreground">{fab.email || '—'}</td>
               {rol === 'admin' && (
                 <td className="px-6 py-4">
                   <RowActions 
@@ -252,7 +252,7 @@ export const AdminFabricantes: React.FC = () => {
       {modalOpen && (
         <ModalOverlay onClose={() => setModalOpen(false)}>
           <ModalHeader>
-            <h3 className="text-xl font-bold text-gray-900">
+            <h3 className="text-xl font-bold text-foreground">
               {editando ? t('crud.edit_manufacturer') : t('crud.new_manufacturer')}
             </h3>
           </ModalHeader>

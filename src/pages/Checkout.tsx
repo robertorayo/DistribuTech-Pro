@@ -88,37 +88,37 @@ export const Checkout: React.FC = () => {
         {/* Lista de Productos */}
         <div className="lg:col-span-2 space-y-4">
           {items.map((item) => (
-            <div key={item.producto.id} className="flex flex-col sm:flex-row items-center gap-4 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm transition-all hover:shadow-md relative">
-              <div className="w-full sm:w-24 h-40 sm:h-24 bg-gray-50/80 rounded-xl border border-gray-100 flex items-center justify-center shrink-0">
-                <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{t('common.no_img')}</span>
+            <div key={item.producto.id} className="flex flex-col sm:flex-row items-center gap-4 bg-card p-4 rounded-2xl border border-border/50 shadow-sm transition-all hover:shadow-md relative">
+              <div className="w-full sm:w-24 h-40 sm:h-24 bg-muted/10/80 rounded-xl border border-border/50 flex items-center justify-center shrink-0">
+                <span className="text-[10px] text-muted-foreground/70 font-bold uppercase tracking-widest">{t('common.no_img')}</span>
               </div>
               
               <div className="flex-1 text-center sm:text-left w-full px-2">
-                <h3 className="font-bold text-gray-900 line-clamp-2 sm:line-clamp-1">{item.producto.nombre}</h3>
-                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mt-1 mb-2 sm:mb-3">
+                <h3 className="font-bold text-foreground line-clamp-2 sm:line-clamp-1">{item.producto.nombre}</h3>
+                <p className="text-[10px] font-semibold text-muted-foreground/70 uppercase tracking-widest mt-1 mb-2 sm:mb-3">
                   {item.producto.fabricantes?.nombre || 'General'}
                 </p>
-                <p className="font-black text-blue-600 text-base sm:text-lg">
-                  {formatCurrency(item.producto.precio)} <span className="text-xs text-gray-400 font-medium">/ud</span>
+                <p className="font-black text-primary text-base sm:text-lg">
+                  {formatCurrency(item.producto.precio)} <span className="text-xs text-muted-foreground/70 font-medium">/ud</span>
                 </p>
               </div>
 
               <div className="flex flex-wrap items-center gap-3 sm:gap-4 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-0 pt-4 sm:pt-0 mt-2 sm:mt-0">
-                <div className="flex items-center border border-gray-200 rounded-lg bg-white overflow-hidden shadow-sm h-9 sm:h-10">
+                <div className="flex items-center border border-border rounded-lg bg-card overflow-hidden shadow-sm h-9 sm:h-10">
                   <button 
-                    className="px-2.5 sm:px-3 hover:bg-gray-50 text-gray-600 font-bold border-r border-gray-200 transition-colors h-full disabled:opacity-30"
+                    className="px-2.5 sm:px-3 hover:bg-muted/10 text-muted-foreground font-bold border-r border-border transition-colors h-full disabled:opacity-30"
                     onClick={() => updateQuantity(item.producto.id, item.cantidad - 1)}
                     disabled={item.cantidad <= 1}
                   >-</button>
                   <span className="w-10 sm:w-12 text-center text-sm font-bold">{item.cantidad}</span>
                   <button 
-                    className="px-2.5 sm:px-3 hover:bg-gray-50 text-gray-600 font-bold border-l border-gray-200 transition-colors h-full disabled:opacity-30"
+                    className="px-2.5 sm:px-3 hover:bg-muted/10 text-muted-foreground font-bold border-l border-border transition-colors h-full disabled:opacity-30"
                     onClick={() => updateQuantity(item.producto.id, item.cantidad + 1)}
                     disabled={item.cantidad >= item.producto.stock}
                   >+</button>
                 </div>
                 
-                <p className="font-bold text-gray-900 min-w-[70px] sm:min-w-[80px] text-right text-base sm:text-lg flex-1 sm:flex-none">
+                <p className="font-bold text-foreground min-w-[70px] sm:min-w-[80px] text-right text-base sm:text-lg flex-1 sm:flex-none">
                   {formatCurrency(item.producto.precio * item.cantidad)}
                 </p>
 
@@ -137,23 +137,23 @@ export const Checkout: React.FC = () => {
         </div>
 
         {/* Panel de Totales */}
-        <div className="bg-white p-6 sm:p-8 rounded-2xl border border-gray-100 shadow-xl shadow-blue-900/5 h-fit sticky top-24">
-          <h3 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
-            <ShoppingBag className="w-5 h-5 text-blue-500" /> {t('checkout.summary')}
+        <div className="bg-card p-6 sm:p-8 rounded-2xl border border-border/50 shadow-xl shadow-blue-900/5 h-fit sticky top-24">
+          <h3 className="text-lg font-bold text-foreground mb-6 flex items-center gap-2">
+            <ShoppingBag className="w-5 h-5 text-primary/80" /> {t('checkout.summary')}
           </h3>
           
-          <div className="space-y-4 text-sm text-gray-600 mb-8">
+          <div className="space-y-4 text-sm text-muted-foreground mb-8">
             <div className="flex justify-between items-center">
               <span className="font-medium">{t('checkout.base')}</span>
-              <span className="font-bold text-gray-900 text-base">{formatCurrency(subtotal)}</span>
+              <span className="font-bold text-foreground text-base">{formatCurrency(subtotal)}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="font-medium">IVA (21%)</span>
-              <span className="font-bold text-gray-900 text-base">{formatCurrency(iva)}</span>
+              <span className="font-bold text-foreground text-base">{formatCurrency(iva)}</span>
             </div>
-            <div className="border-t border-gray-100 pt-5 flex justify-between items-end mt-2">
-              <span className="font-bold text-gray-900 uppercase tracking-widest text-xs">{t('checkout.total')}</span>
-              <span className="text-3xl font-black text-blue-700 tracking-tighter">{formatCurrency(total)}</span>
+            <div className="border-t border-border/50 pt-5 flex justify-between items-end mt-2">
+              <span className="font-bold text-foreground uppercase tracking-widest text-xs">{t('checkout.total')}</span>
+              <span className="text-3xl font-black text-primary tracking-tighter">{formatCurrency(total)}</span>
             </div>
           </div>
 
@@ -169,7 +169,7 @@ export const Checkout: React.FC = () => {
               <>{t('checkout.send')} <ArrowRight className="w-5 h-5" /></>
             )}
           </Button>
-          <p className="text-[11px] text-gray-400 text-center mt-5 font-medium leading-relaxed">
+          <p className="text-[11px] text-muted-foreground/70 text-center mt-5 font-medium leading-relaxed">
             {t('checkout.disclaimer')}
           </p>
         </div>

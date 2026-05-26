@@ -70,11 +70,11 @@ export const ResetPassword: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4 font-sans">
-      <div className="w-full max-w-md rounded-2xl bg-white p-10 shadow-2xl border border-gray-100 animate-in fade-in zoom-in-95 duration-200">
+    <div className="flex min-h-screen items-center justify-center bg-muted/10 p-4 font-sans">
+      <div className="w-full max-w-md rounded-2xl bg-card p-10 shadow-2xl border border-border/50 animate-in fade-in zoom-in-95 duration-200">
         <div className="text-center mb-8">
-          <h2 className="text-4xl font-extrabold text-gray-900 tracking-tight">DistribuTech Pro</h2>
-          <p className="mt-2 text-gray-500 font-medium">{t('auth.reset_password_title')}</p>
+          <h2 className="text-4xl font-extrabold text-foreground tracking-tight">DistribuTech Pro</h2>
+          <p className="mt-2 text-muted-foreground font-medium">{t('auth.reset_password_title')}</p>
         </div>
 
         {error && (
@@ -90,14 +90,14 @@ export const ResetPassword: React.FC = () => {
               <CheckCircle2 className="h-6 w-6 text-green-600" />
             </div>
             <div className="space-y-2">
-              <p className="text-sm text-gray-600 leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 {t('auth.password_updated_success')}
               </p>
             </div>
             <div className="pt-2">
               <Link
                 to="/login"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-primary transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
                 {t('auth.login_now')}
@@ -106,13 +106,13 @@ export const ResetPassword: React.FC = () => {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
-            <p className="text-sm text-gray-500 leading-relaxed">
+            <p className="text-sm text-muted-foreground leading-relaxed">
               {t('auth.reset_password_subtitle')}
             </p>
 
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <label className="block text-sm font-semibold text-gray-700">{t('auth.new_password')}</label>
+                <label className="block text-sm font-semibold text-foreground/90">{t('auth.new_password')}</label>
                 {isCapsLock && (
                   <span className="flex items-center gap-1 text-[10px] font-bold text-amber-600 uppercase tracking-wider bg-amber-50 px-2 py-0.5 rounded border border-amber-100 animate-pulse">
                     <AlertCircle className="w-3 h-3" /> {t('auth.caps_lock_on')}
@@ -126,13 +126,13 @@ export const ResetPassword: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   onKeyUp={checkCapsLock}
-                  className="w-full rounded-xl border border-gray-200 bg-gray-50/50 p-3.5 pr-12 transition-all focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10"
+                  className="w-full rounded-xl border border-border bg-muted/10/50 p-3.5 pr-12 transition-all focus:border-primary focus:bg-card focus:outline-none focus:ring-4 focus:ring-primary/10"
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-blue-600 transition-colors rounded-lg hover:bg-blue-50"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-muted-foreground/70 hover:text-primary transition-colors rounded-lg hover:bg-primary/5"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -142,14 +142,14 @@ export const ResetPassword: React.FC = () => {
               {password.length > 0 && (
                 <div className="pt-2 space-y-1.5">
                   <div className="flex gap-1.5 h-1.5">
-                    <div className={`flex-1 rounded-full transition-all duration-500 ${strength >= 0 ? (strength === 0 ? 'bg-red-400' : strength === 1 ? 'bg-amber-400' : strength === 2 ? 'bg-blue-400' : 'bg-green-500') : 'bg-gray-200'}`} />
-                    <div className={`flex-1 rounded-full transition-all duration-500 ${strength >= 2 ? (strength === 2 ? 'bg-blue-400' : 'bg-green-500') : 'bg-gray-200'}`} />
-                    <div className={`flex-1 rounded-full transition-all duration-500 ${strength >= 3 ? 'bg-green-500' : 'bg-gray-200'}`} />
+                    <div className={`flex-1 rounded-full transition-all duration-500 ${strength >= 0 ? (strength === 0 ? 'bg-red-400' : strength === 1 ? 'bg-amber-400' : strength === 2 ? 'bg-primary/70' : 'bg-green-500') : 'bg-muted'}`} />
+                    <div className={`flex-1 rounded-full transition-all duration-500 ${strength >= 2 ? (strength === 2 ? 'bg-primary/70' : 'bg-green-500') : 'bg-muted'}`} />
+                    <div className={`flex-1 rounded-full transition-all duration-500 ${strength >= 3 ? 'bg-green-500' : 'bg-muted'}`} />
                   </div>
                   <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider">
                     {strength === 0 && <span className="text-red-500 flex items-center gap-1"><Shield className="w-3 h-3" /> {t('auth.strength_weak')}</span>}
                     {strength === 1 && <span className="text-amber-500 flex items-center gap-1"><ShieldAlert className="w-3 h-3" /> {t('auth.strength_weak')}</span>}
-                    {strength === 2 && <span className="text-blue-500 flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> {t('auth.strength_medium')}</span>}
+                    {strength === 2 && <span className="text-primary/80 flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> {t('auth.strength_medium')}</span>}
                     {strength === 3 && <span className="text-green-600 flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> {t('auth.strength_strong')}</span>}
                   </div>
                 </div>
@@ -157,20 +157,20 @@ export const ResetPassword: React.FC = () => {
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-semibold text-gray-700">{t('auth.confirm_password')}</label>
+              <label className="mb-2 block text-sm font-semibold text-foreground/90">{t('auth.confirm_password')}</label>
               <div className="relative">
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full rounded-xl border border-gray-200 bg-gray-50/50 p-3.5 pr-12 transition-all focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10"
+                  className="w-full rounded-xl border border-border bg-muted/10/50 p-3.5 pr-12 transition-all focus:border-primary focus:bg-card focus:outline-none focus:ring-4 focus:ring-primary/10"
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-blue-600 transition-colors rounded-lg hover:bg-blue-50"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-muted-foreground/70 hover:text-primary transition-colors rounded-lg hover:bg-primary/5"
                 >
                   {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
@@ -180,7 +180,7 @@ export const ResetPassword: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-xl bg-blue-600 py-4 font-bold text-white shadow-xl shadow-blue-500/20 transition-all hover:bg-blue-700 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-70 disabled:pointer-events-none"
+              className="w-full rounded-xl bg-primary py-4 font-bold text-white shadow-xl shadow-primary/20 transition-all hover:bg-primary/90 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-70 disabled:pointer-events-none"
             >
               {loading ? (
                 <div className="flex items-center justify-center gap-2">
@@ -195,7 +195,7 @@ export const ResetPassword: React.FC = () => {
             <div className="text-center pt-2">
               <Link
                 to="/login"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
                 {t('auth.back_to_login')}

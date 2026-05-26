@@ -223,93 +223,93 @@ export const AdminDashboard: React.FC = () => {
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="shadow-sm border-gray-100 bg-white hover:shadow-md transition-shadow relative overflow-hidden">
+        <Card className="shadow-sm border-border/50 bg-card hover:shadow-md transition-shadow relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-green-50 rounded-bl-full -mr-4 -mt-4 opacity-50 z-0" />
           <CardHeader className="flex flex-row items-center justify-between pb-2 relative z-10">
-            <CardTitle className="text-[11px] font-bold text-gray-500 uppercase tracking-widest">
+            <CardTitle className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">
               {t('admin.approved_revenue')}
             </CardTitle>
             <TrendingUp className="w-5 h-5 text-green-500" />
           </CardHeader>
           <CardContent className="relative z-10">
-            <div className="text-3xl font-black text-gray-900 tracking-tighter">
+            <div className="text-3xl font-black text-foreground tracking-tighter">
               {formatCurrency(stats.ingresosAprobados)}
             </div>
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm border-gray-100 bg-white hover:shadow-md transition-shadow">
+        <Card className="shadow-sm border-border/50 bg-card hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-[11px] font-bold text-gray-500 uppercase tracking-widest">
+            <CardTitle className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">
               {t('admin.operations_volume')}
             </CardTitle>
-            <FileText className="w-5 h-5 text-blue-500" />
+            <FileText className="w-5 h-5 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-black text-gray-900">{stats.cotizacionesTotal}</div>
-            <p className="text-xs text-blue-600 font-medium mt-1">{t('admin.quotes_issued')}</p>
+            <div className="text-3xl font-black text-foreground">{stats.cotizacionesTotal}</div>
+            <p className="text-xs text-primary font-medium mt-1">{t('admin.quotes_issued')}</p>
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm border-gray-100 bg-white hover:shadow-md transition-shadow">
+        <Card className="shadow-sm border-border/50 bg-card hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-[11px] font-bold text-gray-500 uppercase tracking-widest">
+            <CardTitle className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">
               {t('admin.client_base')}
             </CardTitle>
             <Users className="w-5 h-5 text-purple-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-black text-gray-900">{stats.clientes}</div>
+            <div className="text-3xl font-black text-foreground">{stats.clientes}</div>
             <p className="text-xs text-purple-600 font-medium mt-1">
               {t('admin.active_sales')}: {stats.comerciales}
             </p>
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm border-gray-100 bg-white hover:shadow-md transition-shadow">
+        <Card className="shadow-sm border-border/50 bg-card hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-[11px] font-bold text-gray-500 uppercase tracking-widest">
+            <CardTitle className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">
               {t('admin.active_catalog')}
             </CardTitle>
             <Package className="w-5 h-5 text-orange-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-black text-gray-900">{stats.productosActivos}</div>
+            <div className="text-3xl font-black text-foreground">{stats.productosActivos}</div>
             <p className="text-xs text-orange-600 font-medium mt-1">{t('admin.product_refs')}</p>
           </CardContent>
         </Card>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="col-span-1 lg:col-span-2 shadow-sm border-gray-100 bg-white">
+        <Card className="col-span-1 lg:col-span-2 shadow-sm border-border/50 bg-card">
           <CardHeader>
-            <CardTitle className="text-gray-900 font-bold">{t('admin.revenue_evolution')}</CardTitle>
+            <CardTitle className="text-foreground font-bold">{t('admin.revenue_evolution')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-64 sm:h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f3f4f6" />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" />
                   <XAxis
                     dataKey="name"
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fontSize: 10, fill: '#6b7280' }}
+                    tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
                     dy={10}
                   />
                   <YAxis
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fontSize: 10, fill: '#6b7280' }}
+                    tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))' }}
                     tickFormatter={(val) => `€${val}`}
                   />
                   <RechartsTooltip
                     cursor={{ fill: '#f3f4f6' }}
                     contentStyle={{
-                      backgroundColor: '#ffffff',
-                      color: '#0f172a',
-                      borderRadius: '8px',
-                      border: '1px solid #e2e8f0',
+                      backgroundColor: 'hsl(var(--card))',
+                      color: 'hsl(var(--foreground))',
+                      borderRadius: '0.5rem',
+                      border: '1px solid hsl(var(--border))',
                       boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
                     }}
                     formatter={(value) => [formatCurrency(Number(value ?? 0)), 'Ingresos']}
@@ -321,9 +321,9 @@ export const AdminDashboard: React.FC = () => {
           </CardContent>
         </Card>
 
-        <Card className="col-span-1 shadow-sm border-gray-100 bg-white">
+        <Card className="col-span-1 shadow-sm border-border/50 bg-card">
           <CardHeader>
-            <CardTitle className="text-gray-900 font-bold">{t('admin.quotes_status')}</CardTitle>
+            <CardTitle className="text-foreground font-bold">{t('admin.quotes_status')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-80 flex flex-col items-center justify-center">
@@ -344,10 +344,10 @@ export const AdminDashboard: React.FC = () => {
                   </Pie>
                   <RechartsTooltip
                     contentStyle={{
-                      backgroundColor: '#ffffff',
-                      color: '#0f172a',
-                      borderRadius: '8px',
-                      border: '1px solid #e2e8f0',
+                      backgroundColor: 'hsl(var(--card))',
+                      color: 'hsl(var(--foreground))',
+                      borderRadius: '0.5rem',
+                      border: '1px solid hsl(var(--border))',
                       boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
                     }}
                   />
@@ -359,23 +359,23 @@ export const AdminDashboard: React.FC = () => {
         </Card>
       </div>
 
-      <Card className="shadow-sm border-gray-100 bg-white">
+      <Card className="shadow-sm border-border/50 bg-card">
         <CardHeader className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div className="space-y-1">
-            <CardTitle className="text-gray-900 font-bold">{t('admin.daily_revenue_title')}</CardTitle>
+            <CardTitle className="text-foreground font-bold">{t('admin.daily_revenue_title')}</CardTitle>
             <CardDescription>{t('admin.daily_revenue_subtitle')} — {monthLabel}</CardDescription>
           </div>
           <div className="flex flex-col sm:flex-row items-stretch sm:items-end gap-3">
             <div className="grid gap-1.5">
               <Label htmlFor="admin-month-select">{t('admin.select_month')}</Label>
               <Select value={selectedMonth} onValueChange={(v) => v != null && setSelectedMonth(v)}>
-                <SelectTrigger id="admin-month-select" className="min-w-[140px] w-full sm:w-auto bg-white">
+                <SelectTrigger id="admin-month-select" className="min-w-[140px] w-full sm:w-auto bg-card">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent 
                   side="bottom" 
                   alignItemWithTrigger={false} 
-                  className="bg-slate-50/95 dark:bg-slate-900/95 backdrop-blur-sm border-slate-200 dark:border-slate-800 shadow-lg"
+                  className="bg-popover border border-border shadow-lg"
                 >
                   {MONTH_NAMES_FULL.map((name, index) => (
                     <SelectItem 
@@ -394,13 +394,13 @@ export const AdminDashboard: React.FC = () => {
             <div className="grid gap-1.5">
               <Label htmlFor="admin-year-select">{t('admin.select_year')}</Label>
               <Select value={selectedYear} onValueChange={(v) => v != null && handleYearChange(v)}>
-                <SelectTrigger id="admin-year-select" className="min-w-[100px] w-full sm:w-auto bg-white">
+                <SelectTrigger id="admin-year-select" className="min-w-[100px] w-full sm:w-auto bg-card">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent 
                   side="bottom" 
                   alignItemWithTrigger={false}
-                  className="bg-slate-50/95 dark:bg-slate-900/95 backdrop-blur-sm border-slate-200 dark:border-slate-800 shadow-lg"
+                  className="bg-popover border border-border shadow-lg"
                 >
                   {YEAR_OPTIONS.map((year) => (
                     <SelectItem key={year} value={String(year)}>
@@ -437,6 +437,12 @@ export const AdminDashboard: React.FC = () => {
                   }
                 />
                 <ChartTooltip
+                  contentStyle={{
+                    backgroundColor: 'hsl(var(--card))',
+                    border: '1px solid hsl(var(--border))',
+                    borderRadius: '0.5rem',
+                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+                  }}
                   content={
                     <ChartTooltipContent
                       labelFormatter={(_, payload) => {
@@ -462,9 +468,9 @@ export const AdminDashboard: React.FC = () => {
         </CardContent>
       </Card>
 
-      <div className="bg-blue-50/50 border border-blue-100 rounded-2xl p-8 text-center mt-12 shadow-inner">
-        <h3 className="text-2xl font-black text-blue-900 mb-3 tracking-tight">{t('admin.mvp_ready')}</h3>
-        <p className="text-blue-700/80 max-w-2xl mx-auto font-medium">{t('admin.mvp_description')}</p>
+      <div className="bg-primary/5 border border-primary/20 rounded-2xl p-8 text-center mt-12 shadow-inner">
+        <h3 className="text-2xl font-black text-primary mb-3 tracking-tight">{t('admin.mvp_ready')}</h3>
+        <p className="text-primary/70 max-w-2xl mx-auto font-medium">{t('admin.mvp_description')}</p>
       </div>
     </div>
   );
