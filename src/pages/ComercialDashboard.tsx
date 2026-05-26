@@ -19,7 +19,8 @@ import {
   EmptyState,
   FilterBar,
   SearchInput,
-  selectClasses
+  selectClasses,
+  Pagination
 } from '../components/shared';
 
 export const ComercialDashboard: React.FC = () => {
@@ -35,10 +36,16 @@ export const ComercialDashboard: React.FC = () => {
   const [detallesCotizacion, setDetallesCotizacion] = useState<any[]>([]);
   const [cargandoDetalles, setCargandoDetalles] = useState(false);
   
-  // Estados de filtrado
+  // Estados de filtrado y paginación
   const [searchTerm, setSearchTerm] = useState('');
   const [filterEstado, setFilterEstado] = useState('all');
   const [sortBy, setSortBy] = useState<string>('date-desc');
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Resetear página al filtrar
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterEstado, sortBy]);
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -158,6 +165,13 @@ export const ComercialDashboard: React.FC = () => {
     return result;
   }, [cotizaciones, searchTerm, filterEstado, sortBy]);
 
+  const itemsPerPage = 15;
+  const totalPages = Math.ceil(cotizacionesFiltradas.length / itemsPerPage);
+  const cotizacionesPaginadas = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return cotizacionesFiltradas.slice(start, start + itemsPerPage);
+  }, [cotizacionesFiltradas, currentPage]);
+
   if (loading) return <LoadingScreen />;
 
   const pendientes = cotizaciones.filter(c => c.estado === 'pendiente');
@@ -257,7 +271,7 @@ export const ComercialDashboard: React.FC = () => {
               </td>
             </tr>
           ) : (
-            cotizacionesFiltradas.map(cot => (
+            cotizacionesPaginadas.map(cot => (
               <tr key={cot.id} className="hover:bg-gray-50 transition-colors">
                 <td className="px-3 sm:px-6 py-3 sm:py-4 font-mono text-xs text-gray-400">#{cot.id.split('-')[0]}</td>
                 <td className="px-3 sm:px-6 py-3 sm:py-4">
@@ -280,6 +294,12 @@ export const ComercialDashboard: React.FC = () => {
             ))
           )}
         </DataTable>
+
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
       </div>
 
       {cotizacionSeleccionada && (
@@ -288,7 +308,7 @@ export const ComercialDashboard: React.FC = () => {
             <div className="flex justify-between items-center">
               <div>
                 <h3 className="text-xl sm:text-2xl font-bold text-gray-900">{t('comercial.quote_review')}</h3>
-                <p className="text-sm text-gray-500">ID: {cotizacionSeleccionada.id}</p>
+                <p className="text-xs text-gray-400 mt-1">ID: #{cotizacionSeleccionada.id.split('-')[0]}</p>
               </div>
               <Button variant="ghost" size="icon" onClick={() => setCotizacionSeleccionada(null)} className="text-gray-400">&times;</Button>
             </div>

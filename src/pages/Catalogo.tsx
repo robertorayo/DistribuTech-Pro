@@ -15,7 +15,8 @@ import {
   SearchInput,
   EmptyState,
   selectClasses,
-  FilterBar
+  FilterBar,
+  Pagination
 } from '../components/shared';
 
 export type ProductoConDetalles = Producto & {
@@ -32,11 +33,17 @@ export const Catalogo: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [productoSeleccionado, setProductoSeleccionado] = useState<ProductoConDetalles | null>(null);
 
-  // Estados para los filtros
+  // Estados para los filtros y paginación
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedManufacturer, setSelectedManufacturer] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('default');
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Resetear página al cambiar filtros
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedCategory, selectedManufacturer, sortBy]);
 
   useEffect(() => {
     cargarTodo();
@@ -96,6 +103,14 @@ export const Catalogo: React.FC = () => {
 
     return result;
   }, [productos, searchTerm, selectedCategory, selectedManufacturer, sortBy]);
+
+  const itemsPerPage = 12;
+  const totalPages = Math.ceil(productosFiltrados.length / itemsPerPage);
+  
+  const productosPaginados = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return productosFiltrados.slice(start, start + itemsPerPage);
+  }, [productosFiltrados, currentPage]);
 
   const limpiarFiltros = () => {
     setSearchTerm('');
@@ -168,61 +183,92 @@ export const Catalogo: React.FC = () => {
           onAction={limpiarFiltros}
         />
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {productosFiltrados.map((prod) => (
-            <Card key={prod.id} className="flex flex-col h-full hover:shadow-lg hover:border-blue-200 transition-all duration-300 group overflow-hidden border-gray-100 shadow-sm">
-              <CardHeader className="pb-4">
-                <div className="flex justify-between items-start mb-3">
-                  <span className="text-[10px] uppercase font-bold tracking-wider bg-blue-50 text-blue-700 px-2.5 py-1 rounded-md border border-blue-100">
-                    {prod.categorias?.nombre || 'General'}
-                  </span>
-                  <span className="text-xs text-gray-400 font-semibold">{prod.fabricantes?.nombre || 'Marca Blanca'}</span>
-                </div>
-                <CardTitle className="text-lg line-clamp-2 leading-tight group-hover:text-blue-700 transition-colors cursor-pointer" onClick={() => setProductoSeleccionado(prod)}>
-                  {prod.nombre}
-                </CardTitle>
-              </CardHeader>
-
-              <CardContent className="flex-1 flex flex-col">
-                <p className="text-sm text-gray-600 line-clamp-3 mb-6 flex-1">
-                  {prod.descripcion}
-                </p>
-                <div className="mt-auto">
-                  <p className="text-3xl font-black text-gray-900 tracking-tight">
-                    {formatCurrency(prod.precio)}
-                    <span className="text-sm font-medium text-gray-400 tracking-normal ml-1">/ud</span>
-                  </p>
-                  <div className="flex items-center gap-2 mt-2">
-                    <div className={`w-2 h-2 rounded-full ${prod.stock > 0 ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                    <p className="text-xs font-medium text-gray-600">
-                      {prod.stock > 0 ? t('catalog.units_in_stock', { count: prod.stock }) : t('catalog.out_of_stock_temp')}
-                    </p>
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {productosPaginados.map((prod) => (
+              <Card key={prod.id} className="flex flex-col h-full hover:shadow-lg hover:border-blue-200 transition-all duration-300 group overflow-hidden border-gray-200 bg-white rounded-2xl shadow-sm">
+                {/* Header card with category and brand */}
+                <CardHeader className="pb-3 pt-5 px-5">
+                  <div className="flex justify-between items-center mb-2.5">
+                    <span className="text-[10px] uppercase font-bold tracking-wider bg-blue-50 text-blue-700 px-2 py-0.5 rounded-md border border-blue-100">
+                      {prod.categorias?.nombre || 'General'}
+                    </span>
+                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">{prod.fabricantes?.nombre || 'Marca Blanca'}</span>
                   </div>
-                </div>
-              </CardContent>
+                  <CardTitle 
+                    className="text-base font-extrabold text-gray-900 leading-snug line-clamp-2 hover:text-blue-700 transition-colors cursor-pointer" 
+                    onClick={() => setProductoSeleccionado(prod)}
+                  >
+                    {prod.nombre}
+                  </CardTitle>
+                </CardHeader>
 
-              <CardFooter className="pt-0 flex gap-2">
-                <Button
-                  className="flex-1 font-semibold shadow-sm"
-                  onClick={() => setProductoSeleccionado(prod)}
-                  variant="outline"
-                >
-                  {t('catalog.details')}
-                </Button>
-                <Button
-                  className="font-semibold shadow-sm px-3"
-                  disabled={prod.stock === 0}
-                  onClick={() => {
-                    useCartStore.getState().addItem(prod, 1);
-                    toast.success(`1x ${prod.nombre} ${t('catalog.added_to_cart')}`);
-                  }}
-                  title="Añadir 1 al Carrito"
-                >
-                  <ShoppingCart className="w-5 h-5" />
-                </Button>
-              </CardFooter>
-            </Card>
-          ))}
+                {/* Card Content with structured description */}
+                <CardContent className="flex-1 flex flex-col px-5 pb-4">
+                  {/* Subtle card-like box for description */}
+                  <div className="bg-slate-50/40 p-3.5 rounded-xl border border-slate-100 text-xs sm:text-sm text-gray-500 leading-relaxed font-normal line-clamp-3 mb-4 flex-1">
+                    {prod.descripcion || 'Sin descripción disponible para este producto profesional.'}
+                  </div>
+                  
+                  {/* Visual Divider and Pricing info */}
+                  <div className="mt-auto border-t border-gray-100 pt-3 flex flex-col gap-2">
+                    <div className="flex justify-between items-baseline">
+                      <p className="text-2xl font-black text-gray-900 tracking-tight">
+                        {formatCurrency(prod.precio)}
+                        <span className="text-[10px] font-bold text-gray-400 tracking-normal ml-0.5">/ud</span>
+                      </p>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Sin IVA</p>
+                    </div>
+
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="relative flex h-2.5 w-2.5">
+                        {prod.stock > 0 ? (
+                          <>
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-60"></span>
+                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                          </>
+                        ) : (
+                          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
+                        )}
+                      </span>
+                      <p className="text-xs font-semibold text-gray-500">
+                        {prod.stock > 0 ? t('catalog.units_in_stock', { count: prod.stock }) : t('catalog.out_of_stock_temp')}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+
+                {/* Action footer */}
+                <CardFooter className="pt-0 pb-5 px-5 flex gap-2">
+                  <Button
+                    className="flex-1 font-bold shadow-sm hover:shadow transition-all"
+                    onClick={() => setProductoSeleccionado(prod)}
+                    variant="outline"
+                  >
+                    {t('catalog.details')}
+                  </Button>
+                  <Button
+                    className="font-bold shadow-sm px-3 hover:scale-105 transition-transform"
+                    disabled={prod.stock === 0}
+                    onClick={() => {
+                      useCartStore.getState().addItem(prod, 1);
+                      toast.success(`1x ${prod.nombre} ${t('catalog.added_to_cart')}`);
+                    }}
+                    title="Añadir 1 al Carrito"
+                  >
+                    <ShoppingCart className="w-4 h-4" />
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+
+          {/* Catalog Pagination Component */}
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       )}
 

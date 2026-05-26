@@ -22,7 +22,8 @@ import {
   EmptyState,
   FilterBar,
   SearchInput,
-  ConfirmModal
+  ConfirmModal,
+  Pagination
 } from '../components/shared';
 
 type Categoria = Database['public']['Tables']['categorias']['Row'];
@@ -46,6 +47,12 @@ export const AdminCategorias: React.FC = () => {
   const [descripcion, setDescripcion] = useState('');
   const [sector, setSector] = useState<CategoriaInsert['sector']>('ferreteria');
   const [saving, setSaving] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Resetear página al filtrar
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterSector]);
 
   useEffect(() => {
     cargarCategorias();
@@ -154,6 +161,13 @@ export const AdminCategorias: React.FC = () => {
     return matchSearch && matchSector;
   });
 
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(categoriasFiltradas.length / itemsPerPage);
+  const categoriasPaginadas = categoriasFiltradas.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   if (loading) return <LoadingScreen />;
 
   const isFilterActive = searchTerm !== '' || filterSector !== 'all';
@@ -203,7 +217,7 @@ export const AdminCategorias: React.FC = () => {
             </td>
           </tr>
         ) : (
-          categoriasFiltradas.map((cat) => (
+          categoriasPaginadas.map((cat) => (
             <tr key={cat.id} className="hover:bg-gray-50 transition-colors">
               <td className="px-6 py-4 font-bold text-gray-900">{cat.nombre}</td>
               <td className="px-6 py-4 text-gray-600 max-w-xs truncate">{cat.descripcion || '—'}</td>
@@ -224,6 +238,12 @@ export const AdminCategorias: React.FC = () => {
           ))
         )}
       </DataTable>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
 
       {modalOpen && (
         <ModalOverlay onClose={() => setModalOpen(false)}>

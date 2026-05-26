@@ -20,7 +20,8 @@ import {
   EmptyState,
   FilterBar,
   SearchInput,
-  ConfirmModal
+  ConfirmModal,
+  Pagination
 } from '../components/shared';
 
 type Fabricante = Database['public']['Tables']['fabricantes']['Row'];
@@ -42,6 +43,12 @@ export const AdminFabricantes: React.FC = () => {
   const [email, setEmail] = useState('');
   const [direccion, setDireccion] = useState('');
   const [saving, setSaving] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Resetear página al filtrar
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
 
   useEffect(() => {
     cargarFabricantes();
@@ -171,6 +178,13 @@ export const AdminFabricantes: React.FC = () => {
            (fab.telefono || '').toLowerCase().includes(search);
   });
 
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(fabricantesFiltrados.length / itemsPerPage);
+  const fabricantesPaginados = fabricantesFiltrados.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   if (loading) return <LoadingScreen />;
 
   return (
@@ -210,7 +224,7 @@ export const AdminFabricantes: React.FC = () => {
             </td>
           </tr>
         ) : (
-          fabricantesFiltrados.map((fab) => (
+          fabricantesPaginados.map((fab) => (
             <tr key={fab.id} className="hover:bg-gray-50 transition-colors">
               <td className="px-6 py-4 font-bold text-gray-900">{fab.nombre}</td>
               <td className="px-6 py-4 text-gray-600">{fab.contacto || '—'}</td>
@@ -228,6 +242,12 @@ export const AdminFabricantes: React.FC = () => {
           ))
         )}
       </DataTable>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
 
       {modalOpen && (
         <ModalOverlay onClose={() => setModalOpen(false)}>

@@ -227,7 +227,7 @@ export const MisPedidos: React.FC = () => {
             <div className="flex justify-between items-center">
               <div>
                 <h3 className="text-xl sm:text-2xl font-bold text-gray-900">{t('mispedidos.detail_title')}</h3>
-                <p className="text-xs text-gray-400 mt-1">ID: {cotizacionSeleccionada.id}</p>
+                <p className="text-xs text-gray-400 mt-1">ID: #{cotizacionSeleccionada.id.split('-')[0]}</p>
               </div>
               <Button variant="ghost" size="icon" onClick={cerrarModal} className="text-gray-400">&times;</Button>
             </div>

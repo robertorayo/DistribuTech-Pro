@@ -24,7 +24,8 @@ import {
   textareaClasses,
   EmptyState,
   FilterBar,
-  ConfirmModal
+  ConfirmModal,
+  Pagination
 } from '../components/shared';
 
 type Producto = Database['public']['Tables']['productos']['Row'];
@@ -64,6 +65,12 @@ export const AdminProductos: React.FC = () => {
   const [fabricanteId, setFabricanteId] = useState('');
   const [activo, setActivo] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Resetear página al filtrar
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filterCategoria, filterFabricante, filterStock, filterActivo, sortByPrice]);
 
   useEffect(() => {
     cargarTodo();
@@ -232,6 +239,13 @@ export const AdminProductos: React.FC = () => {
     return 0;
   });
 
+  const itemsPerPage = 15;
+  const totalPages = Math.ceil(productosFiltrados.length / itemsPerPage);
+  const productosPaginados = productosFiltrados.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   if (loading) return <LoadingScreen />;
 
   const isFilterActive = searchTerm !== '' || filterCategoria !== 'all' || filterFabricante !== 'all' || filterStock !== 'all' || filterActivo !== 'all' || sortByPrice !== 'none';
@@ -328,7 +342,7 @@ export const AdminProductos: React.FC = () => {
             </td>
           </tr>
         ) : (
-          productosFiltrados.map((prod) => (
+          productosPaginados.map((prod) => (
             <tr key={prod.id} className="hover:bg-gray-50 transition-colors">
               <td className="px-5 py-4">
                 <p className="font-bold text-gray-900">{prod.nombre}</p>
@@ -361,6 +375,12 @@ export const AdminProductos: React.FC = () => {
           ))
         )}
       </DataTable>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
 
       {modalOpen && (
         <ModalOverlay onClose={() => setModalOpen(false)} maxWidth="max-w-2xl">

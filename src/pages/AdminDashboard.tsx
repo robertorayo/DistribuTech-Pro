@@ -306,9 +306,11 @@ export const AdminDashboard: React.FC = () => {
                   <RechartsTooltip
                     cursor={{ fill: '#f3f4f6' }}
                     contentStyle={{
+                      backgroundColor: '#ffffff',
+                      color: '#0f172a',
                       borderRadius: '8px',
-                      border: 'none',
-                      boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                      border: '1px solid #e2e8f0',
+                      boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
                     }}
                     formatter={(value) => [formatCurrency(Number(value ?? 0)), 'Ingresos']}
                   />
@@ -342,9 +344,11 @@ export const AdminDashboard: React.FC = () => {
                   </Pie>
                   <RechartsTooltip
                     contentStyle={{
+                      backgroundColor: '#ffffff',
+                      color: '#0f172a',
                       borderRadius: '8px',
-                      border: 'none',
-                      boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+                      border: '1px solid #e2e8f0',
+                      boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
                     }}
                   />
                   <Legend verticalAlign="bottom" height={36} iconType="circle" />

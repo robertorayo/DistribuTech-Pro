@@ -15,3 +15,4 @@ export { FormField, inputClasses, selectClasses, textareaClasses } from './FormF
 export { DataTable, RowActions } from './DataTable';
 export { FilterBar } from './FilterBar';
 export { ConfirmModal } from './ConfirmModal';
+export { Pagination } from './Pagination';

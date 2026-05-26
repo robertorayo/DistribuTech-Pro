@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useTranslation } from 'react-i18next';
-import { Eye, EyeOff, AlertCircle, ShieldCheck, ShieldAlert, Shield } from 'lucide-react';
+import { Eye, EyeOff, AlertCircle } from 'lucide-react';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -10,9 +10,7 @@ export const Login: React.FC = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -37,25 +35,8 @@ export const Login: React.FC = () => {
     }
   };
 
-  // Calcular fortaleza de contraseña
-  const getPasswordStrength = (pass: string) => {
-    if (!pass) return 0;
-    let strength = 0;
-    if (pass.length >= 6) strength++;
-    if (pass.length >= 8 && /[A-Z]/.test(pass) && /[0-9]/.test(pass)) strength++;
-    if (pass.length >= 10 && /[^A-Za-z0-9]/.test(pass)) strength++;
-    return strength; // 0: Muy Débil, 1: Débil, 2: Media, 3: Fuerte
-  };
-
-  const strength = getPasswordStrength(password);
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (password !== confirmPassword) {
-      setError(t('auth.passwords_not_match'));
-      return;
-    }
 
     setLoading(true);
     setError(null);
@@ -144,44 +125,6 @@ export const Login: React.FC = () => {
                 className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-blue-600 transition-colors rounded-lg hover:bg-blue-50"
               >
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
-            </div>
-
-            {/* Indicador de fortaleza */}
-            {password.length > 0 && (
-              <div className="pt-2 space-y-1.5">
-                <div className="flex gap-1.5 h-1.5">
-                  <div className={`flex-1 rounded-full transition-all duration-500 ${strength >= 0 ? (strength === 0 ? 'bg-red-400' : strength === 1 ? 'bg-amber-400' : strength === 2 ? 'bg-blue-400' : 'bg-green-500') : 'bg-gray-200'}`} />
-                  <div className={`flex-1 rounded-full transition-all duration-500 ${strength >= 2 ? (strength === 2 ? 'bg-blue-400' : 'bg-green-500') : 'bg-gray-200'}`} />
-                  <div className={`flex-1 rounded-full transition-all duration-500 ${strength >= 3 ? 'bg-green-500' : 'bg-gray-200'}`} />
-                </div>
-                <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider">
-                  {strength === 0 && <span className="text-red-500 flex items-center gap-1"><Shield className="w-3 h-3" /> {t('auth.strength_weak')}</span>}
-                  {strength === 1 && <span className="text-amber-500 flex items-center gap-1"><ShieldAlert className="w-3 h-3" /> {t('auth.strength_weak')}</span>}
-                  {strength === 2 && <span className="text-blue-500 flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> {t('auth.strength_medium')}</span>}
-                  {strength === 3 && <span className="text-green-600 flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> {t('auth.strength_strong')}</span>}
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div>
-            <label className="mb-2 block text-sm font-semibold text-gray-700">{t('auth.confirm_password')}</label>
-            <div className="relative">
-              <input
-                type={showConfirmPassword ? 'text' : 'password'}
-                required
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full rounded-xl border border-gray-200 bg-gray-50/50 p-3.5 pr-12 transition-all focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-500/10"
-                placeholder="••••••••"
-              />
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-blue-600 transition-colors rounded-lg hover:bg-blue-50"
-              >
-                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
               </button>
             </div>
           </div>
