@@ -68,7 +68,7 @@ export const AdminCategorias: React.FC = () => {
       if (error) throw error;
       setCategorias(data || []);
     } catch (error: any) {
-      toast.error('Error: ' + error.message);
+      toast.error(`${t('common.error')} ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -99,11 +99,11 @@ export const AdminCategorias: React.FC = () => {
       return;
     }
     if (tNombre.length < 2) {
-      toast.error('El nombre de la categoría debe tener al menos 2 caracteres.');
+      toast.error(t('crud.name_min_length'));
       return;
     }
     if (!sector) {
-      toast.error('Debes seleccionar un sector válido.');
+      toast.error(t('crud.select_sector'));
       return;
     }
     
@@ -114,16 +114,16 @@ export const AdminCategorias: React.FC = () => {
       if (editando) {
         const { error } = await (supabase.from('categorias') as any).update(payload).eq('id', editando.id);
         if (error) throw error;
-        toast.success(t('categories.update_success'));
+        toast.success(t('crud.updated_success'));
       } else {
         const { error } = await (supabase.from('categorias') as any).insert(payload);
         if (error) throw error;
-        toast.success(t('categories.create_success'));
+        toast.success(t('crud.created_success'));
       }
       setModalOpen(false);
       cargarCategorias();
     } catch (error: any) {
-      toast.error('Error: ' + error.message);
+      toast.error(`${t('common.error')} ${error.message}`);
     } finally {
       setSaving(false);
     }
@@ -143,7 +143,7 @@ export const AdminCategorias: React.FC = () => {
         cargarCategorias();
       }
     } catch (error: any) {
-      toast.error('Error: ' + error.message);
+      toast.error(`${t('common.error')} ${error.message}`);
     } finally {
       setConfirmDelete(null);
     }

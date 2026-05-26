@@ -66,7 +66,7 @@ export const Catalogo: React.FC = () => {
       setCategorias(catRes.data || []);
       setFabricantes(fabRes.data || []);
     } catch (error: any) {
-      toast.error('Error: ' + error.message);
+      toast.error(`${t('common.error')} ${error.message}`);
     } finally {
       setLoading(false);
     }

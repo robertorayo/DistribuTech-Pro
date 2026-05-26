@@ -57,7 +57,7 @@ export const Checkout: React.FC = () => {
       clearCart();
       navigate('/catalogo'); 
     } catch (error: any) {
-      toast.error('Error: ' + error.message);
+      toast.error(`${t('common.error')} ${error.message}`);
     } finally {
       setLoading(false);
     }

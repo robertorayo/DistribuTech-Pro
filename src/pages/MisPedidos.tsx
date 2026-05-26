@@ -59,7 +59,7 @@ export const MisPedidos: React.FC = () => {
       if (error) throw error;
       setCotizaciones(data || []);
     } catch (err: any) {
-      toast.error('Error al cargar pedidos: ' + err.message);
+      toast.error(`${t('mispedidos.load_error')} ${err.message}`);
     } finally {
       setLoading(false);
     }
@@ -76,7 +76,7 @@ export const MisPedidos: React.FC = () => {
       if (error) throw error;
       setDetalles(data || []);
     } catch (err: any) {
-      toast.error('Error: ' + err.message);
+      toast.error(`${t('common.error')} ${err.message}`);
     } finally {
       setCargandoDetalles(false);
     }
@@ -100,7 +100,7 @@ export const MisPedidos: React.FC = () => {
       cerrarModal();
       cargarPedidos();
     } catch (err: any) {
-      toast.error('Error: ' + err.message);
+      toast.error(`${t('common.error')} ${err.message}`);
     } finally {
       setAccionLoading(null);
     }
@@ -121,7 +121,7 @@ export const MisPedidos: React.FC = () => {
       cerrarModal();
       cargarPedidos();
     } catch (err: any) {
-      toast.error('Error: ' + err.message);
+      toast.error(`${t('common.error')} ${err.message}`);
     } finally {
       setAccionLoading(null);
     }
@@ -140,7 +140,7 @@ export const MisPedidos: React.FC = () => {
       cerrarModal();
       cargarPedidos();
     } catch (err: any) {
-      toast.error('Error: ' + err.message);
+      toast.error(`${t('common.error')} ${err.message}`);
     } finally {
       setAccionLoading(null);
     }

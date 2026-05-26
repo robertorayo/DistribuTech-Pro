@@ -91,7 +91,7 @@ export const AdminProductos: React.FC = () => {
       setCategorias(catRes.data || []);
       setFabricantes(fabRes.data || []);
     } catch (error: any) {
-      toast.error('Error: ' + error.message);
+      toast.error(`${t('common.error')} ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -132,28 +132,28 @@ export const AdminProductos: React.FC = () => {
       return;
     }
     if (tNombre.length < 2) {
-      toast.error('El nombre del producto debe tener al menos 2 caracteres.');
+      toast.error(t('crud.name_min_length'));
       return;
     }
     
     if (!categoriaId) {
-      toast.error('Debes seleccionar una categoría.');
+      toast.error(t('crud.select_category'));
       return;
     }
     
     if (!fabricanteId) {
-      toast.error('Debes seleccionar un fabricante.');
+      toast.error(t('crud.select_manufacturer'));
       return;
     }
 
     const precioNum = parseFloat(precio);
     if (isNaN(precioNum) || precioNum <= 0) {
-      toast.error('El precio debe ser un número mayor a 0.');
+      toast.error(t('crud.price_min'));
       return;
     }
     const stockNum = parseInt(stock, 10);
     if (isNaN(stockNum) || stockNum < 0) {
-      toast.error('El stock no puede ser negativo ni inválido.');
+      toast.error(t('crud.stock_invalid'));
       return;
     }
 
@@ -174,16 +174,16 @@ export const AdminProductos: React.FC = () => {
       if (editando) {
         const { error } = await (supabase.from('productos') as any).update(payload).eq('id', editando.id);
         if (error) throw error;
-        toast.success(t('products.update_success'));
+        toast.success(t('crud.updated_success'));
       } else {
         const { error } = await (supabase.from('productos') as any).insert(payload);
         if (error) throw error;
-        toast.success(t('products.create_success'));
+        toast.success(t('crud.created_success'));
       }
       setModalOpen(false);
       cargarTodo();
     } catch (error: any) {
-      toast.error('Error: ' + error.message);
+      toast.error(`${t('common.error')} ${error.message}`);
     } finally {
       setSaving(false);
     }
@@ -203,7 +203,7 @@ export const AdminProductos: React.FC = () => {
         cargarTodo();
       }
     } catch (error: any) {
-      toast.error('Error: ' + error.message);
+      toast.error(`${t('common.error')} ${error.message}`);
     } finally {
       setConfirmDelete(null);
     }

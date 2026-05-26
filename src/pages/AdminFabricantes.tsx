@@ -64,7 +64,7 @@ export const AdminFabricantes: React.FC = () => {
       if (error) throw error;
       setFabricantes(data || []);
     } catch (error: any) {
-      toast.error('Error: ' + error.message);
+      toast.error(`${t('common.error')} ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -102,11 +102,11 @@ export const AdminFabricantes: React.FC = () => {
       return;
     }
     if (tNombre.length < 2) {
-      toast.error('El nombre debe tener al menos 2 caracteres.');
+      toast.error(t('crud.name_min_length'));
       return;
     }
     if (tContacto && /\d/.test(tContacto)) {
-      toast.error('El nombre de contacto no puede contener números.');
+      toast.error(t('crud.contact_no_numbers'));
       return;
     }
     if (tTelefono && !/^\d{9}$/.test(tTelefono)) {
@@ -114,7 +114,7 @@ export const AdminFabricantes: React.FC = () => {
       return;
     }
     if (tEmail && !/^\S+@\S+\.\S+$/.test(tEmail)) {
-      toast.error('El formato del correo electrónico es inválido.');
+      toast.error(t('crud.invalid_email'));
       return;
     }
 
@@ -131,16 +131,16 @@ export const AdminFabricantes: React.FC = () => {
       if (editando) {
         const { error } = await (supabase.from('fabricantes') as any).update(payload).eq('id', editando.id);
         if (error) throw error;
-        toast.success(t('manufacturers.update_success'));
+        toast.success(t('crud.updated_success'));
       } else {
         const { error } = await (supabase.from('fabricantes') as any).insert(payload);
         if (error) throw error;
-        toast.success(t('manufacturers.create_success'));
+        toast.success(t('crud.created_success'));
       }
       setModalOpen(false);
       cargarFabricantes();
     } catch (error: any) {
-      toast.error('Error: ' + error.message);
+      toast.error(`${t('common.error')} ${error.message}`);
     } finally {
       setSaving(false);
     }
@@ -160,7 +160,7 @@ export const AdminFabricantes: React.FC = () => {
         cargarFabricantes();
       }
     } catch (error: any) {
-      toast.error('Error: ' + error.message);
+      toast.error(`${t('common.error')} ${error.message}`);
     } finally {
       setConfirmDelete(null);
     }

@@ -39,7 +39,11 @@ const resources = {
         "no_img": "Sin imagen",
         "status_pending": "Pendiente",
         "status_approved": "Aprobada",
-        "status_rejected": "Rechazada"
+        "status_rejected": "Rechazada",
+        "confirm": "Confirmar",
+        "error": "Error:",
+        "clear_filters": "Limpiar Filtros",
+        "clear": "Limpiar",
       },
       "catalog": {
         "title": "Catálogo de Productos",
@@ -250,7 +254,16 @@ const resources = {
         "updated_success": "Registro actualizado correctamente.",
         "deleted_success": "Registro eliminado correctamente.",
         "delete_has_products": "No se puede eliminar: tiene productos asociados.",
-        "delete_has_orders": "No se puede eliminar: tiene pedidos o cotizaciones asociadas."
+        "delete_has_orders": "No se puede eliminar: tiene pedidos o cotizaciones asociadas.",
+        "name_min_length": "El nombre debe tener al menos 2 caracteres.",
+        "contact_no_numbers": "El nombre de contacto no puede contener números.",
+        "invalid_phone": "El formato del número de teléfono es inválido. Debe contener exactamente 9 números (ej: 600000000).",
+        "invalid_email": "El formato del correo electrónico es inválido.",
+        "select_category": "Debes seleccionar una categoría.",
+        "select_manufacturer": "Debes seleccionar un fabricante.",
+        "select_sector": "Debes seleccionar un sector válido.",
+        "price_min": "El precio debe ser un número mayor a 0.",
+        "stock_invalid": "El stock no puede ser negativo ni inválido.",
       },
       "profile": {
         "title": "Mi Perfil",
@@ -350,7 +363,11 @@ const resources = {
         "no_img": "No image",
         "status_pending": "Pending",
         "status_approved": "Approved",
-        "status_rejected": "Rejected"
+        "status_rejected": "Rejected",
+        "confirm": "Confirm",
+        "error": "Error:",
+        "clear_filters": "Clear Filters",
+        "clear": "Clear",
       },
       "catalog": {
         "title": "Product Catalog",
@@ -561,7 +578,16 @@ const resources = {
         "updated_success": "Record updated successfully.",
         "deleted_success": "Record deleted successfully.",
         "delete_has_products": "Cannot delete: has associated products.",
-        "delete_has_orders": "Cannot delete: has associated orders or quotes."
+        "delete_has_orders": "Cannot delete: has associated orders or quotes.",
+        "name_min_length": "The name must have at least 2 characters.",
+        "contact_no_numbers": "The contact name cannot contain numbers.",
+        "invalid_phone": "Invalid phone format. It must contain exactly 9 numbers.",
+        "invalid_email": "Invalid email format.",
+        "select_category": "You must select a category.",
+        "select_manufacturer": "You must select a manufacturer.",
+        "select_sector": "You must select a valid sector.",
+        "price_min": "The price must be a number greater than 0.",
+        "stock_invalid": "Stock cannot be negative or invalid.",
       },
       "profile": {
         "title": "My Profile",

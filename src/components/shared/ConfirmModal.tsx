@@ -1,5 +1,6 @@
 import React from 'react';
 import { AlertTriangle, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../ui/button';
 import { ModalOverlay } from './ModalOverlay';
 
@@ -21,11 +22,15 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   onConfirm,
   title,
   description,
-  confirmLabel = 'Confirmar',
-  cancelLabel = 'Cancelar',
+  confirmLabel,
+  cancelLabel,
   variant = 'danger',
   loading = false,
 }) => {
+  const { t } = useTranslation();
+  const finalConfirmLabel = confirmLabel || t('common.confirm');
+  const finalCancelLabel = cancelLabel || t('common.cancel');
+
   if (!isOpen) return null;
 
   const getVariantStyles = () => {
@@ -81,7 +86,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
             className="font-bold h-11"
             disabled={loading}
           >
-            {cancelLabel}
+            {finalCancelLabel}
           </Button>
           <Button 
             onClick={onConfirm}
@@ -90,7 +95,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
           >
             {loading ? (
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-            ) : confirmLabel}
+            ) : finalConfirmLabel}
           </Button>
         </div>
       </div>

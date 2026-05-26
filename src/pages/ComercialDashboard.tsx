@@ -65,7 +65,7 @@ export const ComercialDashboard: React.FC = () => {
       setClientes(clientsRes.data || []);
       setCotizaciones(cotRes.data || []);
     } catch (error: any) {
-      toast.error('Error: ' + error.message);
+      toast.error(`${t('common.error')} ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -82,7 +82,7 @@ export const ComercialDashboard: React.FC = () => {
       if (error) throw error;
       setDetallesCotizacion(data || []);
     } catch (error: any) {
-      toast.error('Error: ' + error.message);
+      toast.error(`${t('common.error')} ${error.message}`);
     } finally {
       setCargandoDetalles(false);
     }
@@ -110,7 +110,7 @@ export const ComercialDashboard: React.FC = () => {
         setCotizacionSeleccionada(null);
         cargarDashboard();
       } catch (error: any) {
-        toast.error('Error: ' + error.message);
+        toast.error(`${t('common.error')} ${error.message}`);
       }
       return;
     }
@@ -126,7 +126,7 @@ export const ComercialDashboard: React.FC = () => {
       setCotizacionSeleccionada(null);
       cargarDashboard();
     } catch (error: any) {
-      toast.error('Error: ' + error.message);
+      toast.error(`${t('common.error')} ${error.message}`);
     }
   };
 
