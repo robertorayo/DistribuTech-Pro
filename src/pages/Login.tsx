@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useTranslation } from 'react-i18next';
 import { Eye, EyeOff, AlertCircle } from 'lucide-react';
 
+// Cuentas de prueba públicas (las mismas que figuran en el manual de usuario).
+// Se eligen con /login?demo=cliente|comercial|admin; nunca se pasan credenciales por la URL.
+const DEMO_ACCOUNTS: Record<string, { email: string; password: string }> = {
+  cliente: { email: 'cliente@distributechpro.com', password: 'Cliente1324!' },
+  comercial: { email: 'comercial1@distributechpro.com', password: 'Comercial1234!' },
+  admin: { email: 'admin@distributechpro.com', password: 'Admin1234!' },
+};
+
 export const Login: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { t } = useTranslation();
 
   const [email, setEmail] = useState('');
@@ -19,6 +28,12 @@ export const Login: React.FC = () => {
 
   // Cargar correo recordado al montar el componente
   useEffect(() => {
+    const demo = DEMO_ACCOUNTS[searchParams.get('demo') ?? ''];
+    if (demo) {
+      setEmail(demo.email);
+      setPassword(demo.password);
+      return;
+    }
     const savedEmail = localStorage.getItem('remembered_email');
     if (savedEmail) {
       setEmail(savedEmail);
