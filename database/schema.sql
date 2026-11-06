@@ -61,6 +61,7 @@ DECLARE
   v_user_id UUID;
   v_current UUID;
   v_last_activity TIMESTAMPTZ;
+  v_email TEXT;
 BEGIN
   v_user_id := auth.uid();
   IF v_user_id IS NULL THEN
@@ -70,10 +71,15 @@ BEGIN
   v_session_id := (current_setting('request.jwt.claims', true)::jsonb->>'session_id')::UUID;
   
   -- Leer estado actual
-  SELECT current_session_id, last_session_activity 
-  INTO v_current, v_last_activity
+  SELECT email, current_session_id, last_session_activity 
+  INTO v_email, v_current, v_last_activity
   FROM usuarios 
   WHERE id = v_user_id;
+
+  -- Cuentas de la demo pública: varias personas pueden usarlas a la vez.
+  IF v_email IN ('cliente@distributechpro.com', 'comercial1@distributechpro.com', 'admin@distributechpro.com') THEN
+    RETURN TRUE;
+  END IF;
 
   -- Permitir acceso si:
   -- 1. No hay sesión activa registrada.
