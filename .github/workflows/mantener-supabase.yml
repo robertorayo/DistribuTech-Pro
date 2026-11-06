@@ -1,0 +1,29 @@
+# Mantiene activo el proyecto de Supabase (el plan gratuito pausa los proyectos inactivos).
+# Cada lunes hace una consulta mínima de solo lectura a una tabla pública.
+name: Mantener Supabase activo
+
+on:
+  schedule:
+    - cron: '17 7 * * 1'   # lunes, 07:17 UTC
+  workflow_dispatch:        # también se puede lanzar a mano desde la pestaña Actions
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Consulta de lectura a Supabase
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_ANON_KEY" ]; then
+            echo "Faltan los secretos SUPABASE_URL y/o SUPABASE_ANON_KEY"; exit 1
+          fi
+          code=$(curl -sS -o /dev/null -w "%{http_code}" \
+            "$SUPABASE_URL/rest/v1/categorias?select=id&limit=1" \
+            -H "apikey: $SUPABASE_ANON_KEY" -H "Authorization: Bearer $SUPABASE_ANON_KEY")
+          echo "Respuesta HTTP: $code"
+          [ "$code" = "200" ]
