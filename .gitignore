@@ -29,3 +29,6 @@ Thumbs.db
 
 # Coverage y tests
 coverage/
+
+# Instrucciones locales de Claude (no se suben)
+CLAUDE.md
