@@ -70,11 +70,6 @@ function App() {
             <Route path="/admin" element={<AdminDashboard />} />
           </Route>
 
-          {/* Rutas Exclusivas Comercial */}
-          <Route element={<PrivateRoute allowedRoles={['comercial']} />}>
-            <Route path="/comercial" element={<div className="bg-card rounded-xl shadow-sm border border-border/50 p-8">Panel de Gestión Comercial</div>} />
-          </Route>
-
         </Route>
 
         {/* Fallback 404 */}
