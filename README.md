@@ -121,7 +121,7 @@ npm run test:watch   # los repite al guardar cambios
 npm run lint         # ESLint
 ```
 
-Cubren el carrito (`store/cartStore.ts`), los formateadores de precio y fecha en los dos idiomas, la utilidad `cn`, la paginación, el control de acceso por rol de `PrivateRoute` y la pantalla de checkout (base imponible, IVA del 21 % y total, límite de stock y creación de la cotización con su detalle).
+Cubren el carrito (`store/cartStore.ts`), los formateadores de precio y fecha en los dos idiomas, la utilidad `cn`, la paginación, el control de acceso por rol de `PrivateRoute` y la pantalla de checkout (base imponible, IVA según el tipo de cada producto y total, límite de stock y creación de la cotización con su detalle).
 
 En cada push y pull request a `develop` y `main`, GitHub Actions ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) instala las dependencias con `npm ci` y ejecuta el lint, los tests y el build.
 

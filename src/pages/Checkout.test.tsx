@@ -68,16 +68,39 @@ describe('Checkout', () => {
     expect(screen.getByText('Tu carrito está vacío')).toBeInTheDocument();
   });
 
-  it('calcula base imponible, IVA del 21 % y total', () => {
-    // Todos al 21 %: Checkout aplica hoy un 21 % fijo a toda la base, sin mirar el
-    // tipo_iva de cada producto (pendiente de corregir, no se fija aquí como correcto).
-    const llave = crearProducto({ id: 'llave', precio: 50, tipo_iva: 21, stock: 20 });
-    useCartStore.setState({ items: [{ producto: taladro, cantidad: 2 }, { producto: llave, cantidad: 1 }] });
+  it('suma el IVA de cada línea con su propio tipo', () => {
+    // 2 × 100 € al 21 % (42 €) + 1 × 50 € al 10 % (5 €)
+    useCartStore.setState({ items: [{ producto: taladro, cantidad: 2 }, { producto: brocas, cantidad: 1 }] });
     renderCheckout();
 
     expect(screen.getByText(euros('250,00'))).toBeInTheDocument();
-    expect(screen.getByText(euros('52,50'))).toBeInTheDocument();
-    expect(screen.getByText(euros('302,50'))).toBeInTheDocument();
+    expect(screen.getByText(euros('47,00'))).toBeInTheDocument();
+    expect(screen.getByText(euros('297,00'))).toBeInTheDocument();
+  });
+
+  it('no suma IVA a un producto exento (0 %)', () => {
+    const exento = crearProducto({ id: 'exento', precio: 80, tipo_iva: 0, stock: 5 });
+    useCartStore.setState({ items: [{ producto: taladro, cantidad: 2 }, { producto: exento, cantidad: 1 }] });
+    renderCheckout();
+
+    expect(screen.getByText(euros('280,00'))).toBeInTheDocument();
+    expect(screen.getByText(euros('42,00'))).toBeInTheDocument();
+    expect(screen.getByText(euros('322,00'))).toBeInTheDocument();
+  });
+
+  it('guarda el 0 % de un producto exento en el detalle de la cotización', async () => {
+    const user = userEvent.setup();
+    const insertado = simularSupabase();
+    const exento = crearProducto({ id: 'exento', precio: 80, tipo_iva: 0, stock: 5 });
+    useCartStore.setState({ items: [{ producto: exento, cantidad: 1 }] });
+    renderCheckout();
+
+    await user.click(screen.getByRole('button', { name: /Enviar a Comercial/ }));
+
+    expect(await screen.findByText('Página del catálogo')).toBeInTheDocument();
+    expect(insertado.detalle_cotizacion).toEqual([
+      { cotizacion_id: 'cot-1', producto_id: 'exento', cantidad: 1, precio_unitario: 80, tipo_iva: 0 },
+    ]);
   });
 
   it('no deja subir la cantidad por encima del stock', async () => {

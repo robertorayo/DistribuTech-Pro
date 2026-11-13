@@ -21,8 +21,16 @@ export const Checkout: React.FC = () => {
   const { t } = useTranslation();
   const formatCurrency = useFormatCurrency();
 
+  // Tipo de IVA de cada producto (21 % solo si falta el dato); 0 % es un valor válido.
+  const tipoIva = (producto: (typeof items)[number]['producto']) => producto.tipo_iva ?? 21;
+
   const subtotal = getSubtotal();
-  const iva = subtotal * 0.21;
+  // Se suma el IVA de cada línea, con la misma fórmula que total_iva en la base de datos.
+  // Puede diferir en 1 céntimo cuando una línea cae justo en medio céntimo (coma flotante).
+  const iva = items.reduce(
+    (suma, item) => suma + item.producto.precio * item.cantidad * (tipoIva(item.producto) / 100),
+    0
+  );
   const total = subtotal + iva;
 
   const handleGenerarCotizacion = async () => {
@@ -47,7 +55,7 @@ export const Checkout: React.FC = () => {
         producto_id: item.producto.id,
         cantidad: item.cantidad,
         precio_unitario: item.producto.precio,
-        tipo_iva: item.producto.tipo_iva || 21.00
+        tipo_iva: tipoIva(item.producto)
       }));
 
       const { error: detError } = await (supabase.from('detalle_cotizacion') as any).insert(detalles);
@@ -146,7 +154,7 @@ export const Checkout: React.FC = () => {
               <span className="font-bold text-foreground text-base">{formatCurrency(subtotal)}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="font-medium">IVA (21%)</span>
+              <span className="font-medium">{t('checkout.vat')}</span>
               <span className="font-bold text-foreground text-base">{formatCurrency(iva)}</span>
             </div>
             <div className="border-t border-border/50 pt-5 flex justify-between items-end mt-2">
