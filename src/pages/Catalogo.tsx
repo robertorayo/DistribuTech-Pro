@@ -67,7 +67,7 @@ export const Catalogo: React.FC = () => {
 
   // Aplicar filtros y ordenación
   const productosFiltrados = useMemo(() => {
-    let result = productos.filter((prod) => {
+    const result = productos.filter((prod) => {
       const matchSearch = prod.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (prod.descripcion && prod.descripcion.toLowerCase().includes(searchTerm.toLowerCase()));
       const matchCategory = selectedCategory === 'all' || prod.categoria_id === selectedCategory;

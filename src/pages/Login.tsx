@@ -39,6 +39,8 @@ export const Login: React.FC = () => {
       setEmail(savedEmail);
       setRememberMe(true);
     }
+    // Solo al montar: el parámetro ?demo se lee una vez para rellenar el formulario.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Detectar Bloq Mayús

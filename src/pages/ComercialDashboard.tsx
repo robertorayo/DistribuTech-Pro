@@ -132,7 +132,7 @@ export const ComercialDashboard: React.FC = () => {
   };
 
   const cotizacionesFiltradas = useMemo(() => {
-    let result = cotizaciones.filter(cot => {
+    const result = cotizaciones.filter(cot => {
       const nombreCompleto = `${cot.cliente?.nombre} ${cot.cliente?.apellidos}`.toLowerCase();
       const matchSearch = nombreCompleto.includes(searchTerm.toLowerCase()) ||
         cot.cliente?.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||

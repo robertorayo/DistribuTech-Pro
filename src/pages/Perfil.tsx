@@ -56,6 +56,8 @@ export const Perfil: React.FC = () => {
     if (user?.id) {
       cargarPerfil();
     }
+    // Solo cuando cambia el usuario; cargarPerfil se redefine en cada render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
   const cargarPerfil = async () => {
@@ -138,6 +140,8 @@ export const Perfil: React.FC = () => {
     }
 
     setErrors(newErrors);
+    // Sin errors (se reescribe aquí mismo y crearía un bucle) ni t (los mensajes se recalculan al editar).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nombre, apellidos, email, telefono, originalData]);
 
   // Debounced email check to verify if it is already in use by another user

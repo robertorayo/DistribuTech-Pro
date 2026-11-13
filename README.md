@@ -111,6 +111,20 @@ cp .env.example .env     # rellena VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY
    ```
    Se abre en `http://localhost:5173`. Para generar la versión de producción: `npm run build`.
 
+## Tests y CI
+
+Los tests usan Vitest y Testing Library sobre jsdom. Supabase se simula, así que no necesitan `.env` ni conexión.
+
+```bash
+npm test             # ejecuta todos los tests una vez
+npm run test:watch   # los repite al guardar cambios
+npm run lint         # ESLint
+```
+
+Cubren el carrito (`store/cartStore.ts`), los formateadores de precio y fecha en los dos idiomas, la utilidad `cn`, la paginación, el control de acceso por rol de `PrivateRoute` y la pantalla de checkout (base imponible, IVA del 21 % y total, límite de stock y creación de la cotización con su detalle).
+
+En cada push y pull request a `develop` y `main`, GitHub Actions ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) instala las dependencias con `npm ci` y ejecuta el lint, los tests y el build.
+
 ## Licencia y autoría
 
 Desarrollado por Roberto Borrallo Álvarez. Presentado originalmente como proyecto final del ciclo superior de Desarrollo de Aplicaciones Web.
