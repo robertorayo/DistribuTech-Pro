@@ -51,7 +51,7 @@ El acceso a cada ruta se controla en el cliente con `PrivateRoute`, y los datos,
 
 ## Base de datos
 
-El esquema completo está en [`database/schema.sql`](database/schema.sql): 14 tablas con RLS activado, 22 políticas, funciones, triggers e índices, incluido uno de búsqueda de texto completo en español sobre los productos. Los datos de ejemplo (categorías, fabricantes y productos) están en [`database/data.sql`](database/data.sql); los fabricantes son ficticios.
+El esquema completo está en [`database/schema.sql`](database/schema.sql): 15 tablas con RLS activado, 24 políticas, funciones, triggers e índices, incluido uno de búsqueda de texto completo en español sobre los productos. Los datos de ejemplo (categorías, fabricantes y productos) están en [`database/data.sql`](database/data.sql); los fabricantes son ficticios.
 
 Tablas principales: `usuarios` (extiende `auth.users` con rol, empresa y datos de contacto), `empresas`, `categorias`, `fabricantes`, `productos` (con `especificaciones_tecnicas JSONB`), `cotizaciones` con `detalle_cotizacion`, y `pedidos` con `detalle_pedido`, `pedido_historial_estados` y `facturas`.
 
@@ -72,6 +72,7 @@ CREATE POLICY "user_leer_cot" ON cotizaciones FOR SELECT USING (
 - `registrar_actividad_sesion()` impone una sola sesión activa por usuario; las cuentas de la demo pública están exentas.
 - Triggers que impiden a un cliente fijar precios, descuentos o estados de sus cotizaciones desde la API: el precio y el IVA de cada línea salen del catálogo y solo puede cancelar una cotización pendiente.
 - Las cuentas de la demo pública no pueden borrar el catálogo ni cambiar el correo, la contraseña, el rol o el estado de ninguna cuenta demo; sí pueden crear y editar.
+- Registro de auditoría: un trigger guarda en la tabla `auditoria` quién cambió qué en productos, categorías, fabricantes, usuarios y cotizaciones, con el valor anterior y el nuevo. Solo lo lee el administrador y nadie puede editarlo ni borrarlo desde la API.
 - La clave que usa el navegador es la `anon`; la protección real está en las políticas RLS.
 - `vercel.json` añade cabeceras de seguridad: Content-Security-Policy (solo scripts propios y conexiones a Supabase), HSTS, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy` y `Permissions-Policy`.
 
