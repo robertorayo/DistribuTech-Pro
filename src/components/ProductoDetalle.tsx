@@ -57,10 +57,10 @@ export const ProductoDetalle: React.FC<ProductoDetalleProps> = ({ producto, isOp
           />
           <div className="flex-1 space-y-1.5 min-w-0">
             <div className="flex items-center flex-wrap gap-2">
-              <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider bg-primary/10 text-primary px-2 py-0.5 rounded-md border border-primary/20">
+              <span className="whitespace-nowrap text-[9px] sm:text-[10px] leading-4 uppercase font-bold tracking-wider bg-primary/10 text-primary px-2 py-0.5 rounded-md border border-primary/20">
                 {producto.categorias?.nombre || t('catalog.general')}
               </span>
-              <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
+              <span className="whitespace-nowrap text-[10px] leading-4 text-muted-foreground font-bold uppercase tracking-wider">
                 {producto.fabricantes?.nombre || t('catalog.white_label')}
               </span>
             </div>

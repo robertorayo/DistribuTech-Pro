@@ -202,11 +202,15 @@ export const Catalogo: React.FC = () => {
                 </button>
                 {/* Header card with category and brand */}
                 <CardHeader className="pb-3 pt-5 px-5">
-                  <div className="flex justify-between items-center mb-2.5">
-                    <span className="text-[10px] uppercase font-bold tracking-wider bg-primary/5 text-primary px-2 py-0.5 rounded-md border border-primary/20">
+                  {/* Categoría y fabricante en filas propias: en una sola fila los nombres
+                      largos partían en dos líneas y quedaban descuadrados entre sí */}
+                  <div className="flex flex-col items-start gap-1.5 mb-2.5 min-w-0">
+                    <span className="max-w-full truncate text-[10px] leading-4 uppercase font-bold tracking-wider bg-primary/5 text-primary px-2 py-0.5 rounded-md border border-primary/20">
                       {prod.categorias?.nombre || t('catalog.general')}
                     </span>
-                    <span className="text-[10px] text-muted-foreground/70 font-bold uppercase tracking-wider">{prod.fabricantes?.nombre || t('catalog.white_label')}</span>
+                    <span className="max-w-full truncate text-[10px] leading-4 text-muted-foreground font-bold uppercase tracking-wider">
+                      {prod.fabricantes?.nombre || t('catalog.white_label')}
+                    </span>
                   </div>
                   <CardTitle className="text-base font-extrabold text-foreground leading-snug line-clamp-2">
                     {prod.nombre}

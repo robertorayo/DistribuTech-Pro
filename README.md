@@ -51,7 +51,7 @@ El acceso a cada ruta se controla en el cliente con `PrivateRoute`, y los datos,
 
 ## Base de datos
 
-El esquema completo está en [`database/schema.sql`](database/schema.sql): 14 tablas, 18 políticas RLS, funciones, triggers e índices, incluido uno de búsqueda de texto completo en español sobre los productos. Los datos de ejemplo (categorías, fabricantes y productos) están en [`database/data.sql`](database/data.sql).
+El esquema completo está en [`database/schema.sql`](database/schema.sql): 14 tablas con RLS activado, 22 políticas, funciones, triggers e índices, incluido uno de búsqueda de texto completo en español sobre los productos. Los datos de ejemplo (categorías, fabricantes y productos) están en [`database/data.sql`](database/data.sql).
 
 Tablas principales: `usuarios` (extiende `auth.users` con rol, empresa y datos de contacto), `empresas`, `categorias`, `fabricantes`, `productos` (con `especificaciones_tecnicas JSONB`), `cotizaciones` con `detalle_cotizacion`, y `pedidos` con `detalle_pedido`, `pedido_historial_estados` y `facturas`.
 
@@ -70,6 +70,8 @@ CREATE POLICY "user_leer_cot" ON cotizaciones FOR SELECT USING (
 - La aprobación, la división y la espera de cotizaciones son funciones `SECURITY DEFINER` que comprueban el rol antes de actuar.
 - Un trigger (`handle_new_user`) crea la fila de `usuarios` al registrarse alguien en Supabase Auth.
 - `registrar_actividad_sesion()` impone una sola sesión activa por usuario; las cuentas de la demo pública están exentas.
+- Triggers que impiden a un cliente fijar precios, descuentos o estados de sus cotizaciones desde la API: el precio y el IVA de cada línea salen del catálogo y solo puede cancelar una cotización pendiente.
+- Las cuentas de la demo pública no pueden borrar el catálogo ni cambiar el correo, la contraseña, el rol o el estado de ninguna cuenta demo; sí pueden crear y editar.
 - La clave que usa el navegador es la `anon`; la protección real está en las políticas RLS.
 - `vercel.json` añade cabeceras de seguridad: Content-Security-Policy (solo scripts propios y conexiones a Supabase), HSTS, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy` y `Permissions-Policy`.
 
@@ -86,7 +88,7 @@ src/
 ├── store/        carrito (Zustand)
 ├── types/        tipos del modelo de datos
 └── i18n.ts       traducciones en español e inglés
-database/         schema.sql, data.sql y migrations/ (cambios propuestos sobre el esquema)
+database/         schema.sql, data.sql y migrations/ (cambios aplicados sobre el esquema)
 docs/             manuales de usuario, técnico y de despliegue (PDF)
 ```
 

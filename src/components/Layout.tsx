@@ -24,6 +24,13 @@ interface SidebarProps {
 }
 
 const SidebarContent: React.FC<SidebarProps> = ({ onClose, rol, user, location, menuItems }) => {
+  // Solo se marca la entrada más concreta que coincide con la ruta: en /admin/categorias
+  // coinciden «/admin» y «/admin/categorias», y debe quedar activa solo la segunda.
+  const rutaActiva = menuItems
+    .map((item) => item.path as string)
+    .filter((ruta) => location.pathname === ruta || location.pathname.startsWith(`${ruta}/`))
+    .sort((a, b) => b.length - a.length)[0];
+
   return (
     <div className="flex flex-col h-full bg-background border-r border-border">
       <div className="p-6 border-b border-border">
@@ -36,8 +43,9 @@ const SidebarContent: React.FC<SidebarProps> = ({ onClose, rol, user, location, 
             key={item.path}
             to={item.path}
             onClick={onClose}
+            aria-current={item.path === rutaActiva ? 'page' : undefined}
             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-              location.pathname.startsWith(item.path)
+              item.path === rutaActiva
                 ? 'bg-primary/10 text-primary font-medium'
                 : 'text-muted-foreground hover:bg-muted hover:text-foreground'
             }`}

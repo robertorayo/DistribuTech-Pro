@@ -1,7 +1,8 @@
 -- ==============================================================================
 -- DISTRIBUTECH PRO - Endurecimiento de seguridad para la demo pública
 -- ==============================================================================
--- ESTADO: PROPUESTA, SIN APLICAR. Revisar antes de ejecutarlo en el SQL Editor de Supabase.
+-- ESTADO: APLICADA en producción el 18-11-2026 (sin BEGIN/COMMIT, como migración de Supabase).
+-- Su contenido está integrado en database/schema.sql.
 --
 -- Se basa en el estado real de producción, consultado el 17-11-2026 en solo lectura:
 --   * RLS activado en las 14 tablas (schema.sql no lo refleja en 9 de ellas).
@@ -389,5 +390,4 @@ DROP POLICY IF EXISTS "Cualquiera puede ver productos activos" ON productos;
 
 COMMIT;
 
--- Después de aplicarlo: actualizar database/schema.sql para que vuelva a ser la fuente de verdad
--- (RLS de las 14 tablas, trg_check_usuario_update, política UPDATE de usuarios y todo lo de arriba).
+-- Hecho: database/schema.sql vuelve a ser la fuente de verdad

@@ -147,15 +147,16 @@ CREATE TABLE usuarios (
 );
 
 -- (TRIGGER INSERCIÓN DESDE AUTH.USERS)
+-- El rol es siempre 'cliente': raw_user_meta_data lo envía el navegador y no es de fiar.
 CREATE OR REPLACE FUNCTION public.handle_new_user() RETURNS TRIGGER AS $$
 BEGIN
   INSERT INTO public.usuarios (id, email, nombre, apellidos, rol)
   VALUES (
     NEW.id,
     NEW.email,
-    COALESCE(NEW.raw_user_meta_data->>'nombre', 'Usuario'),
-    COALESCE(NEW.raw_user_meta_data->>'apellidos', 'B2B'),
-    COALESCE((NEW.raw_user_meta_data->>'rol')::public.rol_usuario, 'cliente'::public.rol_usuario)
+    left(COALESCE(NEW.raw_user_meta_data->>'nombre', 'Usuario'), 100),
+    left(COALESCE(NEW.raw_user_meta_data->>'apellidos', 'B2B'), 100),
+    'cliente'::public.rol_usuario
   );
   RETURN NEW;
 END;
@@ -381,9 +382,40 @@ ALTER TABLE cotizaciones ENABLE ROW LEVEL SECURITY;
 ALTER TABLE detalle_cotizacion ENABLE ROW LEVEL SECURITY;
 ALTER TABLE pedidos ENABLE ROW LEVEL SECURITY;
 ALTER TABLE detalle_pedido ENABLE ROW LEVEL SECURITY;
+-- Tablas sin políticas propias: con RLS activo y sin política, solo el propietario accede.
+ALTER TABLE empresas ENABLE ROW LEVEL SECURITY;
+ALTER TABLE direcciones ENABLE ROW LEVEL SECURITY;
+ALTER TABLE categorias ENABLE ROW LEVEL SECURITY;
+ALTER TABLE fabricantes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE productos ENABLE ROW LEVEL SECURITY;
+ALTER TABLE producto_imagenes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE contactos_comercial ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pedido_historial_estados ENABLE ROW LEVEL SECURITY;
+ALTER TABLE facturas ENABLE ROW LEVEL SECURITY;
 
 -- Evitamos recursión en usuarios
 CREATE POLICY "usuario_view_staff" ON usuarios FOR SELECT USING (id = auth.uid() OR get_my_rol() IN ('admin', 'comercial'));
+
+-- Cada usuario edita su perfil; el trigger impide que un no-admin cambie columnas sensibles.
+CREATE POLICY "usuario_update_own_profile" ON usuarios FOR UPDATE
+USING (id = auth.uid())
+WITH CHECK (id = auth.uid());
+
+CREATE OR REPLACE FUNCTION check_usuario_update() RETURNS TRIGGER
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
+BEGIN
+  -- Evitar que usuarios que no sean admin cambien columnas sensibles
+  IF (SELECT rol FROM public.usuarios WHERE id = auth.uid()) != 'admin' THEN
+    NEW.rol = OLD.rol;
+    NEW.activo = OLD.activo;
+    NEW.descuento_global = OLD.descuento_global;
+    NEW.empresa_id = OLD.empresa_id;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+CREATE TRIGGER trg_check_usuario_update BEFORE UPDATE ON usuarios
+  FOR EACH ROW EXECUTE FUNCTION check_usuario_update();
 
 -- ==============================================================================
 -- POLÍTICAS PARA COTIZACIONES
@@ -441,9 +473,9 @@ CREATE POLICY "user_leer_pedidos" ON pedidos FOR SELECT USING (
   )
 );
 
-CREATE POLICY "user_crear_pedidos" ON pedidos FOR INSERT WITH CHECK (
-  usuario_id = auth.uid() OR get_my_rol() IN ('admin', 'comercial')
-);
+-- Los pedidos los crean las funciones de aprobación; desde la API, solo el admin.
+CREATE POLICY "admin_crear_pedidos" ON pedidos FOR INSERT TO authenticated
+WITH CHECK (get_my_rol() = 'admin');
 
 CREATE POLICY "admin_update_pedidos" ON pedidos FOR UPDATE USING (
   get_my_rol() IN ('admin', 'comercial')
@@ -462,12 +494,8 @@ CREATE POLICY "user_leer_detalle_ped" ON detalle_pedido FOR SELECT USING (
   )
 );
 
-CREATE POLICY "user_crear_detalle_ped" ON detalle_pedido FOR INSERT WITH CHECK (
-  EXISTS (
-    SELECT 1 FROM pedidos p WHERE p.id = pedido_id
-    AND (p.usuario_id = auth.uid() OR get_my_rol() IN ('admin', 'comercial'))
-  )
-);
+CREATE POLICY "admin_crear_detalle_ped" ON detalle_pedido FOR INSERT TO authenticated
+WITH CHECK (get_my_rol() = 'admin');
 
 -- ==============================================================================
 -- POLÍTICAS PARA CATÁLOGO (PRODUCTOS, CATEGORÍAS, FABRICANTES)
@@ -587,6 +615,7 @@ CREATE OR REPLACE FUNCTION dividir_cotizacion(p_cotizacion_id UUID)
 RETURNS JSONB
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = public
 AS $$
 DECLARE
   v_cot RECORD;
@@ -597,8 +626,14 @@ DECLARE
   v_cantidad_faltante INT;
   v_total_disponible INT := 0;
 BEGIN
-  SELECT * INTO v_cot FROM cotizaciones WHERE id = p_cotizacion_id AND usuario_id = auth.uid();
-  IF NOT FOUND THEN RAISE EXCEPTION 'Cotización no encontrada o sin permiso'; END IF;
+  -- Solo una cotización propia, pendiente y con la incidencia de stock abierta.
+  SELECT * INTO v_cot FROM cotizaciones
+  WHERE id = p_cotizacion_id
+    AND usuario_id = auth.uid()
+    AND estado = 'pendiente'
+    AND tipo_incidencia = 'pendiente_decision_cliente'
+  FOR UPDATE;
+  IF NOT FOUND THEN RAISE EXCEPTION 'Cotización no encontrada, sin permiso o sin incidencia de stock'; END IF;
 
   -- Comprobar si hay al menos un artículo con stock disponible
   FOR v_detalle IN
@@ -660,13 +695,18 @@ CREATE OR REPLACE FUNCTION mantener_cotizacion_pendiente(p_cotizacion_id UUID)
 RETURNS VOID
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = public
 AS $$
 BEGIN
   UPDATE cotizaciones
   SET tipo_incidencia = 'esperando_stock_completo',
-      notas_stock = 'El cliente ha optado por esperar hasta que haya stock suficiente para el pedido completo.',
+      notas_stock = 'El cliente ha optado por esperar hasta que haya stock suficiente para servir el pedido completo.',
       updated_at = now()
-  WHERE id = p_cotizacion_id AND usuario_id = auth.uid();
+  WHERE id = p_cotizacion_id
+    AND usuario_id = auth.uid()
+    AND estado = 'pendiente'
+    AND tipo_incidencia = 'pendiente_decision_cliente';
+  IF NOT FOUND THEN RAISE EXCEPTION 'Cotización no encontrada, sin permiso o sin incidencia de stock'; END IF;
 END;
 $$;
 
@@ -741,3 +781,216 @@ AFTER UPDATE OF stock ON productos
 FOR EACH ROW
 WHEN (NEW.stock > OLD.stock)
 EXECUTE FUNCTION procesar_pedidos_en_espera();
+
+-- ==============================================================================
+-- ENDURECIMIENTO DE SEGURIDAD (aplicado en producción el 18-11-2026,
+-- ver database/migrations/2026-11-17_seguridad_demo.sql)
+-- ==============================================================================
+-- search_path fijo en las funciones SECURITY DEFINER y sin ejecución anónima de las RPC.
+ALTER FUNCTION public.get_my_rol() SET search_path = public;
+ALTER FUNCTION public.aprobar_cotizacion(UUID) SET search_path = public;
+ALTER FUNCTION public.dividir_cotizacion(UUID) SET search_path = public;
+ALTER FUNCTION public.mantener_cotizacion_pendiente(UUID) SET search_path = public;
+ALTER FUNCTION public.registrar_actividad_sesion() SET search_path = public;
+ALTER FUNCTION public.cerrar_sesion_activa() SET search_path = public;
+ALTER FUNCTION public.procesar_pedidos_en_espera() SET search_path = public;
+ALTER FUNCTION public.check_usuario_update() SET search_path = public;
+ALTER FUNCTION public.log_cambio_estado_pedido() SET search_path = public;
+ALTER FUNCTION public.sync_totales_cotizacion() SET search_path = public;
+ALTER FUNCTION public.sync_totales_pedido() SET search_path = public;
+
+REVOKE EXECUTE ON FUNCTION
+  public.aprobar_cotizacion(UUID),
+  public.dividir_cotizacion(UUID),
+  public.mantener_cotizacion_pendiente(UUID),
+  public.registrar_actividad_sesion(),
+  public.cerrar_sesion_activa(),
+  public.procesar_pedidos_en_espera()
+FROM PUBLIC, anon;
+
+-- Es la función de un trigger: nadie tiene que llamarla por RPC.
+REVOKE EXECUTE ON FUNCTION public.procesar_pedidos_en_espera() FROM authenticated;
+
+-- aprobar_cotizacion compara "get_my_rol() NOT IN (...)": con NULL no lanza error. Al quitar
+-- el EXECUTE a anon ya no hay forma de llegar con rol NULL (todo usuario de Auth tiene fila
+-- en usuarios por handle_new_user). Queda pendiente cambiarlo a COALESCE en su cuerpo.
+GRANT EXECUTE ON FUNCTION
+  public.aprobar_cotizacion(UUID),
+  public.dividir_cotizacion(UUID),
+  public.mantener_cotizacion_pendiente(UUID),
+  public.registrar_actividad_sesion(),
+  public.cerrar_sesion_activa()
+TO authenticated;
+
+-- El cliente no decide precios ni estados (escrituras directas desde la API).
+CREATE OR REPLACE FUNCTION public.es_escritura_directa_de_cliente() RETURNS boolean
+LANGUAGE sql STABLE SECURITY INVOKER SET search_path = public AS $$
+  SELECT current_user = 'authenticated'
+     AND COALESCE(public.get_my_rol(), '') NOT IN ('admin', 'comercial');
+$$;
+
+-- 3a. Cotización nueva de un cliente: siempre pendiente y sin incidencias.
+CREATE OR REPLACE FUNCTION public.proteger_insert_cotizacion() RETURNS TRIGGER
+LANGUAGE plpgsql SET search_path = public AS $$
+BEGIN
+  IF public.es_escritura_directa_de_cliente() THEN
+    NEW.estado := 'pendiente';
+    NEW.tipo_incidencia := NULL;
+    NEW.notas_stock := NULL;
+    NEW.creado_por := auth.uid();
+    -- Los totales los calcula sync_totales_cotizacion a partir de las líneas.
+    NEW.base_imponible := 0;
+    NEW.total_iva := 0;
+    NEW.total := 0;
+    NEW.validez_dias := 30;
+    NEW.created_at := now();
+  END IF;
+  RETURN NEW;
+END;
+$$;
+DROP TRIGGER IF EXISTS trg_proteger_insert_cotizacion ON cotizaciones;
+CREATE TRIGGER trg_proteger_insert_cotizacion BEFORE INSERT ON cotizaciones
+  FOR EACH ROW EXECUTE FUNCTION public.proteger_insert_cotizacion();
+
+-- 3b. Cambios de un cliente en su cotización: solo cancelarla (estado 'rechazada').
+CREATE OR REPLACE FUNCTION public.proteger_update_cotizacion() RETURNS TRIGGER
+LANGUAGE plpgsql SET search_path = public AS $$
+BEGIN
+  IF public.es_escritura_directa_de_cliente() THEN
+    -- Solo cancelar, y solo mientras está pendiente (una aprobada ya descontó stock).
+    IF NEW.estado IS DISTINCT FROM OLD.estado
+       AND (NEW.estado <> 'rechazada' OR OLD.estado <> 'pendiente') THEN
+      RAISE EXCEPTION 'Un cliente solo puede cancelar una cotización pendiente';
+    END IF;
+    -- Todo lo demás se queda como estaba, salvo limpiar la incidencia al cancelar.
+    NEW.id := OLD.id;
+    NEW.updated_at := now();
+    NEW.usuario_id := OLD.usuario_id;
+    NEW.creado_por := OLD.creado_por;
+    NEW.base_imponible := OLD.base_imponible;
+    NEW.total_iva := OLD.total_iva;
+    NEW.total := OLD.total;
+    NEW.validez_dias := OLD.validez_dias;
+    NEW.notas_stock := OLD.notas_stock;
+    NEW.created_at := OLD.created_at;
+    NEW.tipo_incidencia := CASE WHEN NEW.estado = 'rechazada' THEN NULL ELSE OLD.tipo_incidencia END;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+DROP TRIGGER IF EXISTS trg_proteger_update_cotizacion ON cotizaciones;
+CREATE TRIGGER trg_proteger_update_cotizacion BEFORE UPDATE ON cotizaciones
+  FOR EACH ROW EXECUTE FUNCTION public.proteger_update_cotizacion();
+
+-- 3c. Líneas de cotización de un cliente: precio e IVA salen del catálogo, sin descuento,
+--     y solo en cotizaciones propias que sigan pendientes.
+CREATE OR REPLACE FUNCTION public.proteger_insert_detalle_cotizacion() RETURNS TRIGGER
+LANGUAGE plpgsql SET search_path = public AS $$
+DECLARE
+  v_precio NUMERIC;
+  v_iva NUMERIC;
+BEGIN
+  IF public.es_escritura_directa_de_cliente() THEN
+    IF NOT EXISTS (
+      SELECT 1 FROM cotizaciones c
+      WHERE c.id = NEW.cotizacion_id AND c.usuario_id = auth.uid() AND c.estado = 'pendiente'
+    ) THEN
+      RAISE EXCEPTION 'Solo se pueden añadir líneas a una cotización propia pendiente';
+    END IF;
+    SELECT precio, tipo_iva INTO v_precio, v_iva
+      FROM productos WHERE id = NEW.producto_id AND activo = true;
+    IF v_precio IS NULL THEN
+      RAISE EXCEPTION 'Producto no disponible';
+    END IF;
+    NEW.precio_unitario := v_precio;
+    NEW.tipo_iva := v_iva;
+    NEW.descuento_porcentaje := 0;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+DROP TRIGGER IF EXISTS trg_proteger_insert_detalle_cotizacion ON detalle_cotizacion;
+CREATE TRIGGER trg_proteger_insert_detalle_cotizacion BEFORE INSERT ON detalle_cotizacion
+  FOR EACH ROW EXECUTE FUNCTION public.proteger_insert_detalle_cotizacion();
+
+-- Cuentas de la demo pública: sin borrados de catálogo ni cambios de credenciales.
+CREATE OR REPLACE FUNCTION public.es_email_demo(p_email TEXT) RETURNS boolean
+LANGUAGE sql IMMUTABLE SET search_path = public AS $$
+  SELECT lower(COALESCE(p_email, '')) IN (
+    'cliente@distributechpro.com',
+    'comercial1@distributechpro.com',
+    'admin@distributechpro.com'
+  );
+$$;
+
+-- El correo sale del token de Auth, no de public.usuarios (que el propio usuario edita).
+CREATE OR REPLACE FUNCTION public.es_cuenta_demo() RETURNS boolean
+LANGUAGE sql STABLE SET search_path = public AS $$
+  SELECT public.es_email_demo(auth.jwt() ->> 'email');
+$$;
+
+GRANT EXECUTE ON FUNCTION
+  public.es_email_demo(TEXT),
+  public.es_cuenta_demo(),
+  public.es_escritura_directa_de_cliente()
+TO authenticated, service_role;
+
+-- Políticas RESTRICTIVE: se suman (AND) a las existentes; el admin demo sigue creando y editando.
+DROP POLICY IF EXISTS demo_sin_borrar ON productos;
+CREATE POLICY demo_sin_borrar ON productos AS RESTRICTIVE FOR DELETE TO authenticated
+  USING (NOT public.es_cuenta_demo());
+DROP POLICY IF EXISTS demo_sin_borrar ON categorias;
+CREATE POLICY demo_sin_borrar ON categorias AS RESTRICTIVE FOR DELETE TO authenticated
+  USING (NOT public.es_cuenta_demo());
+DROP POLICY IF EXISTS demo_sin_borrar ON fabricantes;
+CREATE POLICY demo_sin_borrar ON fabricantes AS RESTRICTIVE FOR DELETE TO authenticated
+  USING (NOT public.es_cuenta_demo());
+
+-- Fila de public.usuarios de una cuenta demo: desde la API nadie (ni el admin demo)
+-- le cambia correo, rol, estado o descuento. Desde el SQL Editor sí se puede.
+CREATE OR REPLACE FUNCTION public.proteger_usuario_demo() RETURNS TRIGGER
+LANGUAGE plpgsql SET search_path = public AS $$
+BEGIN
+  IF public.es_email_demo(OLD.email) AND current_user = 'authenticated' THEN
+    NEW.email := OLD.email;
+    NEW.rol := OLD.rol;
+    NEW.activo := OLD.activo;
+    NEW.descuento_global := OLD.descuento_global;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+DROP TRIGGER IF EXISTS trg_proteger_usuario_demo ON usuarios;
+CREATE TRIGGER trg_proteger_usuario_demo BEFORE UPDATE ON usuarios
+  FOR EACH ROW EXECUTE FUNCTION public.proteger_usuario_demo();
+
+-- Auth: GoTrue se conecta como supabase_auth_admin (no pasa por PostgREST, así que no hay
+-- claims del JWT). Para las cuentas demo:
+--   * cambiar el correo lanza un error;
+--   * la contraseña se conserva en silencio (un error podría romper el login si GoTrue
+--     reescribe el hash al iniciar sesión).
+-- Ojo: también afecta al panel Authentication de Supabase (usa GoTrue). Para cambiar la
+-- contraseña de una cuenta demo, usar el SQL Editor:
+--   UPDATE auth.users SET encrypted_password = crypt('nueva', gen_salt('bf')) WHERE email = '...';
+CREATE OR REPLACE FUNCTION public.bloquear_credenciales_demo() RETURNS TRIGGER
+LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
+BEGIN
+  IF session_user = 'supabase_auth_admin' AND public.es_email_demo(OLD.email) THEN
+    IF NEW.email IS DISTINCT FROM OLD.email OR NEW.email_change IS DISTINCT FROM OLD.email_change THEN
+      RAISE EXCEPTION 'Las cuentas de demostración no pueden cambiar su correo';
+    END IF;
+    NEW.encrypted_password := OLD.encrypted_password;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+DROP TRIGGER IF EXISTS trg_bloquear_credenciales_demo ON auth.users;
+CREATE TRIGGER trg_bloquear_credenciales_demo BEFORE UPDATE ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.bloquear_credenciales_demo();
+
+-- Validación en servidor.
+ALTER TABLE productos ADD CONSTRAINT productos_tipo_iva_valido CHECK (tipo_iva BETWEEN 0 AND 30);
+ALTER TABLE detalle_cotizacion
+  ADD CONSTRAINT detalle_cot_tipo_iva_valido CHECK (tipo_iva BETWEEN 0 AND 30),
+  ADD CONSTRAINT detalle_cot_cantidad_maxima CHECK (cantidad <= 100000);
+ALTER TABLE cotizaciones ADD CONSTRAINT cotizaciones_validez_valida CHECK (validez_dias BETWEEN 1 AND 365);
