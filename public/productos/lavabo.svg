@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="Lavabo">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f5f9"/><stop offset="1" stop-color="#dfe6ee"/></linearGradient></defs>
+<rect width="320" height="240" fill="url(#bg)"/>
+<ellipse cx="160" cy="210" rx="104" ry="10" fill="#0f172a" opacity=".12"/>
+<g stroke="#1e293b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+<rect x="150" y="64" width="20" height="34" rx="4" fill="#94a3b8"/><path d="M160 70h22v10" stroke="#94a3b8" stroke-width="8" fill="none"/>
+<path d="M60 96h200v14a70 70 0 0 1-70 70h-60a70 70 0 0 1-70-70z" fill="#f8fafc"/>
+<ellipse cx="160" cy="112" rx="78" ry="12" fill="#cbd5e1"/>
+</g>
+</svg>

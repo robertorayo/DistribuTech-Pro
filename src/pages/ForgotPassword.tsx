@@ -28,7 +28,7 @@ export const ForgotPassword: React.FC = () => {
         setSuccess(true);
       }
     } catch (err: any) {
-      setError(err.message || 'An error occurred');
+      setError(err.message || t('common.generic_error'));
     } finally {
       setLoading(false);
     }
@@ -43,7 +43,7 @@ export const ForgotPassword: React.FC = () => {
         </div>
 
         {error && (
-          <div className="mb-6 rounded-lg bg-red-50 p-4 text-sm text-red-700 border border-red-200 flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
+          <div className="mb-6 rounded-lg bg-red-50 dark:bg-red-950/40 p-4 text-sm text-red-700 dark:text-red-300 border border-red-200 dark:border-red-900 flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
             <AlertCircle className="w-5 h-5 shrink-0" />
             <span>{error}</span>
           </div>
@@ -51,8 +51,8 @@ export const ForgotPassword: React.FC = () => {
 
         {success ? (
           <div className="space-y-6 text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-              <CheckCircle2 className="h-6 w-6 text-green-600" />
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/40">
+              <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400" />
             </div>
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground leading-relaxed">
@@ -86,8 +86,8 @@ export const ForgotPassword: React.FC = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-xl border border-border bg-muted/10/50 p-3.5 pl-10 transition-all focus:border-primary focus:bg-card focus:outline-none focus:ring-4 focus:ring-primary/10"
-                  placeholder="empresa@ejemplo.com"
+                  className="w-full rounded-xl border border-border bg-background p-3.5 pl-10 transition-all focus:border-primary focus:bg-card focus:outline-none focus:ring-4 focus:ring-primary/10"
+                  placeholder={t('auth.email_placeholder')}
                 />
               </div>
             </div>

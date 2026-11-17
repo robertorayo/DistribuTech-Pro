@@ -352,12 +352,12 @@ export const AdminProductos: React.FC = () => {
               <td className="px-5 py-4 text-muted-foreground text-sm">{prod.fabricantes?.nombre || '—'}</td>
               <td className="px-5 py-4 text-right font-bold text-foreground">{formatCurrency(prod.precio)}</td>
               <td className="px-5 py-4 text-center">
-                <span className={`font-bold ${prod.stock > 0 ? 'text-green-700' : 'text-red-600'}`}>
+                <span className={`font-bold ${prod.stock > 0 ? 'text-green-700 dark:text-green-300' : 'text-red-600 dark:text-red-400'}`}>
                   {prod.stock}
                 </span>
               </td>
               <td className="px-5 py-4 text-center">
-                <StatusBadge status={prod.activo ? t('crud.active') : t('crud.inactive')} />
+                <StatusBadge status={prod.activo ? 'activo' : 'inactivo'} />
               </td>
               {rol === 'admin' && (
                 <td className="px-5 py-4">

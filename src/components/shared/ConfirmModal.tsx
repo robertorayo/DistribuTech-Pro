@@ -37,14 +37,14 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
     switch (variant) {
       case 'danger':
         return {
-          icon: <AlertTriangle className="w-6 h-6 text-red-600" />,
-          bg: 'bg-red-50',
+          icon: <AlertTriangle className="w-6 h-6 text-red-600 dark:text-red-400" />,
+          bg: 'bg-red-50 dark:bg-red-950/40',
           btn: 'bg-red-600 hover:bg-red-700 text-white',
         };
       case 'warning':
         return {
-          icon: <AlertTriangle className="w-6 h-6 text-amber-600" />,
-          bg: 'bg-amber-50',
+          icon: <AlertTriangle className="w-6 h-6 text-amber-600 dark:text-amber-400" />,
+          bg: 'bg-amber-50 dark:bg-amber-950/40',
           btn: 'bg-amber-600 hover:bg-amber-700 text-white',
         };
       default:
@@ -59,14 +59,16 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   const styles = getVariantStyles();
 
   return (
-    <ModalOverlay onClose={onClose} maxWidth="max-w-md">
+    <ModalOverlay onClose={loading ? undefined : onClose} maxWidth="max-w-md" labelledBy="titulo-confirmacion">
       <div className="relative p-8">
         <button
           type="button"
           onClick={onClose}
+          disabled={loading}
+          aria-label={t('common.close')}
           className="absolute right-3 top-3 p-2 text-muted-foreground/70 hover:text-muted-foreground transition-colors"
         >
-          <X className="w-5 h-5" />
+          <X className="w-5 h-5" aria-hidden="true" />
         </button>
 
         <div className="flex flex-col items-center text-center">
@@ -74,7 +76,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
             {styles.icon}
           </div>
 
-          <h3 className="text-xl font-bold text-foreground mb-3">{title}</h3>
+          <h3 id="titulo-confirmacion" className="text-xl font-bold text-foreground mb-3">{title}</h3>
           <p className="text-sm text-muted-foreground leading-relaxed px-2">
             {description}
           </p>

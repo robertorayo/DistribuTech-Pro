@@ -98,7 +98,7 @@ export const Login: React.FC = () => {
         </div>
 
         {error && (
-          <div className="mb-6 rounded-lg bg-red-50 p-4 text-sm text-red-700 border border-red-200 flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
+          <div className="mb-6 rounded-lg bg-red-50 dark:bg-red-950/40 p-4 text-sm text-red-700 dark:text-red-300 border border-red-200 dark:border-red-900 flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
             <AlertCircle className="w-5 h-5 shrink-0" />
             <span>{error}</span>
           </div>
@@ -112,8 +112,8 @@ export const Login: React.FC = () => {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-xl border border-border bg-muted/10/50 p-3.5 transition-all focus:border-primary focus:bg-card focus:outline-none focus:ring-4 focus:ring-primary/10"
-              placeholder="empresa@ejemplo.com"
+              className="w-full rounded-xl border border-border bg-background p-3.5 transition-all focus:border-primary focus:bg-card focus:outline-none focus:ring-4 focus:ring-primary/10"
+              placeholder={t('auth.email_placeholder')}
             />
           </div>
 
@@ -121,7 +121,7 @@ export const Login: React.FC = () => {
             <div className="flex justify-between items-center">
               <label className="block text-sm font-semibold text-foreground/90">{t('auth.password')}</label>
               {isCapsLock && (
-                <span className="flex items-center gap-1 text-[10px] font-bold text-amber-600 uppercase tracking-wider bg-amber-50 px-2 py-0.5 rounded border border-amber-100 animate-pulse">
+                <span className="flex items-center gap-1 text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded border border-amber-100 dark:border-amber-900 animate-pulse">
                   <AlertCircle className="w-3 h-3" /> {t('auth.caps_lock_on')}
                 </span>
               )}
@@ -133,12 +133,13 @@ export const Login: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 onKeyUp={checkCapsLock}
-                className="w-full rounded-xl border border-border bg-muted/10/50 p-3.5 pr-12 transition-all focus:border-primary focus:bg-card focus:outline-none focus:ring-4 focus:ring-primary/10"
+                className="w-full rounded-xl border border-border bg-background p-3.5 pr-12 transition-all focus:border-primary focus:bg-card focus:outline-none focus:ring-4 focus:ring-primary/10"
                 placeholder="••••••••"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? t('auth.hide_password') : t('auth.show_password')}
                 className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-muted-foreground/70 hover:text-primary transition-colors rounded-lg hover:bg-primary/5"
               >
                 {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}

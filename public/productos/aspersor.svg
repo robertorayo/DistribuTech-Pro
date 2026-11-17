@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="Aspersor">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f5f9"/><stop offset="1" stop-color="#dfe6ee"/></linearGradient></defs>
+<rect width="320" height="240" fill="url(#bg)"/>
+<ellipse cx="160" cy="210" rx="104" ry="10" fill="#0f172a" opacity=".12"/>
+<g stroke="#1e293b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+<path d="M172 82c40-20 80-14 110 6M172 90c34-6 64 2 90 20M148 82c-40-20-80-14-110 6" stroke="#0ea5e9" stroke-width="3" stroke-dasharray="6 8" fill="none"/>
+<rect x="136" y="110" width="48" height="96" rx="8" fill="#334155"/>
+<rect x="128" y="104" width="64" height="16" rx="4" fill="#94a3b8"/>
+<rect x="148" y="70" width="24" height="36" rx="6" fill="#cbd5e1"/>
+</g>
+</svg>

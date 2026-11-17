@@ -105,7 +105,7 @@ export const AdminFabricantes: React.FC = () => {
       return;
     }
     if (tTelefono && !/^\d{9}$/.test(tTelefono)) {
-      toast.error('El formato del número de teléfono es inválido. Debe contener exactamente 9 números (ej: 600000000).');
+      toast.error(t('crud.phone_invalid'));
       return;
     }
     if (tEmail && !/^\S+@\S+\.\S+$/.test(tEmail)) {

@@ -9,7 +9,7 @@ export const LoadingScreen: React.FC = () => {
   const { t } = useTranslation();
   return (
     <div className="flex h-[60vh] items-center justify-center flex-col gap-4">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       <p className="text-muted-foreground font-medium animate-pulse">{t('app.loading')}</p>
     </div>
   );

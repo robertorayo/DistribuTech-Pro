@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="Gotero">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f5f9"/><stop offset="1" stop-color="#dfe6ee"/></linearGradient></defs>
+<rect width="320" height="240" fill="url(#bg)"/>
+<ellipse cx="160" cy="210" rx="104" ry="10" fill="#0f172a" opacity=".12"/>
+<g stroke="#1e293b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+<path d="M30 150h260" stroke="#334155" stroke-width="18"/>
+<rect x="132" y="100" width="56" height="46" rx="10" fill="#1e293b"/><rect x="152" y="86" width="16" height="18" rx="3" fill="#94a3b8"/>
+<path d="M160 168c-10 14-14 22-14 28a14 14 0 0 0 28 0c0-6-4-14-14-28z" fill="#0ea5e9"/>
+</g>
+</svg>

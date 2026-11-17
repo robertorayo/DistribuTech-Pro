@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '../ui/button';
 
 interface PaginationProps {
@@ -13,6 +14,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   totalPages,
   onPageChange,
 }) => {
+  const { t } = useTranslation();
   const [jumpPage, setJumpPage] = useState(String(currentPage));
 
   useEffect(() => {
@@ -65,11 +67,13 @@ export const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 px-6 bg-card border border-border/50 rounded-xl shadow-sm mt-4">
+    <nav
+      aria-label={t('common.pagination')}
+      className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 px-6 bg-card border border-border/50 rounded-xl shadow-sm mt-4"
+    >
       {/* Page Info */}
       <div className="text-xs font-semibold text-muted-foreground">
-        Página <span className="text-foreground font-bold">{currentPage}</span> de{' '}
-        <span className="text-foreground font-bold">{totalPages}</span>
+        {t('common.page_of', { current: currentPage, total: totalPages })}
       </div>
 
       {/* Page Navigation */}
@@ -79,17 +83,19 @@ export const Pagination: React.FC<PaginationProps> = ({
           size="icon-sm"
           onClick={() => onPageChange(1)}
           disabled={currentPage === 1}
-          title="Primera página"
+          title={t('common.first_page')}
+          aria-label={t('common.first_page')}
           className="border-border"
         >
-          <ChevronsLeft className="w-3.5 h-3.5" />
+          <ChevronsLeft className="w-3.5 h-3.5" aria-hidden="true" />
         </Button>
         <Button
           variant="outline"
           size="icon-sm"
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          title="Página anterior"
+          title={t('common.previous_page')}
+          aria-label={t('common.previous_page')}
           className="border-border"
         >
           <ChevronLeft className="w-3.5 h-3.5" />
@@ -113,9 +119,10 @@ export const Pagination: React.FC<PaginationProps> = ({
               variant={isCurrent ? 'default' : 'outline'}
               size="sm"
               onClick={() => onPageChange(pageNum)}
+              aria-current={isCurrent ? 'page' : undefined}
               className={`h-7 w-7 text-xs font-bold ${
                 isCurrent 
-                  ? 'bg-primary hover:bg-primary/90 text-white border-blue-600 shadow-sm' 
+                  ? 'bg-primary hover:bg-primary/90 text-primary-foreground border-primary shadow-sm' 
                   : 'border-border hover:bg-muted/10 text-foreground/90'
               }`}
             >
@@ -129,7 +136,8 @@ export const Pagination: React.FC<PaginationProps> = ({
           size="icon-sm"
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          title="Página siguiente"
+          title={t('common.next_page')}
+          aria-label={t('common.next_page')}
           className="border-border"
         >
           <ChevronRight className="w-3.5 h-3.5" />
@@ -139,7 +147,8 @@ export const Pagination: React.FC<PaginationProps> = ({
           size="icon-sm"
           onClick={() => onPageChange(totalPages)}
           disabled={currentPage === totalPages}
-          title="Última página"
+          title={t('common.last_page')}
+          aria-label={t('common.last_page')}
           className="border-border"
         >
           <ChevronsRight className="w-3.5 h-3.5" />
@@ -149,7 +158,7 @@ export const Pagination: React.FC<PaginationProps> = ({
       {/* Direct Jump to Page Form */}
       <form onSubmit={handleJump} className="flex items-center gap-2">
         <label htmlFor="jump-page-input" className="text-xs font-semibold text-muted-foreground">
-          Ir a:
+          {t('common.go_to_page')}
         </label>
         <input
           id="jump-page-input"
@@ -158,7 +167,7 @@ export const Pagination: React.FC<PaginationProps> = ({
           max={totalPages}
           value={jumpPage}
           onChange={(e) => setJumpPage(e.target.value)}
-          className="w-12 h-7 rounded-lg border border-border text-center text-xs font-bold focus:border-primary focus:outline-none"
+          className="w-12 h-7 rounded-lg border border-border bg-background text-foreground text-center text-xs font-bold focus:border-primary focus:outline-none"
         />
         <Button
           type="submit"
@@ -166,9 +175,9 @@ export const Pagination: React.FC<PaginationProps> = ({
           size="sm"
           className="h-7 text-[10px] uppercase font-bold tracking-wider px-2 hover:bg-primary/5 hover:text-primary border-border transition-colors"
         >
-          Saltar
+          {t('common.jump')}
         </Button>
       </form>
-    </div>
+    </nav>
   );
 };

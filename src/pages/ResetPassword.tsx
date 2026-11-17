@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { useAuth } from '../context/AuthContext';
+import { esCuentaDemo } from '../lib/demo';
 import { useTranslation } from 'react-i18next';
 import { Eye, EyeOff, AlertCircle, ShieldCheck, ShieldAlert, Shield, CheckCircle2, ArrowLeft } from 'lucide-react';
 
 export const ResetPassword: React.FC = () => {
   const { t } = useTranslation();
-  
+  const { user } = useAuth();
+  // Las cuentas demo son compartidas: cambiarles la contraseña dejaría fuera al resto.
+  const esDemo = esCuentaDemo(user?.email);
+
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -41,6 +46,11 @@ export const ResetPassword: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (esDemo) {
+      setError(t('auth.demo_account_locked'));
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError(t('auth.passwords_not_match'));
       return;
@@ -63,7 +73,7 @@ export const ResetPassword: React.FC = () => {
         await supabase.auth.signOut();
       }
     } catch (err: any) {
-      setError(err.message || 'An error occurred');
+      setError(err.message || t('common.generic_error'));
     } finally {
       setLoading(false);
     }
@@ -78,7 +88,7 @@ export const ResetPassword: React.FC = () => {
         </div>
 
         {error && (
-          <div className="mb-6 rounded-lg bg-red-50 p-4 text-sm text-red-700 border border-red-200 flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
+          <div className="mb-6 rounded-lg bg-red-50 dark:bg-red-950/40 p-4 text-sm text-red-700 dark:text-red-300 border border-red-200 dark:border-red-900 flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
             <AlertCircle className="w-5 h-5 shrink-0" />
             <span>{error}</span>
           </div>
@@ -86,8 +96,8 @@ export const ResetPassword: React.FC = () => {
 
         {success ? (
           <div className="space-y-6 text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-              <CheckCircle2 className="h-6 w-6 text-green-600" />
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/40">
+              <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400" />
             </div>
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground leading-relaxed">
@@ -107,14 +117,14 @@ export const ResetPassword: React.FC = () => {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
             <p className="text-sm text-muted-foreground leading-relaxed">
-              {t('auth.reset_password_subtitle')}
+              {esDemo ? t('auth.demo_account_locked') : t('auth.reset_password_subtitle')}
             </p>
 
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <label className="block text-sm font-semibold text-foreground/90">{t('auth.new_password')}</label>
                 {isCapsLock && (
-                  <span className="flex items-center gap-1 text-[10px] font-bold text-amber-600 uppercase tracking-wider bg-amber-50 px-2 py-0.5 rounded border border-amber-100 animate-pulse">
+                  <span className="flex items-center gap-1 text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded border border-amber-100 dark:border-amber-900 animate-pulse">
                     <AlertCircle className="w-3 h-3" /> {t('auth.caps_lock_on')}
                   </span>
                 )}
@@ -126,12 +136,13 @@ export const ResetPassword: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   onKeyUp={checkCapsLock}
-                  className="w-full rounded-xl border border-border bg-muted/10/50 p-3.5 pr-12 transition-all focus:border-primary focus:bg-card focus:outline-none focus:ring-4 focus:ring-primary/10"
+                  className="w-full rounded-xl border border-border bg-background p-3.5 pr-12 transition-all focus:border-primary focus:bg-card focus:outline-none focus:ring-4 focus:ring-primary/10"
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? t('auth.hide_password') : t('auth.show_password')}
                   className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-muted-foreground/70 hover:text-primary transition-colors rounded-lg hover:bg-primary/5"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -150,7 +161,7 @@ export const ResetPassword: React.FC = () => {
                     {strength === 0 && <span className="text-red-500 flex items-center gap-1"><Shield className="w-3 h-3" /> {t('auth.strength_weak')}</span>}
                     {strength === 1 && <span className="text-amber-500 flex items-center gap-1"><ShieldAlert className="w-3 h-3" /> {t('auth.strength_weak')}</span>}
                     {strength === 2 && <span className="text-primary/80 flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> {t('auth.strength_medium')}</span>}
-                    {strength === 3 && <span className="text-green-600 flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> {t('auth.strength_strong')}</span>}
+                    {strength === 3 && <span className="text-green-600 dark:text-green-400 flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> {t('auth.strength_strong')}</span>}
                   </div>
                 </div>
               )}
@@ -164,12 +175,13 @@ export const ResetPassword: React.FC = () => {
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full rounded-xl border border-border bg-muted/10/50 p-3.5 pr-12 transition-all focus:border-primary focus:bg-card focus:outline-none focus:ring-4 focus:ring-primary/10"
+                  className="w-full rounded-xl border border-border bg-background p-3.5 pr-12 transition-all focus:border-primary focus:bg-card focus:outline-none focus:ring-4 focus:ring-primary/10"
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  aria-label={showConfirmPassword ? t('auth.hide_password') : t('auth.show_password')}
                   className="absolute right-3 top-1/2 -translate-y-1/2 p-2 text-muted-foreground/70 hover:text-primary transition-colors rounded-lg hover:bg-primary/5"
                 >
                   {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -179,7 +191,7 @@ export const ResetPassword: React.FC = () => {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || esDemo}
               className="w-full rounded-xl bg-primary py-4 font-bold text-white shadow-xl shadow-primary/20 transition-all hover:bg-primary/90 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-70 disabled:pointer-events-none"
             >
               {loading ? (

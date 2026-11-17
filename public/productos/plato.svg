@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="Plato de ducha">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f5f9"/><stop offset="1" stop-color="#dfe6ee"/></linearGradient></defs>
+<rect width="320" height="240" fill="url(#bg)"/>
+<ellipse cx="160" cy="210" rx="104" ry="10" fill="#0f172a" opacity=".12"/>
+<g stroke="#1e293b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+<path d="M40 150v18h150v-18zM190 168l90-50v-18l-90 50z" fill="#cbd5e1"/>
+<path d="M40 150l90-50h150l-90 50z" fill="#f8fafc"/>
+<path d="M150 125h50" stroke="#94a3b8" stroke-width="6"/>
+</g>
+</svg>

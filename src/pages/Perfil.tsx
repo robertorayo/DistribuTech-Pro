@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabase';
+import { esCuentaDemo } from '../lib/demo';
 import { Button } from '../components/ui/button';
 import { User, Mail, Phone, ShieldCheck, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -29,6 +30,8 @@ interface ValidationErrors {
 export const Perfil: React.FC = () => {
   const { user, rol } = useAuth();
   const { t } = useTranslation();
+  // Las cuentas demo son compartidas: no se les deja cambiar el correo.
+  const esDemo = esCuentaDemo(user?.email);
   
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -232,7 +235,7 @@ export const Perfil: React.FC = () => {
 
       // Handle email update inside Auth context
       let emailChanged = false;
-      if (tEmail !== originalData?.email.toLowerCase()) {
+      if (!esDemo && tEmail !== originalData?.email.toLowerCase()) {
         authUpdatePayload.email = tEmail;
         emailChanged = true;
       }
@@ -298,7 +301,7 @@ export const Perfil: React.FC = () => {
           
           <div className="w-full bg-muted/10 rounded-xl p-4 mt-2 text-left">
             <div className="flex items-start gap-2.5">
-              <ShieldCheck className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
+              <ShieldCheck className="w-5 h-5 text-green-600 dark:text-green-400 shrink-0 mt-0.5" />
               <div>
                 <p className="text-xs font-bold text-foreground">{t('profile.rls_active')}</p>
                 <p className="text-[10px] text-muted-foreground leading-normal mt-0.5">
@@ -333,7 +336,7 @@ export const Perfil: React.FC = () => {
                   />
                 </div>
                 {errors.nombre && (
-                  <p className="text-xs text-red-600 mt-1.5 font-medium animate-in slide-in-from-top-1 duration-200">
+                  <p className="text-xs text-red-600 dark:text-red-400 mt-1.5 font-medium animate-in slide-in-from-top-1 duration-200">
                     {errors.nombre}
                   </p>
                 )}
@@ -354,7 +357,7 @@ export const Perfil: React.FC = () => {
                   />
                 </div>
                 {errors.apellidos && (
-                  <p className="text-xs text-red-600 mt-1.5 font-medium animate-in slide-in-from-top-1 duration-200">
+                  <p className="text-xs text-red-600 dark:text-red-400 mt-1.5 font-medium animate-in slide-in-from-top-1 duration-200">
                     {errors.apellidos}
                   </p>
                 )}
@@ -372,7 +375,8 @@ export const Perfil: React.FC = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   className={`${inputClasses} pl-10 ${emailInUse ? 'border-red-300 focus:ring-red-600 focus:border-red-600' : ''}`}
                   placeholder={t('profile.email_placeholder')}
-                  disabled={saving}
+                  disabled={saving || esDemo}
+                  aria-describedby={esDemo ? 'aviso-demo-email' : undefined}
                 />
                 {checkingEmail && (
                   <span className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-muted-foreground/70">
@@ -381,13 +385,18 @@ export const Perfil: React.FC = () => {
                 )}
               </div>
               {errors.email && (
-                <p className="text-xs text-red-600 mt-1.5 font-medium animate-in slide-in-from-top-1 duration-200">
+                <p className="text-xs text-red-600 dark:text-red-400 mt-1.5 font-medium animate-in slide-in-from-top-1 duration-200">
                   {errors.email}
                 </p>
               )}
               {emailInUse && (
-                <p className="text-xs text-red-600 mt-1.5 font-medium animate-in slide-in-from-top-1 duration-200">
+                <p className="text-xs text-red-600 dark:text-red-400 mt-1.5 font-medium animate-in slide-in-from-top-1 duration-200">
                   {t('profile.email_in_use')}
+                </p>
+              )}
+              {esDemo && (
+                <p id="aviso-demo-email" className="text-xs text-muted-foreground mt-1.5">
+                  {t('auth.demo_account_locked')}
                 </p>
               )}
             </FormField>
@@ -407,7 +416,7 @@ export const Perfil: React.FC = () => {
                 />
               </div>
               {errors.telefono ? (
-                <p className="text-xs text-red-600 mt-1.5 font-medium animate-in slide-in-from-top-1 duration-200">
+                <p className="text-xs text-red-600 dark:text-red-400 mt-1.5 font-medium animate-in slide-in-from-top-1 duration-200">
                   {errors.telefono}
                 </p>
               ) : (

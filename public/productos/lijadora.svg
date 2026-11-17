@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="Lijadora">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f5f9"/><stop offset="1" stop-color="#dfe6ee"/></linearGradient></defs>
+<rect width="320" height="240" fill="url(#bg)"/>
+<ellipse cx="160" cy="210" rx="104" ry="10" fill="#0f172a" opacity=".12"/>
+<g stroke="#1e293b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+<path d="M110 70h80a30 30 0 0 1 30 30v40H100v-46a24 24 0 0 1 10-24z" fill="#f59e0b"/>
+<rect x="82" y="140" width="156" height="30" rx="8" fill="#334155"/>
+<rect x="86" y="170" width="148" height="12" rx="3" fill="#facc15"/>
+<circle cx="200" cy="96" r="8" fill="#334155"/>
+</g>
+</svg>

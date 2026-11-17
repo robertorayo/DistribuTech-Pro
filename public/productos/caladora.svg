@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="Sierra de calar">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f5f9"/><stop offset="1" stop-color="#dfe6ee"/></linearGradient></defs>
+<rect width="320" height="240" fill="url(#bg)"/>
+<ellipse cx="160" cy="210" rx="104" ry="10" fill="#0f172a" opacity=".12"/>
+<g stroke="#1e293b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+<path d="M150 170v36l12-8v-28z" fill="#cbd5e1"/>
+<path d="M90 80h120a24 24 0 0 1 0 48h-20l-10 30H120l-10-30H90a24 24 0 0 1 0-48z" fill="#f59e0b"/>
+<path d="M120 104h80" stroke="#334155" stroke-width="10"/>
+<rect x="104" y="158" width="112" height="16" rx="4" fill="#94a3b8"/>
+</g>
+</svg>

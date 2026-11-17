@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="Programador de riego">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f5f9"/><stop offset="1" stop-color="#dfe6ee"/></linearGradient></defs>
+<rect width="320" height="240" fill="url(#bg)"/>
+<ellipse cx="160" cy="210" rx="104" ry="10" fill="#0f172a" opacity=".12"/>
+<g stroke="#1e293b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+<rect x="92" y="54" width="136" height="150" rx="16" fill="#334155"/>
+<rect x="110" y="72" width="100" height="46" rx="6" fill="#bbf7d0"/><text x="160" y="103" font-family="monospace" font-size="20" fill="#1e293b" stroke="none" text-anchor="middle">06:30</text>
+<circle cx="160" cy="160" r="24" fill="#94a3b8"/><circle cx="160" cy="160" r="8" fill="#1e293b"/>
+<rect x="112" y="188" width="96" height="6" rx="3" fill="#16a34a"/>
+</g>
+</svg>

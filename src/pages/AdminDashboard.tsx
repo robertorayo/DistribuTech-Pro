@@ -149,13 +149,20 @@ export const AdminDashboard: React.FC = () => {
       const users = usersRes.data || [];
       const cots = (cotRes.data || []) as CotizacionRow[];
       setCotizaciones(cots);
+      // Etiqueta corta del mes en el idioma de la interfaz («Ago 2026» / «Aug 2026»).
+      const etiquetaMes = (fecha: Date) => {
+        const mes = i18n.language?.startsWith('en')
+          ? fecha.toLocaleString('en', { month: 'short' })
+          : MONTH_NAMES[fecha.getMonth()];
+        return `${mes} ${fecha.getFullYear()}`;
+      };
       const monthlyData: Record<string, number> = {};
       const statusCounts: Record<string, number> = { pendiente: 0, aprobada: 0, rechazada: 0 };
       cots.forEach((c) => {
         if (statusCounts[c.estado] !== undefined) statusCounts[c.estado]++;
         if (c.estado === 'aprobada' && c.created_at) {
           const date = new Date(c.created_at);
-          const monthYear = `${MONTH_NAMES[date.getMonth()]} ${date.getFullYear()}`;
+          const monthYear = etiquetaMes(date);
           if (!monthlyData[monthYear]) monthlyData[monthYear] = 0;
           monthlyData[monthYear] += c.total || 0;
         }
@@ -164,14 +171,14 @@ export const AdminDashboard: React.FC = () => {
       const now = new Date();
       for (let i = 5; i >= 0; i--) {
         const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-        const name = `${MONTH_NAMES[d.getMonth()]} ${d.getFullYear()}`;
+        const name = etiquetaMes(d);
         last6Months.push({ name, ingresos: monthlyData[name] || 0 });
       }
       setChartData(last6Months);
       setStatusData([
-        { name: t('quotes.status_approved', 'Aprobadas'), value: statusCounts.aprobada, color: '#22c55e' },
-        { name: t('quotes.status_pending', 'Pendientes'), value: statusCounts.pendiente, color: '#eab308' },
-        { name: t('quotes.status_rejected', 'Rechazadas'), value: statusCounts.rechazada, color: '#ef4444' },
+        { name: t('common.status_approved'), value: statusCounts.aprobada, color: '#22c55e' },
+        { name: t('common.status_pending'), value: statusCounts.pendiente, color: '#eab308' },
+        { name: t('common.status_rejected'), value: statusCounts.rechazada, color: '#ef4444' },
       ]);
       setStats({
         usuarios: users.length,
@@ -183,11 +190,11 @@ export const AdminDashboard: React.FC = () => {
       });
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
-      toast.error('Error: ' + message);
+      toast.error(`${t('common.error')} ${message}`);
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, [t, i18n.language]);
 
   useEffect(() => {
     cargarEstadisticas();
@@ -205,7 +212,7 @@ export const AdminDashboard: React.FC = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="shadow-sm border-border/50 bg-card hover:shadow-md transition-shadow relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-green-50 rounded-bl-full -mr-4 -mt-4 opacity-50 z-0" />
+          <div className="absolute top-0 right-0 w-24 h-24 bg-green-50 dark:bg-green-950/40 rounded-bl-full -mr-4 -mt-4 opacity-50 z-0" />
           <CardHeader className="flex flex-row items-center justify-between pb-2 relative z-10">
             <CardTitle className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest">
               {t('admin.approved_revenue')}
@@ -241,7 +248,7 @@ export const AdminDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-black text-foreground">{stats.clientes}</div>
-            <p className="text-xs text-purple-600 font-medium mt-1">
+            <p className="text-xs text-purple-600 dark:text-purple-400 font-medium mt-1">
               {t('admin.active_sales')}: {stats.comerciales}
             </p>
           </CardContent>
@@ -256,7 +263,7 @@ export const AdminDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-black text-foreground">{stats.productosActivos}</div>
-            <p className="text-xs text-orange-600 font-medium mt-1">{t('admin.product_refs')}</p>
+            <p className="text-xs text-orange-600 dark:text-orange-400 font-medium mt-1">{t('admin.product_refs')}</p>
           </CardContent>
         </Card>
       </div>
@@ -449,10 +456,6 @@ export const AdminDashboard: React.FC = () => {
         </CardContent>
       </Card>
 
-      <div className="bg-primary/5 border border-primary/20 rounded-2xl p-8 text-center mt-12 shadow-inner">
-        <h3 className="text-2xl font-black text-primary mb-3 tracking-tight">{t('admin.mvp_ready')}</h3>
-        <p className="text-primary/70 max-w-2xl mx-auto font-medium">{t('admin.mvp_description')}</p>
-      </div>
     </div>
   );
 };

@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useFormatCurrency } from '../lib/formatters';
+import { imagenProducto } from '../lib/imagenProducto';
 import {
   PageHeader,
   EmptyState
@@ -97,14 +98,21 @@ export const Checkout: React.FC = () => {
         <div className="lg:col-span-2 space-y-4">
           {items.map((item) => (
             <div key={item.producto.id} className="flex flex-col sm:flex-row items-center gap-4 bg-card p-4 rounded-2xl border border-border/50 shadow-sm transition-all hover:shadow-md relative">
+              <img
+                src={imagenProducto(item.producto)}
+                alt=""
+                width={96}
+                height={72}
+                className="hidden sm:block w-24 aspect-[4/3] rounded-lg border border-border/50 object-cover shrink-0"
+              />
 
               <div className="flex-1 text-center sm:text-left w-full px-2">
                 <h3 className="font-bold text-foreground line-clamp-2 sm:line-clamp-1">{item.producto.nombre}</h3>
                 <p className="text-[10px] font-semibold text-muted-foreground/70 uppercase tracking-widest mt-1 mb-2 sm:mb-3">
-                  {item.producto.fabricantes?.nombre || 'General'}
+                  {item.producto.fabricantes?.nombre || t('catalog.white_label')}
                 </p>
                 <p className="font-black text-primary text-base sm:text-lg">
-                  {formatCurrency(item.producto.precio)} <span className="text-xs text-muted-foreground/70 font-medium">/ud</span>
+                  {formatCurrency(item.producto.precio)} <span className="text-xs text-muted-foreground/70 font-medium">{t('catalog.per_unit')}</span>
                 </p>
               </div>
 
@@ -115,12 +123,15 @@ export const Checkout: React.FC = () => {
                     className="px-2.5 sm:px-3 hover:bg-muted/10 text-muted-foreground font-bold border-r border-border transition-colors h-full disabled:opacity-30"
                     onClick={() => updateQuantity(item.producto.id, item.cantidad - 1)}
                     disabled={item.cantidad <= 1}
+                    aria-label={t('product.decrease')}
                   >-</button>
-                  <span className="w-10 sm:w-12 text-center text-sm font-bold">{item.cantidad}</span>
+                  <span className="w-10 sm:w-12 text-center text-sm font-bold" aria-live="polite">{item.cantidad}</span>
                   <button
                     className="px-2.5 sm:px-3 hover:bg-muted/10 text-muted-foreground font-bold border-l border-border transition-colors h-full disabled:opacity-30"
+                    type="button"
                     onClick={() => updateQuantity(item.producto.id, item.cantidad + 1)}
                     disabled={item.cantidad >= item.producto.stock}
+                    aria-label={t('product.increase')}
                   >+</button>
                 </div>
 
@@ -131,11 +142,12 @@ export const Checkout: React.FC = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="text-red-400 hover:text-red-600 hover:bg-red-50 shrink-0 rounded-full h-9 w-9"
+                  className="text-red-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 shrink-0 rounded-full h-9 w-9"
                   onClick={() => removeItem(item.producto.id)}
                   title={t('common.delete')}
+                  aria-label={`${t('common.delete')}: ${item.producto.nombre}`}
                 >
-                  <Trash2 className="w-4 h-4 sm:w-5 h-5" />
+                  <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" aria-hidden="true" />
                 </Button>
               </div>
             </div>
@@ -143,7 +155,7 @@ export const Checkout: React.FC = () => {
         </div>
 
         {/* Panel de Totales */}
-        <div className="bg-card p-6 sm:p-8 rounded-2xl border border-border/50 shadow-xl shadow-blue-900/5 h-fit sticky top-24">
+        <div className="bg-card p-6 sm:p-8 rounded-2xl border border-border/50 shadow-xl shadow-primary/5 h-fit sticky top-24">
           <h3 className="text-lg font-bold text-foreground mb-6 flex items-center gap-2">
             <ShoppingBag className="w-5 h-5 text-primary/80" /> {t('checkout.summary')}
           </h3>

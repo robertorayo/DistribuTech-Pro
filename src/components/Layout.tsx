@@ -143,7 +143,7 @@ export const Layout: React.FC = () => {
   const menuItems = [
     { name: t('app.catalog'), path: '/catalogo', icon: <Package className="w-5 h-5" />, roles: ['cliente', 'comercial', 'admin'] },
     { name: t('app.my_orders'), path: '/mis-pedidos', icon: <ClipboardList className="w-5 h-5" />, roles: ['cliente'], badge: incidentCount },
-    { name: t('app.about_us', 'Sobre Nosotros'), path: '/sobre-nosotros', icon: <Building2 className="w-5 h-5" />, roles: ['cliente'] },
+    { name: t('app.about_us'), path: '/sobre-nosotros', icon: <Building2 className="w-5 h-5" />, roles: ['cliente'] },
     { name: t('app.admin_dashboard'), path: '/admin', icon: <LayoutDashboard className="w-5 h-5" />, roles: ['admin'] },
     { name: t('app.admin_products'), path: '/admin/productos', icon: <Package className="w-5 h-5" />, roles: ['admin', 'comercial'] },
     { name: t('app.admin_categories'), path: '/admin/categorias', icon: <FileText className="w-5 h-5" />, roles: ['admin', 'comercial'] },
@@ -167,8 +167,8 @@ export const Layout: React.FC = () => {
               <SheetTrigger 
                 render={
                   <Button variant="ghost" size="icon" className="md:hidden">
-                    <Menu className="w-5 h-5" />
-                    <span className="sr-only">Toggle Menu</span>
+                    <Menu className="w-5 h-5" aria-hidden="true" />
+                    <span className="sr-only">{t('app.open_menu')}</span>
                   </Button>
                 }
               />
@@ -187,8 +187,12 @@ export const Layout: React.FC = () => {
 
           <div className="flex items-center gap-2 sm:gap-4">
             {/* Botón Carrito */}
-            <Link to="/checkout" className="relative inline-flex items-center justify-center h-9 w-9 rounded-full hover:bg-muted transition-colors mr-1 sm:mr-3">
-              <ShoppingCart className="w-5 h-5 text-foreground" />
+            <Link
+              to="/checkout"
+              aria-label={cartItemsCount > 0 ? `${t('app.cart')} (${cartItemsCount})` : t('app.cart')}
+              className="relative inline-flex items-center justify-center h-9 w-9 rounded-full hover:bg-muted transition-colors mr-1 sm:mr-3"
+            >
+              <ShoppingCart className="w-5 h-5 text-foreground" aria-hidden="true" />
               {cartItemsCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-sm animate-in zoom-in duration-300">
                   {cartItemsCount > 99 ? '99+' : cartItemsCount}
@@ -202,6 +206,8 @@ export const Layout: React.FC = () => {
               size="sm" 
               className="text-foreground h-8 w-8 p-0" 
               onClick={toggleTheme}
+              aria-label={t('app.toggle_theme')}
+              title={t('app.toggle_theme')}
             >
               {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </Button>
@@ -210,7 +216,7 @@ export const Layout: React.FC = () => {
             <DropdownMenu>
               <DropdownMenuTrigger 
                 render={
-                  <Button variant="ghost" size="sm" className="gap-2 text-foreground h-8 px-3">
+                  <Button variant="ghost" size="sm" className="gap-2 text-foreground h-8 px-3" aria-label={`${t('app.language')}: ${currentLanguageLabel}`}>
                     <Globe className="w-4 h-4" />
                     <span className="hidden sm:inline-block">{currentLanguageLabel}</span>
                   </Button>
@@ -230,9 +236,9 @@ export const Layout: React.FC = () => {
             <DropdownMenu>
               <DropdownMenuTrigger 
                 render={
-                  <Button variant="outline" size="sm" className="gap-2 rounded-full h-8 px-4 border-border text-foreground">
+                  <Button variant="outline" size="sm" className="gap-2 rounded-full h-8 px-4 border-border text-foreground" aria-label={t('app.account')}>
                     <UserIcon className="w-4 h-4 text-muted-foreground" />
-                    <span className="hidden sm:inline-block">Cuenta</span>
+                    <span className="hidden sm:inline-block">{t('app.account')}</span>
                   </Button>
                 }
               />
@@ -245,7 +251,7 @@ export const Layout: React.FC = () => {
                   {t('app.my_profile')}
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  className="justify-center gap-2 text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer font-medium"
+                  className="justify-center gap-2 text-red-600 focus:text-red-600 focus:bg-red-50 dark:text-red-400 dark:focus:text-red-400 dark:focus:bg-red-950/40 cursor-pointer font-medium"
                   onClick={handleLogout}
                 >
                   <LogOut className="w-4 h-4" />

@@ -54,7 +54,7 @@ export const SobreNosotros: React.FC = () => {
               <h2 className="text-xl font-bold text-foreground">{t('about.team_title')}</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-4 rounded-xl border border-border/20 bg-muted/10/50 flex items-start gap-4">
+              <div className="p-4 rounded-xl border border-border/20 bg-background flex items-start gap-4">
                 <div className="w-12 h-12 rounded-full bg-muted flex-shrink-0 flex items-center justify-center text-muted-foreground font-bold text-lg">
                   CJ
                 </div>
@@ -63,7 +63,7 @@ export const SobreNosotros: React.FC = () => {
                   <p className="text-xs text-primary font-medium">{t('about.ceo_role')}</p>
                 </div>
               </div>
-              <div className="p-4 rounded-xl border border-border/20 bg-muted/10/50 flex items-start gap-4">
+              <div className="p-4 rounded-xl border border-border/20 bg-background flex items-start gap-4">
                 <div className="w-12 h-12 rounded-full bg-muted flex-shrink-0 flex items-center justify-center text-muted-foreground font-bold text-lg">
                   MR
                 </div>

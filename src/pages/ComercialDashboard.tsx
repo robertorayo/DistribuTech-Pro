@@ -189,7 +189,7 @@ export const ComercialDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-4xl font-black text-foreground">{clientes.length}</div>
-            <p className="text-xs text-green-600 font-medium mt-1">{t('comercial.active_platform')}</p>
+            <p className="text-xs text-green-600 dark:text-green-400 font-medium mt-1">{t('comercial.active_platform')}</p>
           </CardContent>
         </Card>
 
@@ -200,11 +200,11 @@ export const ComercialDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-4xl font-black text-foreground">{pendientes.length}</div>
-            <p className="text-xs text-orange-600 font-medium mt-1">{t('comercial.quotes_to_review')}</p>
+            <p className="text-xs text-orange-600 dark:text-orange-400 font-medium mt-1">{t('comercial.quotes_to_review')}</p>
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm border-border/50 hover:shadow-md transition-shadow bg-primary/5/50 border-primary/20">
+        <Card className="shadow-sm border-border/50 hover:shadow-md transition-shadow bg-primary/5 border-primary/20">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-bold text-primary uppercase tracking-widest">{t('comercial.pipeline')}</CardTitle>
             <FileText className="w-5 h-5 text-primary" />
@@ -299,19 +299,19 @@ export const ComercialDashboard: React.FC = () => {
       </div>
 
       {cotizacionSeleccionada && (
-        <ModalOverlay onClose={() => setCotizacionSeleccionada(null)} maxWidth="max-w-4xl">
+        <ModalOverlay onClose={() => setCotizacionSeleccionada(null)} maxWidth="max-w-4xl" labelledBy="titulo-revision">
           <ModalHeader>
             <div className="flex justify-between items-center">
               <div>
-                <h3 className="text-xl sm:text-2xl font-bold text-foreground">{t('comercial.quote_review')}</h3>
+                <h3 id="titulo-revision" className="text-xl sm:text-2xl font-bold text-foreground">{t('comercial.quote_review')}</h3>
                 <p className="text-xs text-muted-foreground/70 mt-1">ID: #{cotizacionSeleccionada.id.split('-')[0]}</p>
               </div>
-              <Button variant="ghost" size="icon" onClick={() => setCotizacionSeleccionada(null)} className="text-muted-foreground/70">&times;</Button>
+              <Button variant="ghost" size="icon" onClick={() => setCotizacionSeleccionada(null)} className="text-muted-foreground/70" aria-label={t('common.close')}>&times;</Button>
             </div>
           </ModalHeader>
-          <ModalBody className="bg-muted/10/30">
+          <ModalBody className="bg-muted/20">
             {cargandoDetalles ? (
-              <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div></div>
+              <div className="flex justify-center py-12"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>
             ) : (
               <div className="space-y-6">
                 <div className="bg-card p-4 sm:p-6 rounded-xl border border-border flex flex-col sm:flex-row justify-between sm:items-center gap-4 shadow-sm">
@@ -336,7 +336,7 @@ export const ComercialDashboard: React.FC = () => {
                         <th className="px-4 py-3 font-bold text-[10px] uppercase text-right">{t('common.subtotal')}</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-100">
+                    <tbody className="divide-y divide-border/50">
                       {detallesCotizacion.map(d => (
                         <tr key={d.id} className="hover:bg-muted/10">
                           <td className="px-4 py-3 font-medium text-foreground">{d.productos?.nombre}</td>
@@ -360,7 +360,7 @@ export const ComercialDashboard: React.FC = () => {
               </>
             )}
             {['esperando_stock', 'esperando_stock_completo', 'pendiente_decision_cliente'].includes(cotizacionSeleccionada.tipo_incidencia) && (
-              <span className="text-amber-600 font-medium text-sm px-4">
+              <span className="text-amber-600 dark:text-amber-400 font-medium text-sm px-4">
                 {t('comercial.waiting_client_or_stock')}
               </span>
             )}

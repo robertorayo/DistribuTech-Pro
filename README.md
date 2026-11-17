@@ -24,12 +24,12 @@ Los datos los comparte cualquiera que use la demo, así que pueden haber cambiad
 
 ## Qué hace
 
-- **Catálogo:** búsqueda por texto, filtros por categoría y fabricante, ordenación, paginación y ficha de producto con especificaciones técnicas en `JSONB`.
+- **Catálogo:** búsqueda por texto, filtros por categoría y fabricante, ordenación, paginación y ficha de producto con especificaciones técnicas en `JSONB`. Cada producto se muestra con una ilustración propia en SVG (`public/productos/`), elegida según el tipo de producto o su categoría; no se usan fotos de marcas.
 - **Carrito y cotización:** el carrito se guarda en el navegador (Zustand con persistencia) y limita las cantidades al stock disponible. Al enviarlo se crea una cotización.
 - **Revisión comercial:** panel con la cartera de clientes y las cotizaciones entrantes, con filtros, búsqueda y detalle. El comercial aprueba o rechaza.
 - **Control de stock al aprobar:** la aprobación se hace en la base de datos y comprueba el stock de forma atómica. Si falta stock, el cliente puede dividir la cotización (una parte aprobada y otra en espera), esperar a tener el pedido completo o cancelar. Cuando sube el stock de un producto, un trigger procesa automáticamente las cotizaciones en espera por orden de llegada.
 - **Administración:** CRUD de productos, categorías y fabricantes (con desactivación en lugar de borrado) y panel con gráficas de ingresos y reparto de cotizaciones por estado, filtrable por mes y año.
-- **Cuenta:** registro, recuperación de contraseña, perfil, modo claro y oscuro, interfaz en español e inglés y sesión única por usuario.
+- **Cuenta:** registro, recuperación de contraseña, perfil, modo claro y oscuro, interfaz en español e inglés (el idioma elegido se recuerda) y sesión única por usuario. En las cuentas de la demo la interfaz no permite cambiar el correo ni la contraseña.
 
 ## Roles
 
@@ -71,6 +71,7 @@ CREATE POLICY "user_leer_cot" ON cotizaciones FOR SELECT USING (
 - Un trigger (`handle_new_user`) crea la fila de `usuarios` al registrarse alguien en Supabase Auth.
 - `registrar_actividad_sesion()` impone una sola sesión activa por usuario; las cuentas de la demo pública están exentas.
 - La clave que usa el navegador es la `anon`; la protección real está en las políticas RLS.
+- `vercel.json` añade cabeceras de seguridad: Content-Security-Policy (solo scripts propios y conexiones a Supabase), HSTS, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy` y `Permissions-Policy`.
 
 ## Estructura
 
@@ -85,7 +86,7 @@ src/
 ├── store/        carrito (Zustand)
 ├── types/        tipos del modelo de datos
 └── i18n.ts       traducciones en español e inglés
-database/         schema.sql y data.sql
+database/         schema.sql, data.sql y migrations/ (cambios propuestos sobre el esquema)
 docs/             manuales de usuario, técnico y de despliegue (PDF)
 ```
 
@@ -121,7 +122,7 @@ npm run test:watch   # los repite al guardar cambios
 npm run lint         # ESLint
 ```
 
-Cubren el carrito (`store/cartStore.ts`), los formateadores de precio y fecha en los dos idiomas, la utilidad `cn`, la paginación, el control de acceso por rol de `PrivateRoute` y la pantalla de checkout (base imponible, IVA según el tipo de cada producto y total, límite de stock y creación de la cotización con su detalle).
+Cubren el carrito (`store/cartStore.ts`), los formateadores de precio y fecha en los dos idiomas, la utilidad `cn`, la elección de ilustración de cada producto (todos los de `data.sql` tienen una propia), la detección de cuentas demo, la paginación, el control de acceso por rol de `PrivateRoute` y la pantalla de checkout (base imponible, IVA según el tipo de cada producto y total, límite de stock y creación de la cotización con su detalle).
 
 En cada push y pull request a `develop` y `main`, GitHub Actions ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) instala las dependencias con `npm ci` y ejecuta el lint, los tests y el build.
 

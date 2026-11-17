@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="Compresor">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f5f9"/><stop offset="1" stop-color="#dfe6ee"/></linearGradient></defs>
+<rect width="320" height="240" fill="url(#bg)"/>
+<ellipse cx="160" cy="210" rx="104" ry="10" fill="#0f172a" opacity=".12"/>
+<g stroke="#1e293b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+<rect x="60" y="120" width="190" height="62" rx="31" fill="#dc2626"/>
+<rect x="110" y="70" width="90" height="52" rx="8" fill="#334155"/><path d="M122 84h66M122 98h66M122 112h66" stroke="#94a3b8" stroke-width="3"/>
+<circle cx="230" cy="90" r="16" fill="#f8fafc"/><path d="M230 90l8-8" stroke="#1e293b"/>
+<circle cx="90" cy="194" r="12" fill="#334155"/><circle cx="220" cy="194" r="12" fill="#334155"/>
+</g>
+</svg>

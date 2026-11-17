@@ -30,7 +30,7 @@ export const DataTable: React.FC<DataTableProps> = ({ columns, children, footer 
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">{children}</tbody>
+          <tbody className="divide-y divide-border/50">{children}</tbody>
         </table>
       </div>
       {footer && (

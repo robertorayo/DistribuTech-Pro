@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="Accesorio de unión">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f5f9"/><stop offset="1" stop-color="#dfe6ee"/></linearGradient></defs>
+<rect width="320" height="240" fill="url(#bg)"/>
+<ellipse cx="160" cy="210" rx="104" ry="10" fill="#0f172a" opacity=".12"/>
+<g stroke="#1e293b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+<path d="M70 96h96a44 44 0 0 1 44 44v66h-56v-56a10 10 0 0 0-10-10H70z" fill="#94a3b8"/>
+<rect x="52" y="88" width="30" height="70" rx="6" fill="#cbd5e1"/>
+<rect x="146" y="186" width="72" height="22" rx="6" fill="#cbd5e1"/>
+<path d="M90 108h70a30 30 0 0 1 30 30" stroke="#f8fafc" stroke-width="4" fill="none" opacity=".7"/>
+</g>
+</svg>

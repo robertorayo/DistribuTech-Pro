@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="Bomba de agua">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f5f9"/><stop offset="1" stop-color="#dfe6ee"/></linearGradient></defs>
+<rect width="320" height="240" fill="url(#bg)"/>
+<ellipse cx="160" cy="210" rx="104" ry="10" fill="#0f172a" opacity=".12"/>
+<g stroke="#1e293b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+<rect x="70" y="150" width="180" height="56" rx="6" fill="#334155"/>
+<rect x="88" y="78" width="104" height="76" rx="14" fill="#2563eb"/>
+<path d="M100 92h80M100 108h80M100 124h80M100 140h80" stroke="#1d4ed8" stroke-width="4"/>
+<circle cx="216" cy="118" r="34" fill="#cbd5e1"/><circle cx="216" cy="118" r="14" fill="#94a3b8"/>
+<rect x="206" y="62" width="20" height="24" fill="#cbd5e1"/><rect x="200" y="54" width="32" height="10" rx="3" fill="#94a3b8"/>
+<rect x="250" y="108" width="26" height="20" fill="#cbd5e1"/><rect x="274" y="102" width="10" height="32" rx="3" fill="#94a3b8"/>
+</g>
+</svg>

@@ -8,7 +8,7 @@ export const useFormatCurrency = () => {
   const { i18n } = useTranslation();
 
   return (valor: number): string => {
-    return new Intl.NumberFormat(i18n.language === 'es' ? 'es-ES' : 'en-US', {
+    return new Intl.NumberFormat(i18n.resolvedLanguage?.startsWith('en') ? 'en-US' : 'es-ES', {
       style: 'currency',
       currency: 'EUR',
     }).format(valor);
@@ -28,7 +28,7 @@ export const useFormatDate = () => {
       year: 'numeric',
     };
     return new Date(date).toLocaleDateString(
-      i18n.language === 'es' ? 'es-ES' : 'en-US',
+      i18n.resolvedLanguage?.startsWith('en') ? 'en-US' : 'es-ES',
       options || defaultOptions
     );
   };

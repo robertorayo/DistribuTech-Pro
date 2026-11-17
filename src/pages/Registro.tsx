@@ -45,7 +45,6 @@ export const Registro: React.FC = () => {
         data: {
           nombre,
           apellidos,
-          rol: 'cliente',
         },
       },
     });
@@ -64,21 +63,21 @@ export const Registro: React.FC = () => {
     return (
       <div className="flex min-h-screen items-center justify-center bg-muted/10 p-4">
         <div className="w-full max-w-md rounded-2xl bg-card p-10 shadow-2xl text-center border border-border/50 animate-in fade-in zoom-in duration-500">
-          <div className="w-20 h-20 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+          <div className="w-20 h-20 bg-green-50 dark:bg-green-950/40 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center mx-auto mb-6">
             <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
-          <h2 className="text-3xl font-bold text-foreground mb-4">¡Casi listo!</h2>
+          <h2 className="text-3xl font-bold text-foreground mb-4">{t('auth.almost_done')}</h2>
           <p className="text-muted-foreground mb-8 leading-relaxed">
-            Hemos enviado un enlace de confirmación a <strong className="text-foreground">{email}</strong>.<br />
-            Por favor, revisa tu correo para activar tu cuenta.
+            {t('auth.confirmation_sent')} <strong className="text-foreground">{email}</strong>.<br />
+            {t('auth.check_inbox')}
           </p>
           <Link
             to="/login"
             className="inline-block w-full rounded-xl bg-primary py-4 font-bold text-white shadow-xl shadow-primary/20 transition-all hover:bg-primary/90"
           >
-            Volver al Login
+            {t('auth.back_to_login')}
           </Link>
         </div>
       </div>
@@ -94,7 +93,7 @@ export const Registro: React.FC = () => {
         </div>
 
         {error && (
-          <div className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700 border border-red-200">
+          <div className="mb-4 rounded-md bg-red-50 dark:bg-red-950/40 p-3 text-sm text-red-700 dark:text-red-300 border border-red-200 dark:border-red-900">
             {error}
           </div>
         )}
@@ -141,11 +140,12 @@ export const Registro: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full rounded-md border border-border p-2.5 pr-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                placeholder="Mínimo 6 caracteres"
+                placeholder={t('auth.password_min_placeholder')}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? t('auth.hide_password') : t('auth.show_password')}
                 className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-muted-foreground/70 hover:text-primary transition-colors rounded-md hover:bg-primary/5"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -162,30 +162,30 @@ export const Registro: React.FC = () => {
                   <div className={`flex-1 rounded-full transition-all duration-500 ${strength >= 4 ? 'bg-green-500' : 'bg-muted'}`} />
                 </div>
                 <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider">
-                  {strength === 0 && <span className="text-red-500 flex items-center gap-1"><Shield className="w-3 h-3" /> Muy Débil</span>}
-                  {strength === 1 && <span className="text-red-500 flex items-center gap-1"><Shield className="w-3 h-3" /> Débil</span>}
-                  {strength === 2 && <span className="text-amber-500 flex items-center gap-1"><ShieldAlert className="w-3 h-3" /> Media</span>}
-                  {strength === 3 && <span className="text-primary/80 flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Fuerte</span>}
-                  {strength === 4 && <span className="text-green-600 flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Muy Fuerte</span>}
+                  {strength === 0 && <span className="text-red-500 flex items-center gap-1"><Shield className="w-3 h-3" /> {t('auth.strength_very_weak')}</span>}
+                  {strength === 1 && <span className="text-red-500 flex items-center gap-1"><Shield className="w-3 h-3" /> {t('auth.strength_weak')}</span>}
+                  {strength === 2 && <span className="text-amber-500 flex items-center gap-1"><ShieldAlert className="w-3 h-3" /> {t('auth.strength_medium')}</span>}
+                  {strength === 3 && <span className="text-primary/80 flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> {t('auth.strength_strong')}</span>}
+                  {strength === 4 && <span className="text-green-600 dark:text-green-400 flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> {t('auth.strength_very_strong')}</span>}
                 </div>
 
                 {/* Requisitos Checklist */}
                 <div className="grid grid-cols-2 gap-1 text-[11px] text-muted-foreground">
-                  <div className={`flex items-center gap-1 ${criteria.length ? 'text-green-600 font-semibold' : ''}`}>
+                  <div className={`flex items-center gap-1 ${criteria.length ? 'text-green-600 dark:text-green-400 font-semibold' : ''}`}>
                     <span className={`w-1.5 h-1.5 rounded-full ${criteria.length ? 'bg-green-500' : 'bg-muted/50'}`} />
-                    Mín. 6 caracteres
+                    {t('auth.req_length')}
                   </div>
-                  <div className={`flex items-center gap-1 ${criteria.uppercase ? 'text-green-600 font-semibold' : ''}`}>
+                  <div className={`flex items-center gap-1 ${criteria.uppercase ? 'text-green-600 dark:text-green-400 font-semibold' : ''}`}>
                     <span className={`w-1.5 h-1.5 rounded-full ${criteria.uppercase ? 'bg-green-500' : 'bg-muted/50'}`} />
-                    Mayúsculas
+                    {t('auth.req_uppercase')}
                   </div>
-                  <div className={`flex items-center gap-1 ${criteria.number ? 'text-green-600 font-semibold' : ''}`}>
+                  <div className={`flex items-center gap-1 ${criteria.number ? 'text-green-600 dark:text-green-400 font-semibold' : ''}`}>
                     <span className={`w-1.5 h-1.5 rounded-full ${criteria.number ? 'bg-green-500' : 'bg-muted/50'}`} />
-                    Números
+                    {t('auth.req_number')}
                   </div>
-                  <div className={`flex items-center gap-1 ${criteria.special ? 'text-green-600 font-semibold' : ''}`}>
+                  <div className={`flex items-center gap-1 ${criteria.special ? 'text-green-600 dark:text-green-400 font-semibold' : ''}`}>
                     <span className={`w-1.5 h-1.5 rounded-full ${criteria.special ? 'bg-green-500' : 'bg-muted/50'}`} />
-                    Especiales (!@#...)
+                    {t('auth.req_special')}
                   </div>
                 </div>
               </div>
@@ -200,11 +200,12 @@ export const Registro: React.FC = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full rounded-md border border-border p-2.5 pr-10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                placeholder="Repite tu contraseña"
+                placeholder={t('auth.repeat_password_placeholder')}
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                aria-label={showConfirmPassword ? t('auth.hide_password') : t('auth.show_password')}
                 className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-muted-foreground/70 hover:text-primary transition-colors rounded-md hover:bg-primary/5"
               >
                 {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

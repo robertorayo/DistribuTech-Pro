@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="Caldera">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f5f9"/><stop offset="1" stop-color="#dfe6ee"/></linearGradient></defs>
+<rect width="320" height="240" fill="url(#bg)"/>
+<ellipse cx="160" cy="210" rx="104" ry="10" fill="#0f172a" opacity=".12"/>
+<g stroke="#1e293b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+<path d="M130 200v10M160 200v10M190 200v10" stroke="#94a3b8" stroke-width="6"/>
+<rect x="96" y="40" width="128" height="160" rx="10" fill="#f8fafc"/>
+<rect x="114" y="150" width="92" height="32" rx="4" fill="#334155"/><circle cx="134" cy="166" r="7" fill="#0ea5e9"/><rect x="152" y="160" width="40" height="12" rx="2" fill="#bbf7d0"/>
+<path d="M150 80c-10 18 0 30 10 36 10-6 20-18 10-36-4 10-8 12-10 6-2-6 0-10-10-6z" fill="#f59e0b"/>
+</g>
+</svg>

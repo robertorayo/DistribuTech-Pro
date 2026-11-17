@@ -6,6 +6,8 @@ import { ShoppingCart, Check, Info, FileText } from 'lucide-react';
 import { toast } from 'sonner';
 import { useCartStore } from '../store/cartStore';
 import { useTranslation } from 'react-i18next';
+import { useFormatCurrency } from '../lib/formatters';
+import { imagenProducto } from '../lib/imagenProducto';
 
 interface ProductoDetalleProps {
   producto: ProductoConDetalles | null;
@@ -16,7 +18,8 @@ interface ProductoDetalleProps {
 export const ProductoDetalle: React.FC<ProductoDetalleProps> = ({ producto, isOpen, onClose }) => {
   const [cantidad, setCantidad] = useState(1);
   const addItem = useCartStore((state) => state.addItem);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
+  const formatCurrency = useFormatCurrency();
 
   // Reiniciar cantidad cuando se abre un nuevo producto
   useEffect(() => {
@@ -24,13 +27,6 @@ export const ProductoDetalle: React.FC<ProductoDetalleProps> = ({ producto, isOp
   }, [isOpen]);
 
   if (!producto) return null;
-
-  const formatearMoneda = (valor: number) => {
-    return new Intl.NumberFormat(i18n.language === 'es' ? 'es-ES' : 'en-US', {
-      style: 'currency',
-      currency: 'EUR'
-    }).format(valor);
-  };
 
   // El campo jsonb viene como objeto en Supabase
   const especificaciones = producto.especificaciones_tecnicas as Record<string, any>;
@@ -45,20 +41,27 @@ export const ProductoDetalle: React.FC<ProductoDetalleProps> = ({ producto, isOp
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-[750px] p-0 overflow-hidden gap-0 bg-card shadow-2xl rounded-2xl border-0 max-h-[95dvh] flex flex-col">
 
-        {/* Cabecera Oculta para Accesibilidad (Requerido por Radix UI) */}
-        <DialogTitle className="sr-only">Detalles de {producto.nombre}</DialogTitle>
-        <DialogDescription className="sr-only">{producto.descripcion}</DialogDescription>
+        {/* Título y descripción para lectores de pantalla (los pide el diálogo de Base UI) */}
+        <DialogTitle className="sr-only">{t('product.details_of', { name: producto.nombre })}</DialogTitle>
+        <DialogDescription className="sr-only">{producto.descripcion || t('product.no_description')}</DialogDescription>
 
         {/* Encabezado visual: Banner gris suave y título */}
-        <div className="bg-muted/10/80 p-4 sm:p-6 border-b border-border/50 flex flex-row items-start gap-4 relative shrink-0">
+        <div className="bg-muted/40 p-4 sm:p-6 border-b border-border/50 flex flex-row items-start gap-4 relative shrink-0">
 
+          <img
+            src={imagenProducto(producto)}
+            alt={t('catalog.image_alt', { name: producto.nombre })}
+            width={320}
+            height={240}
+            className="hidden sm:block w-40 aspect-[4/3] rounded-xl border border-border/50 object-cover shrink-0"
+          />
           <div className="flex-1 space-y-1.5 min-w-0">
             <div className="flex items-center flex-wrap gap-2">
-              <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider bg-primary/10/50 text-primary px-2 py-0.5 rounded-md border border-primary/20">
-                {producto.categorias?.nombre || 'General'}
+              <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider bg-primary/10 text-primary px-2 py-0.5 rounded-md border border-primary/20">
+                {producto.categorias?.nombre || t('catalog.general')}
               </span>
               <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">
-                {producto.fabricantes?.nombre || 'Marca Blanca'}
+                {producto.fabricantes?.nombre || t('catalog.white_label')}
               </span>
             </div>
 
@@ -68,9 +71,9 @@ export const ProductoDetalle: React.FC<ProductoDetalleProps> = ({ producto, isOp
 
             <div className="flex items-end gap-2">
               <span className="text-2xl sm:text-3xl font-black text-foreground tracking-tighter">
-                {formatearMoneda(producto.precio)}
+                {formatCurrency(producto.precio)}
               </span>
-              <span className="text-xs font-medium text-muted-foreground mb-0.5">/ud (Sin IVA)</span>
+              <span className="text-xs font-medium text-muted-foreground mb-0.5">{t('product.per_unit_excl_vat')}</span>
             </div>
           </div>
         </div>
@@ -95,16 +98,16 @@ export const ProductoDetalle: React.FC<ProductoDetalleProps> = ({ producto, isOp
                   <h4 className="text-xs font-bold text-muted-foreground/70 uppercase tracking-widest mb-3 flex items-center gap-2">
                     <Info className="w-4 h-4 text-primary/80" /> {t('product.specifications')}
                   </h4>
-                  <div className="bg-muted/10/50 rounded-xl border border-border/50 overflow-hidden">
+                  <div className="bg-background rounded-xl border border-border/50 overflow-hidden">
                     <table className="w-full text-sm text-left">
-                      <tbody className="divide-y divide-gray-100">
+                      <tbody className="divide-y divide-border/50">
                         {Object.entries(especificaciones).map(([key, value]) => (
                           <tr key={key} className="hover:bg-muted/10 transition-colors">
-                            <th className="px-3 sm:px-5 py-2.5 font-semibold text-foreground w-2/5 sm:w-1/3 bg-muted/30/50 capitalize text-xs">
+                            <th className="px-3 sm:px-5 py-2.5 font-semibold text-foreground w-2/5 sm:w-1/3 bg-muted/30 capitalize text-xs">
                               {key.replace(/_/g, ' ')}
                             </th>
                             <td className="px-3 sm:px-5 py-2.5 text-muted-foreground font-medium text-xs sm:text-sm">
-                              {typeof value === 'boolean' ? (value ? 'Sí' : 'No') : String(value)}
+                              {typeof value === 'boolean' ? (value ? t('common.yes') : t('common.no')) : String(value)}
                             </td>
                           </tr>
                         ))}
@@ -116,39 +119,41 @@ export const ProductoDetalle: React.FC<ProductoDetalleProps> = ({ producto, isOp
             </div>
 
             {/* Columna Derecha: Controles de Compra — en mobile va ARRIBA */}
-            <div className="bg-muted/10/80 p-4 sm:p-5 rounded-2xl border border-border/50 h-fit space-y-4 shadow-sm order-1 md:order-2">
+            <div className="bg-muted/40 p-4 sm:p-5 rounded-2xl border border-border/50 h-fit space-y-4 shadow-sm order-1 md:order-2">
               <div>
                 <p className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest mb-2">{t('product.availability')}</p>
                 <div className="flex items-center gap-2 bg-card px-3 py-2 rounded-lg border border-border/50 shadow-sm w-fit">
-                  <span className="relative flex h-2.5 w-2.5">
+                  <span className="relative flex h-2.5 w-2.5" aria-hidden="true">
                     {producto.stock > 0 ? (
                       <>
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-50"></span>
+                        <span className="animate-ping motion-reduce:animate-none absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-50"></span>
                         <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
                       </>
                     ) : (
                       <>
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-40"></span>
+                        <span className="animate-ping motion-reduce:animate-none absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-40"></span>
                         <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
                       </>
                     )}
                   </span>
-                  <span className={`text-xs font-bold uppercase tracking-wider ${producto.stock > 0 ? 'text-green-700' : 'text-red-600'}`}>
+                  <span className={`text-xs font-bold uppercase tracking-wider ${producto.stock > 0 ? 'text-green-700 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
                     {producto.stock > 0 ? t('product.stock_units', { count: producto.stock }) : t('product.out_of_stock')}
                   </span>
                 </div>
               </div>
 
               <div className="space-y-2 pt-3 border-t border-border/60">
-                <label className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest block">{t('product.quantity')}</label>
+                <label htmlFor="cantidad-producto" className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest block">{t('product.quantity')}</label>
                 <div className="flex items-center border border-border rounded-lg bg-card overflow-hidden shadow-sm">
                   <button
                     type="button"
                     className="px-4 py-2.5 bg-muted/10 hover:bg-muted/30 text-muted-foreground font-bold border-r border-border transition-colors disabled:opacity-30 disabled:hover:bg-muted/10"
                     onClick={() => setCantidad(Math.max(1, cantidad - 1))}
                     disabled={cantidad <= 1}
+                    aria-label={t('product.decrease')}
                   >-</button>
                   <input
+                    id="cantidad-producto"
                     type="number"
                     value={cantidad}
                     onChange={(e) => setCantidad(Math.max(1, Math.min(producto.stock, parseInt(e.target.value) || 1)))}
@@ -159,7 +164,9 @@ export const ProductoDetalle: React.FC<ProductoDetalleProps> = ({ producto, isOp
                   <button
                     className="px-4 py-2.5 bg-muted/10 hover:bg-muted/30 text-muted-foreground font-bold border-l border-border transition-colors disabled:opacity-30 disabled:hover:bg-muted/10"
                     onClick={() => setCantidad(Math.min(producto.stock, cantidad + 1))}
+                    type="button"
                     disabled={cantidad >= producto.stock || producto.stock === 0}
+                    aria-label={t('product.increase')}
                   >+</button>
                 </div>
               </div>

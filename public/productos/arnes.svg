@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="Arnés anticaída">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f5f9"/><stop offset="1" stop-color="#dfe6ee"/></linearGradient></defs>
+<rect width="320" height="240" fill="url(#bg)"/>
+<ellipse cx="160" cy="210" rx="104" ry="10" fill="#0f172a" opacity=".12"/>
+<g stroke="#1e293b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+<path d="M120 50l40 70 40-70M110 60l20 140M210 60l-20 140M118 150h84M124 120h72" stroke="#f59e0b" stroke-width="12" fill="none"/>
+<path d="M160 108V86" stroke="#94a3b8" stroke-width="6"/><rect x="148" y="108" width="24" height="24" rx="5" fill="#94a3b8"/>
+</g>
+</svg>

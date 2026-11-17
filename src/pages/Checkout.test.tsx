@@ -108,10 +108,10 @@ describe('Checkout', () => {
     useCartStore.setState({ items: [{ producto: taladro, cantidad: 1 }] });
     renderCheckout();
 
-    await user.click(screen.getByRole('button', { name: '+' }));
+    await user.click(screen.getByRole('button', { name: 'Sumar una unidad' }));
 
     expect(useCartStore.getState().items[0].cantidad).toBe(2);
-    expect(screen.getByRole('button', { name: '+' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Sumar una unidad' })).toBeDisabled();
   });
 
   it('crea la cotización con su detalle, vacía el carrito y vuelve al catálogo', async () => {

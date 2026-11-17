@@ -9,6 +9,7 @@ import { ProductoDetalle } from '../components/ProductoDetalle';
 import { useTranslation } from 'react-i18next';
 import { useFormatCurrency } from '../lib/formatters';
 import { useCartStore } from '../store/cartStore';
+import { imagenProducto } from '../lib/imagenProducto';
 import {
   LoadingScreen,
   PageHeader,
@@ -44,7 +45,7 @@ export const Catalogo: React.FC = () => {
     try {
       setLoading(true);
       const [prodRes, catRes, fabRes] = await Promise.all([
-        supabase.from('productos').select('*, categorias(id, nombre), fabricantes(id, nombre)').eq('activo', true),
+        supabase.from('productos').select('*, categorias(id, nombre, sector), fabricantes(id, nombre)').eq('activo', true),
         supabase.from('categorias').select('*').order('nombre'),
         supabase.from('fabricantes').select('*').order('nombre'),
       ]);
@@ -134,6 +135,7 @@ export const Catalogo: React.FC = () => {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
+            aria-label={t('catalog.all_categories')}
             className={`${selectClasses} w-full sm:w-48 py-2`}
           >
             <option value="all">{t('catalog.all_categories')}</option>
@@ -145,6 +147,7 @@ export const Catalogo: React.FC = () => {
           <select
             value={selectedManufacturer}
             onChange={(e) => setSelectedManufacturer(e.target.value)}
+            aria-label={t('crud.all_manufacturers')}
             className={`${selectClasses} w-full sm:w-48 py-2`}
           >
             <option value="all">{t('crud.all_manufacturers')}</option>
@@ -156,6 +159,7 @@ export const Catalogo: React.FC = () => {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
+            aria-label={t('catalog.sort_by')}
             className={`${selectClasses} w-full sm:w-48 py-2`}
           >
             <option value="default">{t('catalog.sort_by')}</option>
@@ -180,18 +184,31 @@ export const Catalogo: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {productosPaginados.map((prod) => (
               <Card key={prod.id} className="flex flex-col h-full hover:shadow-lg hover:border-primary/30 transition-all duration-300 group overflow-hidden border-border bg-card rounded-2xl shadow-sm">
+                {/* Ilustración del producto: abre la ficha, como el botón «Detalles» */}
+                <button
+                  type="button"
+                  onClick={() => setProductoSeleccionado(prod)}
+                  className="block aspect-[4/3] w-full overflow-hidden bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+                  aria-label={t('product.details_of', { name: prod.nombre })}
+                >
+                  <img
+                    src={imagenProducto(prod)}
+                    alt=""
+                    loading="lazy"
+                    width={320}
+                    height={240}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                  />
+                </button>
                 {/* Header card with category and brand */}
                 <CardHeader className="pb-3 pt-5 px-5">
                   <div className="flex justify-between items-center mb-2.5">
                     <span className="text-[10px] uppercase font-bold tracking-wider bg-primary/5 text-primary px-2 py-0.5 rounded-md border border-primary/20">
-                      {prod.categorias?.nombre || 'General'}
+                      {prod.categorias?.nombre || t('catalog.general')}
                     </span>
-                    <span className="text-[10px] text-muted-foreground/70 font-bold uppercase tracking-wider">{prod.fabricantes?.nombre || 'Marca Blanca'}</span>
+                    <span className="text-[10px] text-muted-foreground/70 font-bold uppercase tracking-wider">{prod.fabricantes?.nombre || t('catalog.white_label')}</span>
                   </div>
-                  <CardTitle
-                    className="text-base font-extrabold text-foreground leading-snug line-clamp-2 hover:text-primary transition-colors cursor-pointer"
-                    onClick={() => setProductoSeleccionado(prod)}
-                  >
+                  <CardTitle className="text-base font-extrabold text-foreground leading-snug line-clamp-2">
                     {prod.nombre}
                   </CardTitle>
                 </CardHeader>
@@ -199,8 +216,8 @@ export const Catalogo: React.FC = () => {
                 {/* Card Content with structured description */}
                 <CardContent className="flex-1 flex flex-col px-5 pb-4">
                   {/* Subtle card-like box for description */}
-                  <div className="bg-slate-50/40 p-3.5 rounded-xl border border-slate-100 text-xs sm:text-sm text-muted-foreground leading-relaxed font-normal line-clamp-3 mb-4 flex-1">
-                    {prod.descripcion || 'Sin descripción disponible para este producto profesional.'}
+                  <div className="bg-muted/40 p-3.5 rounded-xl border border-border/60 text-xs sm:text-sm text-muted-foreground leading-relaxed font-normal line-clamp-3 mb-4 flex-1">
+                    {prod.descripcion || t('catalog.no_description')}
                   </div>
 
                   {/* Visual Divider and Pricing info */}
@@ -208,21 +225,21 @@ export const Catalogo: React.FC = () => {
                     <div className="flex justify-between items-baseline">
                       <p className="text-2xl font-black text-foreground tracking-tight">
                         {formatCurrency(prod.precio)}
-                        <span className="text-[10px] font-bold text-muted-foreground/70 tracking-normal ml-0.5">/ud</span>
+                        <span className="text-[10px] font-bold text-muted-foreground/70 tracking-normal ml-0.5">{t('catalog.per_unit')}</span>
                       </p>
-                      <p className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest">Sin IVA</p>
+                      <p className="text-[10px] font-bold text-muted-foreground/70 uppercase tracking-widest">{t('catalog.vat_excluded')}</p>
                     </div>
 
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="relative flex h-2.5 w-2.5">
+                      <span className="relative flex h-2.5 w-2.5" aria-hidden="true">
                         {prod.stock > 0 ? (
                           <>
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-50"></span>
+                            <span className="animate-ping motion-reduce:animate-none absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-50"></span>
                             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
                           </>
                         ) : (
                           <>
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-40"></span>
+                            <span className="animate-ping motion-reduce:animate-none absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-40"></span>
                             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
                           </>
                         )}
@@ -250,9 +267,10 @@ export const Catalogo: React.FC = () => {
                       useCartStore.getState().addItem(prod, 1);
                       toast.success(`1x ${prod.nombre} ${t('catalog.added_to_cart')}`);
                     }}
-                    title="Añadir 1 al Carrito"
+                    title={t('catalog.add_one')}
+                    aria-label={`${t('catalog.add_one')}: ${prod.nombre}`}
                   >
-                    <ShoppingCart className="w-4 h-4" />
+                    <ShoppingCart className="w-4 h-4" aria-hidden="true" />
                   </Button>
                 </CardFooter>
               </Card>

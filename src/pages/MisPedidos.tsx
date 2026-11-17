@@ -149,7 +149,7 @@ export const MisPedidos: React.FC = () => {
   const getIncidenciaBadge = (cot: any) => {
     if (cot.tipo_incidencia === 'pendiente_decision_cliente') {
       return (
-        <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-full">
+        <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-900 px-2 py-0.5 rounded-full">
           <AlertTriangle className="w-3 h-3" /> {t('mispedidos.action_required')}
         </span>
       );
@@ -163,7 +163,7 @@ export const MisPedidos: React.FC = () => {
     }
     if (cot.tipo_incidencia === 'esperando_stock') {
       return (
-        <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200 px-2 py-0.5 rounded-full">
+        <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-900 px-2 py-0.5 rounded-full">
           <Hourglass className="w-3 h-3" /> {t('mispedidos.backorder')}
         </span>
       );
@@ -208,7 +208,7 @@ export const MisPedidos: React.FC = () => {
               <td className="px-3 sm:px-6 py-3 sm:py-4">
                 <StatusBadge status={cot.estado} />
               </td>
-              <td className="hidden sm:table-cell px-3 sm:px-6 py-3 sm:py-4">{getIncidenciaBadge(cot) || <span className="text-gray-300 text-xs">—</span>}</td>
+              <td className="hidden sm:table-cell px-3 sm:px-6 py-3 sm:py-4">{getIncidenciaBadge(cot) || <span className="text-muted-foreground/50 text-xs">—</span>}</td>
               <td className="px-3 sm:px-6 py-3 sm:py-4 text-right font-black text-foreground text-sm sm:text-base">{formatCurrency(cot.total || 0)}</td>
               <td className="px-3 sm:px-6 py-3 sm:py-4 text-center">
                 <Button variant="outline" size="sm" onClick={() => abrirDetalle(cot)}>
@@ -222,51 +222,51 @@ export const MisPedidos: React.FC = () => {
 
       {/* Modal de Detalle */}
       {cotizacionSeleccionada && (
-        <ModalOverlay onClose={cerrarModal} maxWidth="max-w-3xl">
+        <ModalOverlay onClose={cerrarModal} maxWidth="max-w-3xl" labelledBy="titulo-detalle-pedido">
           <ModalHeader>
             <div className="flex justify-between items-center">
               <div>
-                <h3 className="text-xl sm:text-2xl font-bold text-foreground">{t('mispedidos.detail_title')}</h3>
+                <h3 id="titulo-detalle-pedido" className="text-xl sm:text-2xl font-bold text-foreground">{t('mispedidos.detail_title')}</h3>
                 <p className="text-xs text-muted-foreground/70 mt-1">ID: #{cotizacionSeleccionada.id.split('-')[0]}</p>
               </div>
-              <Button variant="ghost" size="icon" onClick={cerrarModal} className="text-muted-foreground/70">&times;</Button>
+              <Button variant="ghost" size="icon" onClick={cerrarModal} className="text-muted-foreground/70" aria-label={t('common.close')}>&times;</Button>
             </div>
           </ModalHeader>
 
           <ModalBody>
             {cargandoDetalles ? (
               <div className="flex justify-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
               </div>
             ) : (
               <div className="space-y-6">
 
                 {/* Alerta de incidencia — Pendiente decisión */}
                 {esDecisionPendiente && notasStock && (
-                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 space-y-4">
-                    <div className="flex items-center gap-2 text-amber-800 font-bold">
-                      <AlertTriangle className="w-5 h-5 text-amber-600" />
+                  <div className="bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900 rounded-xl p-5 space-y-4">
+                    <div className="flex items-center gap-2 text-amber-800 dark:text-amber-200 font-bold">
+                      <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
                       {t('mispedidos.stock_alert_title')}
                     </div>
-                    <p className="text-sm text-amber-700">{t('mispedidos.stock_alert_desc')}</p>
+                    <p className="text-sm text-amber-700 dark:text-amber-300">{t('mispedidos.stock_alert_desc')}</p>
 
                     {/* Tabla de disponibilidad */}
-                    <div className="overflow-hidden rounded-lg border border-amber-200">
+                    <div className="overflow-hidden rounded-lg border border-amber-200 dark:border-amber-900">
                       <table className="w-full text-xs">
-                        <thead className="bg-amber-100 text-amber-800">
+                        <thead className="bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200">
                           <tr>
                             <th className="px-3 py-2 text-left font-bold uppercase">{t('common.product')}</th>
                             <th className="px-3 py-2 text-center font-bold uppercase">{t('mispedidos.ordered')}</th>
-                            <th className="px-3 py-2 text-center font-bold uppercase text-green-700">{t('mispedidos.available')}</th>
-                            <th className="px-3 py-2 text-center font-bold uppercase text-red-700">{t('mispedidos.missing')}</th>
+                            <th className="px-3 py-2 text-center font-bold uppercase text-green-700 dark:text-green-300">{t('mispedidos.available')}</th>
+                            <th className="px-3 py-2 text-center font-bold uppercase text-red-700 dark:text-red-300">{t('mispedidos.missing')}</th>
                           </tr>
                         </thead>
-                        <tbody className="bg-card divide-y divide-amber-100">
+                        <tbody className="bg-card divide-y divide-amber-100 dark:divide-amber-900">
                           {notasStock.disponible.map((item) => (
                             <tr key={item.producto_id}>
                               <td className="px-3 py-2 font-medium text-card-foreground">{item.nombre}</td>
                               <td className="px-3 py-2 text-center">{item.cantidad_pedida}</td>
-                              <td className="px-3 py-2 text-center font-bold text-green-600">{item.cantidad_disponible}</td>
+                              <td className="px-3 py-2 text-center font-bold text-green-600 dark:text-green-400">{item.cantidad_disponible}</td>
                               <td className="px-3 py-2 text-center font-bold text-red-500">{item.cantidad_faltante}</td>
                             </tr>
                           ))}
@@ -274,7 +274,7 @@ export const MisPedidos: React.FC = () => {
                       </table>
                     </div>
 
-                    <p className="text-xs text-amber-600 font-medium">{t('mispedidos.choose_option')}</p>
+                    <p className="text-xs text-amber-600 dark:text-amber-400 font-medium">{t('mispedidos.choose_option')}</p>
                   </div>
                 )}
 
@@ -305,7 +305,7 @@ export const MisPedidos: React.FC = () => {
                         <th className="px-4 py-3 font-bold text-[10px] uppercase text-right">{t('common.subtotal')}</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-100">
+                    <tbody className="divide-y divide-border/50">
                       {detalles.map((d) => (
                         <tr key={d.id} className="hover:bg-muted/10">
                           <td className="px-4 py-3 font-medium text-foreground">{d.productos?.nombre}</td>

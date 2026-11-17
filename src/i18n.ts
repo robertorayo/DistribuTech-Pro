@@ -6,6 +6,12 @@ const resources = {
   es: {
     translation: {
       "app": {
+        "about_us": "Sobre Nosotros",
+        "account": "Cuenta",
+        "open_menu": "Abrir menú",
+        "cart": "Carrito",
+        "toggle_theme": "Cambiar entre modo claro y oscuro",
+        "language": "Idioma",
         "title": "DistribuTech Pro",
         "catalog": "Catálogo B2B",
         "my_orders": "Mis Pedidos",
@@ -23,6 +29,20 @@ const resources = {
         "auto_approved_toast_staff": "El pedido en espera #{{id}} se ha aprobado automáticamente por entrada de stock."
       },
       "common": {
+        "pagination": "Paginación",
+        "yes": "Sí",
+        "no": "No",
+        "generic_error": "Ha ocurrido un error.",
+        "status_active": "Activo",
+        "status_inactive": "Inactivo",
+        "page_of": "Página {{current}} de {{total}}",
+        "first_page": "Primera página",
+        "previous_page": "Página anterior",
+        "next_page": "Página siguiente",
+        "last_page": "Última página",
+        "go_to_page": "Ir a:",
+        "jump": "Saltar",
+        "page_n": "Página {{n}}",
         "close": "Cerrar",
         "cancel": "Cancelar",
         "delete": "Eliminar",
@@ -45,6 +65,13 @@ const resources = {
         "clear": "Limpiar",
       },
       "catalog": {
+        "vat_excluded": "Sin IVA",
+        "per_unit": "/ud",
+        "general": "General",
+        "white_label": "Marca blanca",
+        "no_description": "Sin descripción disponible.",
+        "add_one": "Añadir 1 al carrito",
+        "image_alt": "Ilustración de {{name}}",
         "title": "Catálogo de Productos",
         "subtitle": "Explora nuestro inventario B2B y añade productos a tu cotización.",
         "search_placeholder": "Buscar por nombre, descripción o modelo...",
@@ -105,6 +132,7 @@ const resources = {
         "waiting_client_or_stock": "En espera de decisión del cliente o de stock"
       },
       "mispedidos": {
+        "load_error": "No se han podido cargar los pedidos:",
         "title": "Mis Pedidos",
         "subtitle": "Consulta el estado de todas tus cotizaciones y pedidos.",
         "no_orders": "No tienes ningún pedido todavía.",
@@ -131,6 +159,10 @@ const resources = {
         "waiting_full_stock_msg": "Has optado por esperar a que haya stock suficiente para servir el pedido completo. Te notificaremos cuando esté disponible."
       },
       "product": {
+        "details_of": "Detalles de {{name}}",
+        "per_unit_excl_vat": "/ud (sin IVA)",
+        "decrease": "Restar una unidad",
+        "increase": "Sumar una unidad",
         "description": "Descripción",
         "specifications": "Especificaciones Técnicas",
         "no_description": "Sin descripción detallada.",
@@ -149,8 +181,6 @@ const resources = {
         "operations_volume": "Volumen Operaciones",
         "client_base": "Base de Clientes",
         "active_catalog": "Catálogo Activo",
-        "mvp_ready": "¡Sistema MVP Operativo! 🚀",
-        "mvp_description": "El motor central de DistribuTech Pro está completamente funcional. Has integrado autenticación, base de datos relacional de productos, triggers automáticos en la nube, un carrito reactivo y paneles de gestión B2B para clientes y comerciales.",
         "active_sales": "Comerciales Activos",
         "product_refs": "Referencias de producto",
         "quotes_issued": "Cotizaciones emitidas",
@@ -163,6 +193,21 @@ const resources = {
         "quotes_status": "Estado de Cotizaciones"
       },
       "auth": {
+        "req_length": "Mín. 6 caracteres",
+        "req_uppercase": "Mayúsculas",
+        "req_number": "Números",
+        "req_special": "Especiales (!@#…)",
+        "strength_very_weak": "Muy débil",
+        "strength_very_strong": "Muy fuerte",
+        "password_min_placeholder": "Mínimo 6 caracteres",
+        "repeat_password_placeholder": "Repite la contraseña",
+        "email_placeholder": "empresa@ejemplo.com",
+        "almost_done": "¡Casi listo!",
+        "confirmation_sent": "Hemos enviado un enlace de confirmación a",
+        "check_inbox": "Revisa tu correo para activar la cuenta.",
+        "show_password": "Mostrar contraseña",
+        "hide_password": "Ocultar contraseña",
+        "demo_account_locked": "Las cuentas de demostración son compartidas: no se puede cambiar su correo ni su contraseña.",
         "b2b_access": "Acceso a plataforma B2B",
         "email": "Correo Electrónico",
         "password": "Contraseña",
@@ -200,6 +245,7 @@ const resources = {
         "session_already_active": "Ya tienes una sesión activa en otro dispositivo o navegador."
       },
       "crud": {
+        "phone_invalid": "El teléfono debe tener exactamente 9 dígitos (ej.: 600000000).",
         "categories": "Gestión de Categorías",
         "categories_desc": "Administra las categorías del catálogo de productos.",
         "new_category": "Nueva Categoría",
@@ -330,6 +376,12 @@ const resources = {
   en: {
     translation: {
       "app": {
+        "about_us": "About Us",
+        "account": "Account",
+        "open_menu": "Open menu",
+        "cart": "Cart",
+        "toggle_theme": "Switch between light and dark mode",
+        "language": "Language",
         "title": "DistribuTech Pro",
         "catalog": "B2B Catalog",
         "my_orders": "My Orders",
@@ -347,6 +399,20 @@ const resources = {
         "auto_approved_toast_staff": "The backordered order #{{id}} has been automatically approved due to new stock."
       },
       "common": {
+        "pagination": "Pagination",
+        "yes": "Yes",
+        "no": "No",
+        "generic_error": "An error occurred.",
+        "status_active": "Active",
+        "status_inactive": "Inactive",
+        "page_of": "Page {{current}} of {{total}}",
+        "first_page": "First page",
+        "previous_page": "Previous page",
+        "next_page": "Next page",
+        "last_page": "Last page",
+        "go_to_page": "Go to:",
+        "jump": "Go",
+        "page_n": "Page {{n}}",
         "close": "Close",
         "cancel": "Cancel",
         "delete": "Delete",
@@ -369,6 +435,13 @@ const resources = {
         "clear": "Clear",
       },
       "catalog": {
+        "vat_excluded": "Excl. VAT",
+        "per_unit": "/unit",
+        "general": "General",
+        "white_label": "Unbranded",
+        "no_description": "No description available.",
+        "add_one": "Add 1 to cart",
+        "image_alt": "Illustration of {{name}}",
         "title": "Product Catalog",
         "subtitle": "Explore our B2B inventory and add products to your quote.",
         "search_placeholder": "Search by name, description or model...",
@@ -429,6 +502,7 @@ const resources = {
         "waiting_client_or_stock": "Waiting for client decision or stock"
       },
       "mispedidos": {
+        "load_error": "Could not load your orders:",
         "title": "My Orders",
         "subtitle": "Check the status of all your quotes and orders.",
         "no_orders": "You have no orders yet.",
@@ -455,6 +529,10 @@ const resources = {
         "waiting_full_stock_msg": "You have chosen to wait until there is enough stock to fulfill the complete order. We will notify you when available."
       },
       "product": {
+        "details_of": "Details of {{name}}",
+        "per_unit_excl_vat": "/unit (excl. VAT)",
+        "decrease": "Decrease quantity",
+        "increase": "Increase quantity",
         "description": "Description",
         "specifications": "Technical Specifications",
         "no_description": "No detailed description.",
@@ -473,8 +551,6 @@ const resources = {
         "operations_volume": "Operations Volume",
         "client_base": "Client Base",
         "active_catalog": "Active Catalog",
-        "mvp_ready": "MVP System Operational! 🚀",
-        "mvp_description": "The core engine of DistribuTech Pro is fully functional. You have integrated authentication, relational product database, automatic cloud triggers, reactive cart and B2B management panels for clients and sales agents.",
         "active_sales": "Active Sales Agents",
         "product_refs": "Product references",
         "quotes_issued": "Quotes issued",
@@ -487,6 +563,21 @@ const resources = {
         "quotes_status": "Quote Status"
       },
       "auth": {
+        "req_length": "Min. 6 characters",
+        "req_uppercase": "Uppercase",
+        "req_number": "Numbers",
+        "req_special": "Special (!@#…)",
+        "strength_very_weak": "Very weak",
+        "strength_very_strong": "Very strong",
+        "password_min_placeholder": "At least 6 characters",
+        "repeat_password_placeholder": "Repeat the password",
+        "email_placeholder": "company@example.com",
+        "almost_done": "Almost done!",
+        "confirmation_sent": "We have sent a confirmation link to",
+        "check_inbox": "Check your inbox to activate your account.",
+        "show_password": "Show password",
+        "hide_password": "Hide password",
+        "demo_account_locked": "Demo accounts are shared: their email and password cannot be changed.",
         "b2b_access": "B2B Platform Access",
         "email": "Email Address",
         "password": "Password",
@@ -524,6 +615,7 @@ const resources = {
         "session_already_active": "You already have an active session on another device or browser."
       },
       "crud": {
+        "phone_invalid": "The phone number must have exactly 9 digits (e.g. 600000000).",
         "categories": "Category Management",
         "categories_desc": "Manage product catalog categories.",
         "new_category": "New Category",
@@ -658,7 +750,6 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: 'es',
     fallbackLng: 'es',
     supportedLngs: ['es', 'en'],
     nonExplicitSupportedLngs: true,
@@ -671,5 +762,13 @@ i18n
       escapeValue: false,
     },
   });
+
+// Sin `lng` fijo: el detector lee el idioma guardado en localStorage y, si no hay, se usa el español.
+// El atributo lang del documento sigue al idioma para lectores de pantalla y traducción del navegador.
+const actualizarLangDocumento = (lng: string) => {
+  if (typeof document !== 'undefined') document.documentElement.lang = lng.startsWith('en') ? 'en' : 'es';
+};
+actualizarLangDocumento(i18n.resolvedLanguage ?? 'es');
+i18n.on('languageChanged', actualizarLangDocumento);
 
 export default i18n;

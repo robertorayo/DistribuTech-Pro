@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-label="Depósito de membrana">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f5f9"/><stop offset="1" stop-color="#dfe6ee"/></linearGradient></defs>
+<rect width="320" height="240" fill="url(#bg)"/>
+<ellipse cx="160" cy="210" rx="104" ry="10" fill="#0f172a" opacity=".12"/>
+<g stroke="#1e293b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+<rect x="112" y="50" width="96" height="140" rx="44" fill="#dc2626"/>
+<path d="M126 80c20-10 48-10 68 0" stroke="#fca5a5" stroke-width="5" fill="none"/>
+<rect x="148" y="188" width="24" height="16" fill="#cbd5e1"/><rect x="142" y="200" width="36" height="8" rx="3" fill="#94a3b8"/>
+<rect x="152" y="38" width="16" height="14" rx="3" fill="#94a3b8"/>
+</g>
+</svg>
