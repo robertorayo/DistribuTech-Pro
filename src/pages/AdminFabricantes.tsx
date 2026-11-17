@@ -246,9 +246,9 @@ export const AdminFabricantes: React.FC = () => {
       />
 
       {modalOpen && (
-        <ModalOverlay onClose={() => setModalOpen(false)}>
+        <ModalOverlay onClose={() => setModalOpen(false)} labelledBy="titulo-formulario">
           <ModalHeader>
-            <h3 className="text-xl font-bold text-foreground">
+            <h3 id="titulo-formulario" className="text-xl font-bold text-foreground">
               {editando ? t('crud.edit_manufacturer') : t('crud.new_manufacturer')}
             </h3>
           </ModalHeader>

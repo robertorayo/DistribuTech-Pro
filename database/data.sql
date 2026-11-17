@@ -25,19 +25,19 @@ INSERT INTO categorias (id, nombre, descripcion, sector) VALUES
   ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a19', 'Depósitos y Almacenaje',     'Depósitos de agua, silos y contenedores industriales',        'industrial');
 
 -- ==============================================================================
--- 2. FABRICANTES (10 fabricantes)
+-- 2. FABRICANTES (10 fabricantes ficticios; dominio reservado .example)
 -- ==============================================================================
 INSERT INTO fabricantes (id, nombre, contacto, telefono, email, direccion) VALUES
-  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b10', 'Bosch Professional',     'Ventas España',        '911234567', 'distribucion@bosch.es',       'C/ Burgos 12, 28036 Madrid'),
-  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b11', 'Roca Sanitarios',        'Centro B2B',           '935678901', 'profesionales@roca.es',       'Av. Diagonal 514, 08006 Barcelona'),
-  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b12', 'Hunter Irrigation',      'Soporte Técnico',      '965551234', 'b2b@hunter-europe.com',       'Pol. Ind. Fuente del Jarro, Valencia'),
-  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b13', 'Grundfos Iberia',        'Departamento Técnico', '914445566', 'ventas@grundfos.es',          'Pol. Ind. Alcobendas, Madrid'),
-  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b14', 'Laufen España',          'Atención Profesional', '932109876', 'pro@laufen.es',               'C/ Còrsega 289, 08008 Barcelona'),
-  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b15', 'Stanley Black & Decker', 'Canal Profesional',    '917654321', 'profesional@stanleybds.es',   'C/ Orense 34, 28020 Madrid'),
-  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b16', 'Siemens Building',       'Automatización',       '936789012', 'building@siemens.es',         'Av. Tibidabo 17, 08022 Barcelona'),
-  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b17', 'Jimten Fontanería',      'Ventas Directas',      '965112233', 'ventas@jimten.es',            'Pol. Ind. Quart, 46930 Valencia'),
-  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b18', 'Gewiss Electro',         'Distribución',         '918877665', 'ventas@gewiss.es',            'P. Empresarial Omega, Alcobendas'),
-  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b19', 'Pladur Knauf',           'Soporte Obra',         '913456789', 'tecnico@pladur.es',           'Av. de la Industria 49, Alcobendas');
+  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b10', 'Voltek Herramientas',  'Canal Profesional',    NULL, 'ventas@voltek.example',          'Pol. Ind. Las Rozas, Madrid'),
+  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b11', 'Aquanova Sanitarios',  'Atención Profesional', NULL, 'profesionales@aquanova.example', 'Pol. Ind. Can Calderón, Barcelona'),
+  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b12', 'Riegotec',             'Soporte Técnico',      NULL, 'b2b@riegotec.example',           'Pol. Ind. Fuente del Jarro, Valencia'),
+  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b13', 'Hidrobomba Ibérica',   'Departamento Técnico', NULL, 'ventas@hidrobomba.example',      'Pol. Ind. Coslada, Madrid'),
+  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b14', 'Cerámicas Lumen',      'Atención Profesional', NULL, 'pro@ceramicaslumen.example',     'Pol. Ind. El Colomer, Castellón'),
+  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b15', 'Ferrex Tools',         'Canal Profesional',    NULL, 'profesional@ferrex.example',     'Pol. Ind. Júndiz, Vitoria'),
+  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b16', 'Termalia Clima',       'Departamento Técnico', NULL, 'ventas@termalia.example',        'Pol. Ind. Malpica, Zaragoza'),
+  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b17', 'Fluxa Fontanería',     'Ventas Directas',      NULL, 'ventas@fluxa.example',           'Pol. Ind. Quart, Valencia'),
+  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b18', 'Electra Norte',        'Distribución',         NULL, 'ventas@electranorte.example',    'Pol. Ind. Asipo, Asturias'),
+  ('b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b19', 'Segurpro EPI',         'Soporte Obra',         NULL, 'tecnico@segurpro.example',       'Pol. Ind. Alcobendas, Madrid');
 
 -- ==============================================================================
 -- 3. PRODUCTOS (55 productos)
@@ -52,7 +52,7 @@ VALUES
  '{"potencia":"1000W","caudal_max":"18000 l/h","altura_max":"10m","paso_solidos":"35mm","inmersion_max":"7m"}',
  135.00, 21.00, 12, true),
 
-('Bomba Presurizadora Grundfos CM5-5',
+('Bomba Presurizadora Centrífuga 750W',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a10', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b13',
  'Bomba centrífuga de alta eficiencia para instalaciones domésticas e industriales ligeras.',
  '{"potencia":"750W","caudal_max":"5 m³/h","altura_max":"55m","conexion":"G 1 1/4\"","ip":"IP54"}',
@@ -64,7 +64,7 @@ VALUES
  '{"potencia":"650W","caudal_max":"3600 l/h","altura_max":"45m","profundidad_aspir":"9m"}',
  89.50, 21.00, 20, true),
 
-('Bomba Dosificadora Grundfos DDE 15-4',
+('Bomba Dosificadora de Diafragma 15 l/h',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a10', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b13',
  'Dosificadora eléctrica de diafragma para tratamiento de agua y fertilización.',
  '{"caudal":"15 l/h","presion_max":"4 bar","comunicacion":"4-20mA","material_cabezal":"PP"}',
@@ -77,7 +77,7 @@ VALUES
  312.00, 21.00, 6, true),
 
 ('Depósito Membrana 24L Anti-golpe Ariete',
- 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a10', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b17',
+ 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a10', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b13',
  'Depósito de expansión con membrana de butilo. Para grupos de presión.',
  '{"capacidad":"24L","presion_max":"10 bar","conexion":"3/4\"","membrana":"butilo"}',
  48.90, 21.00, 35, true),
@@ -88,7 +88,7 @@ VALUES
  '{"potencia":"0.75kW","caudal":"3 m³/h","deposito":"24L","presostato_incluido":true}',
  289.00, 21.00, 9, true),
 
-('Bomba Circuladora Alpha1 L 25-40',
+('Bomba Circuladora 25-40 Clase A',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a10', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b13',
  'Circuladora para calefacción y ACS. Ultra-eficiente clase A.',
  '{"potencia":"5-34W","altura_max":"4m","caudal_max":"3.5 m³/h","conexion":"1\"","clase_energia":"A"}',
@@ -138,74 +138,74 @@ VALUES
  3.90, 21.00, 400, true),
 
 -- ── HERRAMIENTA ELÉCTRICA (9 productos) ──────────────────────────────────────
-('Taladro Atornillador Bosch GSR 18V-55',
+('Taladro Atornillador 18V',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b10',
  'Taladro atornillador profesional 18V con dos baterías de 2Ah y maletín.',
  '{"voltaje":"18V","par_max":"55Nm","rpm_max":"1900","bateria":"2x2.0Ah","peso":"1.2kg"}',
  195.50, 21.00, 45, true),
 
-('Amoladora Angular Bosch GWS 18V-10',
+('Amoladora Angular 18V 125mm',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b10',
  'Amoladora angular 18V sin cable. Disco 125mm. Incluye 1 batería 5Ah.',
  '{"voltaje":"18V","disco":"125mm","rpm_max":"9000","bateria":"5Ah","peso":"2.0kg"}',
  224.00, 21.00, 30, true),
 
-('Sierra Circular Bosch GKS 18V-57',
+('Sierra Circular 18V 57mm',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b10',
  'Sierra circular de batería con profundidad de corte 57mm a 90°.',
  '{"voltaje":"18V","disco":"165mm","corte_90":"57mm","corte_45":"40mm","bateria":"4Ah"}',
  278.00, 21.00, 18, true),
 
-('Martillo Demoledor SDS-Max Bosch GSH 16-30',
+('Martillo Demoledor SDS-Max 1750W',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b10',
  'Martillo demoledor de 1750W para trabajos intensivos en hormigón y mampostería.',
  '{"potencia":"1750W","energia_golpe":"41J","golpes":"900-1700/min","peso":"16.5kg"}',
  649.00, 21.00, 7, true),
 
-('Nivel Láser Autonivelante Bosch GLL 3-80',
+('Nivel Láser Autonivelante 3 Líneas',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b10',
  'Nivel láser de 3 líneas con rango de 80m y base magnética incluida.',
  '{"lineas":"3","alcance":"80m","precision":"±0.1mm/m","autonivelacion":"±4°","ip":"IP 54"}',
  385.00, 21.00, 12, true),
 
-('Caladora Pendular Stanley FME340K',
- 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b15',
+('Caladora Pendular 18V',
+ 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b10',
  'Caladora 18V con 4 posiciones de movimiento pendular y guía láser.',
  '{"voltaje":"18V","carrera":"26mm","movimiento_pendular":"4 pos","capacidad_madera":"80mm"}',
  164.00, 21.00, 25, true),
 
-('Lijadora Orbital Stanley FME650K',
- 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b15',
+('Lijadora Orbital 18V',
+ 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b10',
  'Lijadora orbital aleatoria de 18V. Bolsa de polvo 10L incluida.',
  '{"voltaje":"18V","diametro_disco":"125mm","orbita":"2.8mm","rpm":"8000-12000"}',
  142.00, 21.00, 20, true),
 
-('Compresor Silencioso 24L 1.5HP Bosch',
+('Compresor Silencioso 24L 1.5HP',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b10',
  'Compresor silencioso sin aceite 24L. Ideal para taller y obra.',
  '{"potencia":"1.1kW","deposito":"24L","caudal":"105 l/min","presion_max":"8 bar","ruido":"69dB"}',
  219.00, 21.00, 14, true),
 
 ('Soldadora Inverter MIG 180A',
- 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b15',
+ 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b10',
  'Soldadora inverter MIG/MAG 180A con antorcha, pinza y cable 3m.',
  '{"corriente":"180A","ciclo_trabajo":"60%","tension":"230V","electrodo":"0.6-0.9mm"}',
  345.00, 21.00, 10, true),
 
 -- ── SISTEMAS DE RIEGO (7 productos) ──────────────────────────────────────────
-('Programador Hunter X-Core 4 Estaciones',
+('Programador de Riego 4 Estaciones',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b12',
  'Programador de riego residencial interior/exterior. 3 programas independientes.',
  '{"estaciones":4,"programas":3,"tipo":"fijo","montaje":"muro","ip":"IP54"}',
  112.75, 21.00, 25, true),
 
-('Programador Hunter Pro-HC 12 Estaciones WiFi',
+('Programador de Riego WiFi 12 Estaciones',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b12',
  'Programador inteligente 12 estaciones con control por app y ajuste climático.',
  '{"estaciones":12,"conectividad":"WiFi","app":"Hydrawise","montaje":"muro","evapotranspiracion":true}',
  298.00, 21.00, 15, true),
 
-('Aspersor Hunter PGP-ADJ 0-360°',
+('Aspersor de Turbina Ajustable 0-360°',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b12',
  'Aspersor emergente de turbina con arco y radio ajustables. Filtro integrado.',
  '{"arco":"0-360°","radio":"8-15m","presion":"2-5 bar","elevacion":"114mm"}',
@@ -229,7 +229,7 @@ VALUES
  '{"diametro":"32mm","espesor":"2.9mm","longitud":"50m","presion":"PN6","color":"negro"}',
  42.00, 21.00, 90, true),
 
-('Electroválvula Hunter PGV-100-MM 1"',
+('Electroválvula de Riego 1" 24VAC',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b12',
  'Electroválvula de plástico 1" con regulador de caudal integrado. 24VAC.',
  '{"conexion":"1 pulgada","voltaje":"24VAC","presion":"1-10 bar","caudal":"0.5-7.5 m³/h"}',
@@ -273,25 +273,25 @@ VALUES
  67.50, 21.00, 35, true),
 
 -- ── GRIFERÍAS Y SANITARIOS (5 productos) ─────────────────────────────────────
-('Grifo Monomando Lavabo Roca Esmai',
+('Grifo Monomando de Lavabo Cromado',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b11',
  'Grifo monomando de lavabo con cartucho cerámico de 35mm. Acabado cromo brillo.',
  '{"conexion":"1/2 pulgada","cartucho":"35mm","acabado":"cromo","certificacion":"AENOR"}',
  89.90, 21.00, 40, true),
 
-('Grifería Termoestática Ducha Roca T-1000',
+('Grifería Termostática de Ducha Empotrada',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b11',
  'Termostato de ducha empotrado con antescalda 38°C. Incluye teclas y cuerpo.',
  '{"conexiones":"1/2 pulgada","temp_max":"38°C","caudal_max":"20 l/min","acabado":"cromo"}',
  345.00, 21.00, 12, true),
 
-('Lavabo Suspendido Laufen Pro 60cm Blanco',
+('Lavabo Suspendido 60cm Blanco',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b14',
  'Lavabo de porcelana vitrificada suspendido. Sin agujero de grifo. Con LCC.',
  '{"largo":"60cm","ancho":"48cm","material":"ceramica","montaje":"suspendido","lcc":true}',
  249.00, 21.00, 18, true),
 
-('Inodoro Compacto Roca Dama Sentado Plus',
+('Inodoro Compacto Descarga Dual',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b11',
  'Inodoro compacto con salida al suelo. Cisterna baja incluida. Descarga dual 3/6L.',
  '{"salida":"suelo","cisterna":"baja","descarga":"3_6L","asiento":"no_incluido"}',
@@ -304,13 +304,13 @@ VALUES
  389.00, 21.00, 10, true),
 
 -- ── CALEFACCIÓN Y ACS (5 productos) ──────────────────────────────────────────
-('Termo Eléctrico Junkers Elacell 80L',
+('Termo Eléctrico 80L',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a16', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b16',
  'Acumulador eléctrico vertical 80L. Clase energética B. Ánodo de magnesio.',
  '{"capacidad":"80L","potencia":"1.5kW","temperatura_max":"75°C","clase_energia":"B","presion_max":"6 bar"}',
  289.00, 21.00, 20, true),
 
-('Caldera de Condensación Siemens 24kW',
+('Caldera de Condensación 24kW',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a16', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b16',
  'Caldera mural de condensación gas natural 24kW para calefacción y ACS.',
  '{"potencia":"24kW","rendimiento":"109%","clase_energia":"A","combustible":"gas_natural","display":"digital"}',
@@ -328,32 +328,32 @@ VALUES
  '{"diametro":"16mm","espesor":"2mm","longitud":"200m","barrera_oxigeno":true,"presion":"6 bar"}',
  148.00, 21.00, 25, true),
 
-('Termostato Programable Siemens RDG160',
+('Termostato Programable Semanal',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a16', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b16',
  'Termostato de habitación programable semanal. Pantalla retroiluminada.',
  '{"programacion":"semanal","display":"retroiluminado","comunicacion":"KNX","rango":"5-30°C"}',
  98.00, 21.00, 50, true),
 
 -- ── HERRAMIENTA MANUAL (4 productos) ─────────────────────────────────────────
-('Llave Inglesa Ajustable 12" Stanley',
+('Llave Inglesa Ajustable 12"',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a17', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b15',
  'Llave inglesa de acero al cromo-vanadio con mango antideslizante.',
  '{"longitud":"300mm","apertura_max":"40mm","material":"Cr-V","acabado":"cromado"}',
  28.50, 21.00, 80, true),
 
-('Juego 38 piezas Llaves de Vaso Stanley',
+('Juego de Llaves de Vaso 38 Piezas',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a17', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b15',
  'Maletín con juego de llaves de vaso métrico 1/2" y 3/8". Trinquete reversible.',
  '{"piezas":38,"cuadrados":"1/2 y 3/8","material":"Cr-V","maletín":"incluido"}',
  89.00, 21.00, 35, true),
 
-('Alicates Presión Knipex 200mm',
+('Alicates de Presión 200mm',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a17', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b15',
  'Alicates de presión con mordaza plana. Acero especial templado al aceite.',
  '{"longitud":"200mm","apertura_max":"50mm","material":"acero_especial","mangos":"PVC bicolor"}',
  42.00, 21.00, 60, true),
 
-('Metro Láser 50m Stanley TLM165',
+('Metro Láser 50m',
  'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a17', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b15',
  'Medidor láser compacto hasta 50m. Cálculo de área, volumen y pitágoras.',
  '{"alcance":"50m","precision":"±1.5mm","funciones":"area_volumen_pitagoras","ip":"IP54"}',
@@ -392,13 +392,13 @@ VALUES
  289.00, 21.00, 12, true),
 
 ('Depósito Vertical Industrial PEHD 1000L',
- 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a19', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b17',
+ 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a19', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b19',
  'Depósito vertical de PEHD de alta densidad. Para productos químicos y agua.',
  '{"capacidad":"1000L","material":"PEHD","forma":"vertical","bocas":"3","palet_incluido":false}',
  498.00, 21.00, 6, true),
 
 ('Contenedor GRG 1000L IBC Inox',
- 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a19', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b17',
+ 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a19', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b19',
  'GRG/IBC de acero inoxidable 316L con jaula. Apto para alimentario y químicos.',
  '{"capacidad":"1000L","material":"AISI 316L","valvula":"DN50","palet":"acero","apto_alimentario":true}',
  1890.00, 21.00, 3, true),
@@ -410,7 +410,7 @@ VALUES
  168.00, 21.00, 22, true),
 
 ('Bidón Metálico 200L Homologado ADR',
- 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a19', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b17',
+ 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a19', 'b0eebc99-9c0b-4ef8-bb6d-6bb9bd380b19',
  'Bidón metálico estándar 200L homologado para transporte de mercancías peligrosas.',
  '{"capacidad":"200L","material":"acero","homologacion":"ADR","cierre":"boca_ancha","recubrimiento":"epoxi"}',
  78.00, 21.00, 30, true);

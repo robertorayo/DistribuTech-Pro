@@ -379,9 +379,9 @@ export const AdminProductos: React.FC = () => {
       />
 
       {modalOpen && (
-        <ModalOverlay onClose={() => setModalOpen(false)} maxWidth="max-w-2xl">
+        <ModalOverlay onClose={() => setModalOpen(false)} maxWidth="max-w-2xl" labelledBy="titulo-formulario">
           <ModalHeader>
-            <h3 className="text-xl font-bold text-foreground">
+            <h3 id="titulo-formulario" className="text-xl font-bold text-foreground">
               {editando ? t('crud.edit_product') : t('crud.new_product')}
             </h3>
           </ModalHeader>

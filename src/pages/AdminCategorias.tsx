@@ -242,9 +242,9 @@ export const AdminCategorias: React.FC = () => {
       />
 
       {modalOpen && (
-        <ModalOverlay onClose={() => setModalOpen(false)}>
+        <ModalOverlay onClose={() => setModalOpen(false)} labelledBy="titulo-formulario">
           <ModalHeader>
-            <h3 className="text-xl font-bold text-foreground">
+            <h3 id="titulo-formulario" className="text-xl font-bold text-foreground">
               {editando ? t('crud.edit_category') : t('crud.new_category')}
             </h3>
           </ModalHeader>

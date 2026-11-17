@@ -51,7 +51,7 @@ El acceso a cada ruta se controla en el cliente con `PrivateRoute`, y los datos,
 
 ## Base de datos
 
-El esquema completo está en [`database/schema.sql`](database/schema.sql): 14 tablas con RLS activado, 22 políticas, funciones, triggers e índices, incluido uno de búsqueda de texto completo en español sobre los productos. Los datos de ejemplo (categorías, fabricantes y productos) están en [`database/data.sql`](database/data.sql).
+El esquema completo está en [`database/schema.sql`](database/schema.sql): 14 tablas con RLS activado, 22 políticas, funciones, triggers e índices, incluido uno de búsqueda de texto completo en español sobre los productos. Los datos de ejemplo (categorías, fabricantes y productos) están en [`database/data.sql`](database/data.sql); los fabricantes son ficticios.
 
 Tablas principales: `usuarios` (extiende `auth.users` con rol, empresa y datos de contacto), `empresas`, `categorias`, `fabricantes`, `productos` (con `especificaciones_tecnicas JSONB`), `cotizaciones` con `detalle_cotizacion`, y `pedidos` con `detalle_pedido`, `pedido_historial_estados` y `facturas`.
 

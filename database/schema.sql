@@ -541,23 +541,35 @@ WITH CHECK (usuario_id = auth.uid());
 
 -- Aprueba una cotización comprobando stock atómicamente.
 -- Si hay stock: descuenta y aprueba. Si no: marca incidencia para el cliente.
-CREATE OR REPLACE FUNCTION aprobar_cotizacion(p_cotizacion_id UUID)
-RETURNS JSONB
-LANGUAGE plpgsql
-SECURITY DEFINER
-AS $$
+CREATE OR REPLACE FUNCTION public.aprobar_cotizacion(p_cotizacion_id uuid)
+ RETURNS jsonb
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path = public
+AS $function$
 DECLARE
   v_detalle RECORD;
   v_todos_ok BOOLEAN := true;
   v_disponible JSONB := '[]'::JSONB;
   v_faltante JSONB := '[]'::JSONB;
+  v_estado TEXT;
   v_tipo_incidencia VARCHAR;
 BEGIN
-  IF get_my_rol() NOT IN ('admin', 'comercial') THEN
+  IF COALESCE(get_my_rol(), '') NOT IN ('admin', 'comercial') THEN
     RAISE EXCEPTION 'Sin permisos para aprobar cotizaciones';
   END IF;
 
-  SELECT tipo_incidencia INTO v_tipo_incidencia FROM cotizaciones WHERE id = p_cotizacion_id;
+  SELECT estado::TEXT, tipo_incidencia INTO v_estado, v_tipo_incidencia
+  FROM cotizaciones WHERE id = p_cotizacion_id
+  FOR UPDATE;
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'Cotización no encontrada';
+  END IF;
+  IF v_estado <> 'pendiente' THEN
+    RAISE EXCEPTION 'Solo se puede aprobar una cotización pendiente (estado actual: %)', v_estado;
+  END IF;
+
+  -- Comprobar si la cotización ya está en espera de stock
   IF v_tipo_incidencia IN ('esperando_stock', 'esperando_stock_completo', 'pendiente_decision_cliente') THEN
     RETURN jsonb_build_object('resultado', 'ya_en_espera', 'tiene_incidencia', true);
   END IF;
@@ -608,7 +620,7 @@ BEGIN
       'disponible', v_disponible, 'faltante', v_faltante);
   END IF;
 END;
-$$;
+$function$;
 
 -- Divide la cotización en: Pedido A (stock disponible, aprobado) + Pedido B (sin stock, en espera).
 CREATE OR REPLACE FUNCTION dividir_cotizacion(p_cotizacion_id UUID)
@@ -813,7 +825,7 @@ REVOKE EXECUTE ON FUNCTION public.procesar_pedidos_en_espera() FROM authenticate
 
 -- aprobar_cotizacion compara "get_my_rol() NOT IN (...)": con NULL no lanza error. Al quitar
 -- el EXECUTE a anon ya no hay forma de llegar con rol NULL (todo usuario de Auth tiene fila
--- en usuarios por handle_new_user). Queda pendiente cambiarlo a COALESCE en su cuerpo.
+-- en usuarios por handle_new_user). El COALESCE se añadió después (2026-11-18_aprobar_cotizacion.sql).
 GRANT EXECUTE ON FUNCTION
   public.aprobar_cotizacion(UUID),
   public.dividir_cotizacion(UUID),
