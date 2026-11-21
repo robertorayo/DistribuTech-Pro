@@ -18,11 +18,6 @@
 
 Plataforma B2B de cotizaciones para un distribuidor de material técnico (ferretería, fontanería, riego, baño e industrial). Los clientes arman un carrito y lo envían como cotización, los comerciales la revisan y la aprueban comprobando el stock, y el administrador gestiona el catálogo y ve el estado del negocio.
 
-<p align="center">
-  <img src="docs/img/dashboard.png" alt="Panel de administración con ingresos aprobados, cotizaciones emitidas, clientes, catálogo activo y gráficas" width="90%">
-  <br><sub>Panel de administración</sub>
-</p>
-
 ## Probar la demo
 
 Es un entorno público con cuentas de prueba. Cada enlace abre el acceso con los datos ya escritos; solo hay que pulsar «Iniciar sesión».
@@ -66,16 +61,6 @@ Es un entorno público con cuentas de prueba. Cada enlace abre el acceso con los
     </td>
   </tr>
 </table>
-
-<p align="center">
-  <img src="public/productos/taladro.svg" alt="Taladro" width="15%">
-  <img src="public/productos/grifo.svg" alt="Grifo" width="15%">
-  <img src="public/productos/aspersor.svg" alt="Aspersor" width="15%">
-  <img src="public/productos/lavabo.svg" alt="Lavabo" width="15%">
-  <img src="public/productos/compresor.svg" alt="Compresor" width="15%">
-  <img src="public/productos/casco.svg" alt="Casco" width="15%">
-  <br><sub>Algunas de las ilustraciones del catálogo (<code>public/productos/</code>)</sub>
-</p>
 
 ### Control de stock al aprobar
 
