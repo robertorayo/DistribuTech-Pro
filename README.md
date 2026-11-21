@@ -83,18 +83,18 @@ La aprobación se hace en la base de datos y comprueba el stock de forma atómic
 
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'primaryColor':'#172554','primaryTextColor':'#f8fafc','primaryBorderColor':'#3b82f6','lineColor':'#60a5fa','secondaryColor':'#0f172a','tertiaryColor':'#0f172a','fontFamily':'Segoe UI, Arial, sans-serif'}}}%%
-flowchart LR
-    A([🛒 Carrito]) --> B[Cotización<br/>pendiente]
-    B --> C{El comercial<br/>la revisa}
-    C -- rechaza --> R([Rechazada])
-    C -- aprueba --> S{¿Hay stock?<br/>aprobar_cotizacion}
-    S -- sí --> OK([✅ Aprobada])
-    S -- no --> E{El cliente<br/>elige}
-    E -- dividir --> D[Parte aprobada<br/>y parte en espera]
-    E -- esperar --> W[En espera]
-    E -- cancelar --> R
+flowchart TD
+    A([🛒 El cliente envía el carrito]) --> B[Cotización pendiente]
+    B --> C{El comercial la revisa}
+    C -->|" rechaza "| R([Rechazada])
+    C -->|" aprueba "| S{"¿Hay stock? · aprobar_cotizacion"}
+    S -->|" sí "| OK([✅ Aprobada])
+    S -->|" no "| E{El cliente elige}
+    E -->|" cancelar "| R
+    E -->|" dividir "| D[Parte aprobada y parte en espera]
+    E -->|" esperar "| W[En espera]
     D --> W
-    W -- "sube el stock<br/>(trigger)" --> OK
+    W -->|" sube el stock · trigger "| OK
 ```
 
 ## Roles
