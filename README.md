@@ -1,14 +1,27 @@
-# DistribuTech Pro
+<p align="center">
+  <img src="docs/img/banner.svg" alt="DistribuTech Pro: plataforma B2B de cotizaciones con control de stock" width="100%">
+</p>
+
+<p align="center">
+  <a href="https://github.com/robertorayo/DistribuTech-Pro/actions/workflows/ci.yml"><img src="https://github.com/robertorayo/DistribuTech-Pro/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI"></a>
+  <a href="https://react.dev/"><img src="https://img.shields.io/badge/React_18-0f172a?style=flat-square&logo=react&logoColor=61DAFB" alt="React 18"></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript_5-0f172a?style=flat-square&logo=typescript&logoColor=3178C6" alt="TypeScript 5"></a>
+  <a href="https://vitejs.dev/"><img src="https://img.shields.io/badge/Vite_5-0f172a?style=flat-square&logo=vite&logoColor=a78bfa" alt="Vite 5"></a>
+  <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind_3-0f172a?style=flat-square&logo=tailwindcss&logoColor=38B2AC" alt="Tailwind CSS 3"></a>
+  <a href="https://supabase.com/"><img src="https://img.shields.io/badge/Supabase-PostgreSQL_con_RLS-0f172a?style=flat-square&logo=supabase&logoColor=3ECF8E" alt="Supabase"></a>
+  <img src="https://img.shields.io/badge/Vercel-0f172a?style=flat-square&logo=vercel&logoColor=white" alt="Vercel">
+</p>
+
+<p align="center">
+  <a href="https://distributech-pro.vercel.app"><img src="https://img.shields.io/badge/Ver_la_demo-distributech--pro.vercel.app-2563eb?style=for-the-badge&labelColor=0f172a" alt="Ver la demo"></a>
+</p>
 
 Plataforma B2B de cotizaciones para un distribuidor de material técnico (ferretería, fontanería, riego, baño e industrial). Los clientes arman un carrito y lo envían como cotización, los comerciales la revisan y la aprueban comprobando el stock, y el administrador gestiona el catálogo y ve el estado del negocio.
 
-[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat&logo=react&logoColor=white)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=flat&logo=supabase&logoColor=white)](https://supabase.com/)
-
-**Demo:** <https://distributech-pro.vercel.app>
+<p align="center">
+  <img src="docs/img/dashboard.png" alt="Panel de administración con ingresos aprobados, cotizaciones emitidas, clientes, catálogo activo y gráficas" width="90%">
+  <br><sub>Panel de administración</sub>
+</p>
 
 ## Probar la demo
 
@@ -16,38 +29,93 @@ Es un entorno público con cuentas de prueba. Cada enlace abre el acceso con los
 
 | Rol | Entrar | Correo | Contraseña |
 | --- | --- | --- | --- |
-| Cliente | [abrir](https://distributech-pro.vercel.app/login?demo=cliente) | `cliente@distributechpro.com` | `Cliente1324!` |
-| Comercial | [abrir](https://distributech-pro.vercel.app/login?demo=comercial) | `comercial1@distributechpro.com` | `Comercial1234!` |
-| Administrador | [abrir](https://distributech-pro.vercel.app/login?demo=admin) | `admin@distributechpro.com` | `Admin1234!` |
+| 🛒 Cliente | [abrir](https://distributech-pro.vercel.app/login?demo=cliente) | `cliente@distributechpro.com` | `Cliente1324!` |
+| 💼 Comercial | [abrir](https://distributech-pro.vercel.app/login?demo=comercial) | `comercial1@distributechpro.com` | `Comercial1234!` |
+| 🛠️ Administrador | [abrir](https://distributech-pro.vercel.app/login?demo=admin) | `admin@distributechpro.com` | `Admin1234!` |
 
-Los datos los comparte cualquiera que use la demo, así que pueden haber cambiado.
+> [!NOTE]
+> Los datos los comparte cualquiera que use la demo, así que pueden haber cambiado.
 
 ## Qué hace
 
-- **Catálogo:** búsqueda por texto, filtros por categoría y fabricante, ordenación, paginación y ficha de producto con especificaciones técnicas en `JSONB`. Cada producto se muestra con una ilustración propia en SVG (`public/productos/`), elegida según el tipo de producto o su categoría; no se usan fotos de marcas.
-- **Carrito y cotización:** el carrito se guarda en el navegador (Zustand con persistencia) y limita las cantidades al stock disponible. Al enviarlo se crea una cotización.
-- **Revisión comercial:** panel con la cartera de clientes y las cotizaciones entrantes, con filtros, búsqueda y detalle. El comercial aprueba o rechaza.
-- **Control de stock al aprobar:** la aprobación se hace en la base de datos y comprueba el stock de forma atómica. Si falta stock, el cliente puede dividir la cotización (una parte aprobada y otra en espera), esperar a tener el pedido completo o cancelar. Cuando sube el stock de un producto, un trigger procesa automáticamente las cotizaciones en espera por orden de llegada.
-- **Administración:** CRUD de productos, categorías y fabricantes (con desactivación en lugar de borrado) y panel con gráficas de ingresos y reparto de cotizaciones por estado, filtrable por mes y año.
-- **Cuenta:** registro, recuperación de contraseña, perfil, modo claro y oscuro, interfaz en español e inglés (el idioma elegido se recuerda) y sesión única por usuario. En las cuentas de la demo la interfaz no permite cambiar el correo ni la contraseña.
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <h4>📦 Catálogo</h4>
+      Búsqueda por texto, filtros por categoría y fabricante, ordenación, paginación y ficha de producto con especificaciones técnicas en <code>JSONB</code>. Cada producto se muestra con una ilustración propia en SVG (<code>public/productos/</code>), elegida según el tipo de producto o su categoría; no se usan fotos de marcas.
+    </td>
+    <td width="50%" valign="top">
+      <h4>🛒 Carrito y cotización</h4>
+      El carrito se guarda en el navegador (Zustand con persistencia) y limita las cantidades al stock disponible. Al enviarlo se crea una cotización.
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <h4>💼 Revisión comercial</h4>
+      Panel con la cartera de clientes y las cotizaciones entrantes, con filtros, búsqueda y detalle. El comercial aprueba o rechaza.
+    </td>
+    <td valign="top">
+      <h4>📊 Administración</h4>
+      CRUD de productos, categorías y fabricantes (con desactivación en lugar de borrado) y panel con gráficas de ingresos y reparto de cotizaciones por estado, filtrable por mes y año.
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" valign="top">
+      <h4>👤 Cuenta</h4>
+      Registro, recuperación de contraseña, perfil, modo claro y oscuro, interfaz en español e inglés (el idioma elegido se recuerda) y sesión única por usuario. En las cuentas de la demo la interfaz no permite cambiar el correo ni la contraseña.
+    </td>
+  </tr>
+</table>
+
+<p align="center">
+  <img src="public/productos/taladro.svg" alt="Taladro" width="15%">
+  <img src="public/productos/grifo.svg" alt="Grifo" width="15%">
+  <img src="public/productos/aspersor.svg" alt="Aspersor" width="15%">
+  <img src="public/productos/lavabo.svg" alt="Lavabo" width="15%">
+  <img src="public/productos/compresor.svg" alt="Compresor" width="15%">
+  <img src="public/productos/casco.svg" alt="Casco" width="15%">
+  <br><sub>Algunas de las ilustraciones del catálogo (<code>public/productos/</code>)</sub>
+</p>
+
+### Control de stock al aprobar
+
+La aprobación se hace en la base de datos y comprueba el stock de forma atómica. Si falta stock, el cliente puede dividir la cotización (una parte aprobada y otra en espera), esperar a tener el pedido completo o cancelar. Cuando sube el stock de un producto, un trigger procesa automáticamente las cotizaciones en espera por orden de llegada.
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#172554','primaryTextColor':'#f8fafc','primaryBorderColor':'#3b82f6','lineColor':'#60a5fa','secondaryColor':'#0f172a','tertiaryColor':'#0f172a','fontFamily':'Segoe UI, Arial, sans-serif'}}}%%
+flowchart TD
+    A([🛒 El cliente envía el carrito]) --> B[Cotización pendiente]
+    B --> C{El comercial la revisa}
+    C -->|" rechaza "| R([Rechazada])
+    C -->|" aprueba "| S{"¿Hay stock? · aprobar_cotizacion"}
+    S -->|" sí "| OK([✅ Aprobada])
+    S -->|" no "| E{El cliente elige}
+    E -->|" cancelar "| R
+    E -->|" dividir "| D[Parte aprobada y parte en espera]
+    E -->|" esperar "| W[En espera]
+    D --> W
+    W -->|" sube el stock · trigger "| OK
+```
 
 ## Roles
 
-| Zona | Cliente | Comercial | Administrador |
+| Zona | 🛒 Cliente | 💼 Comercial | 🛠️ Administrador |
 | --- | :---: | :---: | :---: |
-| Catálogo, carrito y perfil | Sí | Sí | Sí |
-| Mis cotizaciones y pedidos | Sí | No | No |
-| Panel comercial y revisión de cotizaciones | No | Sí | Sí |
-| Gestión de productos, categorías y fabricantes | No | Sí | Sí |
-| Panel de administración con métricas | No | No | Sí |
+| Catálogo, carrito y perfil | ✅ | ✅ | ✅ |
+| Mis cotizaciones y pedidos | ✅ | — | — |
+| Panel comercial y revisión de cotizaciones | — | ✅ | ✅ |
+| Gestión de productos, categorías y fabricantes | — | ✅ | ✅ |
+| Panel de administración con métricas | — | — | ✅ |
 
 El acceso a cada ruta se controla en el cliente con `PrivateRoute`, y los datos, en la base de datos con RLS.
 
 ## Stack
 
-- **Frontend:** React 18, TypeScript, Vite, React Router 6, Tailwind CSS, componentes de shadcn/ui y Base UI, Zustand, Recharts, Sonner y i18next.
-- **Backend:** Supabase, es decir, PostgreSQL con Row Level Security, funciones RPC y triggers, más Supabase Auth. No hay servidor propio.
-- **Despliegue:** Vercel, con una regla de reescritura para la SPA (`vercel.json`).
+| Parte | Tecnologías |
+| --- | --- |
+| **Frontend** | React 18, TypeScript, Vite, React Router 6, Tailwind CSS, componentes de shadcn/ui y Base UI, Zustand, Recharts, Sonner e i18next |
+| **Backend** | Supabase, es decir, PostgreSQL con Row Level Security, funciones RPC y triggers, más Supabase Auth. No hay servidor propio |
+| **Despliegue** | Vercel, con una regla de reescritura para la SPA (`vercel.json`) |
 
 ## Base de datos
 
@@ -55,7 +123,7 @@ El esquema completo está en [`database/schema.sql`](database/schema.sql): 15 ta
 
 Tablas principales: `usuarios` (extiende `auth.users` con rol, empresa y datos de contacto), `empresas`, `categorias`, `fabricantes`, `productos` (con `especificaciones_tecnicas JSONB`), `cotizaciones` con `detalle_cotizacion`, y `pedidos` con `detalle_pedido`, `pedido_historial_estados` y `facturas`.
 
-## Seguridad
+## 🔒 Seguridad
 
 Los permisos se aplican en PostgreSQL, no solo en la interfaz: aunque alguien se salte la aplicación y consulte la API directamente, cada rol solo ve lo suyo.
 
@@ -90,7 +158,7 @@ src/
 ├── types/        tipos del modelo de datos
 └── i18n.ts       traducciones en español e inglés
 database/         schema.sql, data.sql y migrations/ (cambios aplicados sobre el esquema)
-docs/             manuales de usuario, técnico y de despliegue (PDF)
+docs/             manuales de usuario, técnico y de despliegue (PDF) e imágenes del README
 ```
 
 ## Puesta en marcha
