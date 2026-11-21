@@ -19,25 +19,18 @@
   <rect width="1280" height="240" rx="16" fill="url(#grid)"/>
   <rect width="1280" height="240" rx="16" fill="url(#glow)"/>
 
-  <!-- Logo (mismo dibujo que public/favicon.svg) -->
-  <g transform="translate(92 56) scale(4)">
-    <rect width="32" height="32" rx="7" fill="#2563eb"/>
-    <path d="M8 8h7a8 8 0 0 1 0 16H8z" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round"/>
-    <path d="M19 12h6M22 12v12" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
-  </g>
-
   <!-- Texto -->
-  <text x="282" y="104" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="54" font-weight="700" fill="#f8fafc">DistribuTech <tspan fill="#60a5fa">Pro</tspan></text>
-  <text x="284" y="144" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="24" fill="#cbd5e1">Plataforma B2B de cotizaciones con control de stock</text>
+  <text x="92" y="104" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="54" font-weight="700" fill="#f8fafc">DistribuTech <tspan fill="#60a5fa">Pro</tspan></text>
+  <text x="94" y="144" font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="24" fill="#cbd5e1">Plataforma B2B de cotizaciones con control de stock</text>
 
   <!-- Roles -->
   <g font-family="'Segoe UI','Helvetica Neue',Arial,sans-serif" font-size="16" font-weight="600">
-    <rect x="284" y="172" width="96" height="30" rx="8" fill="#2563eb" fill-opacity=".18" stroke="#3b82f6" stroke-opacity=".7"/>
-    <text x="332" y="192" text-anchor="middle" fill="#bfdbfe">Cliente</text>
-    <rect x="390" y="172" width="118" height="30" rx="8" fill="#2563eb" fill-opacity=".18" stroke="#3b82f6" stroke-opacity=".7"/>
-    <text x="449" y="192" text-anchor="middle" fill="#bfdbfe">Comercial</text>
-    <rect x="518" y="172" width="148" height="30" rx="8" fill="#2563eb" fill-opacity=".18" stroke="#3b82f6" stroke-opacity=".7"/>
-    <text x="592" y="192" text-anchor="middle" fill="#bfdbfe">Administrador</text>
+    <rect x="94" y="172" width="96" height="30" rx="8" fill="#2563eb" fill-opacity=".18" stroke="#3b82f6" stroke-opacity=".7"/>
+    <text x="142" y="192" text-anchor="middle" fill="#bfdbfe">Cliente</text>
+    <rect x="200" y="172" width="118" height="30" rx="8" fill="#2563eb" fill-opacity=".18" stroke="#3b82f6" stroke-opacity=".7"/>
+    <text x="259" y="192" text-anchor="middle" fill="#bfdbfe">Comercial</text>
+    <rect x="328" y="172" width="148" height="30" rx="8" fill="#2563eb" fill-opacity=".18" stroke="#3b82f6" stroke-opacity=".7"/>
+    <text x="402" y="192" text-anchor="middle" fill="#bfdbfe">Administrador</text>
   </g>
 
   <!-- Datos del esquema -->
