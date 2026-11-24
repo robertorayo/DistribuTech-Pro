@@ -1,10 +1,12 @@
 # Mantiene activo el proyecto de Supabase (el plan gratuito pausa los proyectos inactivos).
-# Cada lunes hace una consulta mínima de solo lectura a una tabla pública.
+# Lunes y jueves hace una consulta mínima de solo lectura a una tabla pública.
+# Dos veces por semana porque Supabase avisa a los 7 días sin actividad y GitHub
+# retrasa los cron varias horas: una vez por semana se quedaba justo en el límite.
 name: Mantener Supabase activo
 
 on:
   schedule:
-    - cron: '17 7 * * 1'   # lunes, 07:17 UTC
+    - cron: '17 7 * * 1,4' # lunes y jueves, 07:17 UTC
   workflow_dispatch:        # también se puede lanzar a mano desde la pestaña Actions
 
 permissions:
